@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>login</title>
+    <style>
+        .error-msg{
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <form action="/login/" method="POST">
+        <div>
+            <div>
+                {{ obj.user }}
+                {% if obj.errors.user %}
+                    <span class="error-msg"> {{ obj.errors.user.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.password }}
+                {% if obj.errors.password %}
+                    <span class="error-msg"> {{ obj.errors.password.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.phone }}
+                {% if obj.errors.phone %}
+                    <span class="error-msg"> {{ obj.errors.phone.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.url }}
+                {% if obj.errors.url %}
+                    <span class="error-msg"> {{ obj.errors.url.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.email }}
+                {% if obj.errors.email %}
+                    <span class="error-msg"> {{ obj.errors.email.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.countries }}
+                {% if obj.errors.countries %}
+                    <span class="error-msg"> {{ obj.errors.countries.0 }}</span>
+                {% endif %}
+            </div>
+            <div>
+                {{ obj.note }}
+                {% if obj.errors.note %}
+                    <span class="error-msg"> {{ obj.errors.note.0 }}</span>
+                {% endif %}
+            </div>
+            <input type="submit" value="提交"/>
+        </div>
+    </form>
+
+</body>
+</html>

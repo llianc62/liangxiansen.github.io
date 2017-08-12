@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="梁先森" />
+
+
+
+<meta name="description" content="回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以读写分离得形式实现了接受处理多个请求.
+然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Python之路：(十六）socketserver模块">
+<meta property="og:url" content="http://www.liangxiansen.cn/2016/08/10/socketserver/index.html">
+<meta property="og:site_name" content="一个梦">
+<meta property="og:description" content="回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以读写分离得形式实现了接受处理多个请求.
+然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请">
+<meta property="og:image" content="http://www.liangxiansen.cn/images/socket编程/socketserver拓扑.png">
+<meta property="og:image" content="http://www.liangxiansen.cn/images/socket编程/ThreadingTCPServer类.png">
+<meta property="og:updated_time" content="2017-08-10T06:16:29.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Python之路：(十六）socketserver模块">
+<meta name="twitter:description" content="回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以读写分离得形式实现了接受处理多个请求.
+然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请">
+<meta name="twitter:image" content="http://www.liangxiansen.cn/images/socket编程/socketserver拓扑.png">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="一个梦" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/favicon.ico">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>Python之路：(十六）socketserver模块 | 一个梦</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: true
+    }
+</script>
+
+
+    <script>
+        yiliaConfig.jquery_ui = [true, "//cdn.bootcss.com/jqueryui/1.10.4/jquery-ui.min.js", "//cdn.bootcss.com/jqueryui/1.10.4/css/jquery-ui.min.css"];
+    </script>
+
+
+<link rel="stylesheet" href="/css/prettify.css" type="text/css">
+
+<script src="http://www.liangxiansen.cn/js/prettify.min.js"></script>
+
+<script>
+$(window).load(function(){
+ $('pre').addClass('prettyprint linenums').attr('style', 'overflow:auto;');
+   prettyPrint();
+ })
+</script>
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+    <script>
+        var _hmt = _hmt || [];
+        (function() {
+            var hm = document.createElement("script");
+            hm.src = "//hm.baidu.com/hm.js?0d474235655a3b96cc57939124dd3bb6";
+            var s = document.getElementsByTagName("script")[0]; 
+            s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/avatar.gif" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">梁先森</a></h1>
+        </hgroup>
+
+        
+        <p class="header-subtitle">为目标奋斗,坚持不放弃只为离它更近一些</p>
+        
+
+        
+            <form id="search-form">
+            <input type="text" id="local-search-input" name="q" placeholder="search..." class="search form-control" autocomplete="off" autocorrect="off" searchonload="true" />
+            <i class="fa fa-times" onclick="resetSearch()"></i>
+            </form>
+            <div id="local-search-result"></div>
+            <p class='no-result'>No results found <i class='fa fa-spinner fa-pulse'></i></p>
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/EF/">EF资料</a></li>
+                        
+                            <li><a href="/about/">关于 &amp; 留言板</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:lianglian8866@163.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/LiangXianSen" title="GitHub"></a>
+                            
+                                <a class="fa QQ" href="tencent://message/?menu=yes&uin=787710500&websitename=im.qq.com" title="QQ"></a>
+                            
+                                <a class="fa 微信" href="/Wechat" title="微信"></a>
+                            
+                                <a class="fa Facebook" href="#" title="Facebook"></a>
+                            
+                                <a class="fa Twitter" href="#" title="Twitter"></a>
+                            
+                                <a class="fa RSS" href="/atom.xml" title="RSS"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Ajax/">Ajax</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Beginner/">Beginner</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Beginner-Basics/">Beginner Basics</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CSS/">CSS</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Consul/">Consul</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DOM/">DOM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Django/">Django</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/EF/">EF</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Git/">Git</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Github/">Github</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HAproxy/">HAproxy</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HTML/">HTML</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Hexo/">Hexo</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Jupyter/">Jupyter</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Level-0A/">Level 0A</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mysql/">Mysql</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Python/">Python</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SCL/">SCL</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/">Socket</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Supervisor/">Supervisor</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Tornado/">Tornado</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Web/">Web</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Zabbix/">Zabbix</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/协程/">协程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/旅游/">旅游</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/监控/">监控</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/硬件/">硬件</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/笔记/">笔记</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/线程/">线程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/编程/">编程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/话题/">话题</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/进程/">进程</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/队列/">队列</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://www.netcan666.com/">Netcan</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://github.com/LiangXianSen/">Github</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.easyaq.com/">E安全</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/wupeiqi/">武沛齐</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.cnblogs.com/alex3714/">Alex</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://www.evil0x.com/">邪恶十六进制</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">海迷、爱运动、爱交友、爱旅行、喜欢接触新鲜事物、迎接新的挑战，更爱游离于错综复杂的编码与逻辑中</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">梁先森</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/avatar.gif" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">梁先森</a></h1>
+            </hgroup>
+            
+            <p class="header-subtitle">为目标奋斗,坚持不放弃只为离它更近一些</p>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/EF/">EF资料</a></li>
+                
+                    <li><a href="/about/">关于 &amp; 留言板</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                <ul class="social">
+                    
+                        <a class="fa Email" target="_blank" href="mailto:lianglian8866@163.com" title="Email"></a>
+                    
+                        <a class="fa GitHub" target="_blank" href="https://github.com/LiangXianSen" title="GitHub"></a>
+                    
+                        <a class="fa QQ" target="_blank" href="tencent://message/?menu=yes&uin=787710500&websitename=im.qq.com" title="QQ"></a>
+                    
+                        <a class="fa 微信" target="_blank" href="/Wechat" title="微信"></a>
+                    
+                        <a class="fa Facebook" target="_blank" href="#" title="Facebook"></a>
+                    
+                        <a class="fa Twitter" target="_blank" href="#" title="Twitter"></a>
+                    
+                        <a class="fa RSS" target="_blank" href="/atom.xml" title="RSS"></a>
+                    
+                </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-socketserver" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/08/10/socketserver/" class="article-date">
+      <time datetime="2016-08-10T12:47:28.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python之路：(十六）socketserver模块
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socket/">Socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <p>回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以<code>读写分离得形式</code>实现了接受处理多个请求.</p>
+<p>然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请求.还好python给我们提供了一个并发处理socket得功能,那就是socketserver模块.</p>
+<blockquote>
+<p>socketserver内部使用 IO多路复用 以及 <code>多线程</code> 和 <code>多进程</code> ，从而实现并发处理多个客户端请求的socket服务端。即：每个客户端请求连接到服务器时socket服务端都会在服务器是创建一个<code>线程</code>或者<code>进程</code> 专门负责处理当前客户端的所有请求。　　</p>
+</blockquote>
+<a id="more"></a>
+<p>如下图：</p>
+<p>第一次连接后，数据通讯就通过线程或进程进行数据交换（红色箭头）</p>
+<p><img src="/images/socket编程/socketserver拓扑.png" alt="socketserver拓扑图"></p>
+<h2 id="ThreadingTCPServer"><a href="#ThreadingTCPServer" class="headerlink" title="ThreadingTCPServer"></a>ThreadingTCPServer</h2><blockquote>
+<p><code>ThreadingTCPServer</code>实现的soket服务器内部会为每个client创建一个 <code>线程</code>，该线程用来和客户端进行交互。</p>
+</blockquote>
+<h3 id="ThreadingTCPServer基础"><a href="#ThreadingTCPServer基础" class="headerlink" title="ThreadingTCPServer基础"></a>ThreadingTCPServer基础</h3><p><strong>使用ThreadingTCPServer:</strong></p>
+<ul>
+<li>创建一个继承自 socketserver.BaseRequestHandler 的类</li>
+<li>类中必须定义一个名称为 handle 的方法</li>
+<li>启动ThreadingTCPServer</li>
+</ul>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><pre><code class="python">import socketserver
+
+
+class MyServer(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        conn = self.request  # 接受连接请求,获取客户端socket对象
+        conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)  # 回一条消息给客户端
+        while True:
+            data = str(conn.recv(1024), encoding=&#39;utf-8&#39;)
+            # 如果客户端没有输入内容则跳出本次循环什么都不执行
+            if data == len(data):
+                break
+            # 根据用户输入的内容执行相应的操作
+            elif data == &#39;0&#39;:
+                conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+            else:
+                conn.sendall(&#39;请重新输入.&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    # 实例话对象,传递一个元祖设置启动的IP/PORT,第二个参数把自己定义的类写上作为SocketServer.ThreadingTCPServer的构造函数
+    server = socketserver.ThreadingTCPServer((&#39;127.0.0.1&#39;,8000), MyServer)
+    # 对象调用父类的启动方法
+    server.serve_forever()
+</code></pre>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><pre><code class="python">import socket
+
+
+ip_port = (&#39;127.0.0.1&#39;,8000)
+sk = socket.socket()
+sk.connect(ip_port)
+sk.settimeout(5)
+
+while True:
+    data = sk.recv(1024)
+    print(&#39;receive: %s&#39;,data)
+    inp = input(&#39;please input:&#39;)
+    sk.sendall(bytes(inp), encoding=&#39;utf-8&#39;)
+    if inp == &#39;exit&#39;:
+        break
+
+sk.close()
+</code></pre>
+<h3 id="ThreadingTCPServer源码剖析"><a href="#ThreadingTCPServer源码剖析" class="headerlink" title="ThreadingTCPServer源码剖析"></a>ThreadingTCPServer源码剖析</h3><p>ThreadingTCPServer的类图关系如下：</p>
+<p><img src="/images/socket编程/ThreadingTCPServer类.png" alt="ThreadingTCPServer类结构"></p>
+<p>学会看源码非常重要！不能仅仅光会用！大赞~ 知道他的过程和实现~ 怎么学会看源码呢？多看然后画类图，如上图！！！</p>
+<p>在理解的时候可以把他们想象为，把所有需要用的方法，都在ThreadingTCPServer中</p>
+<p>内部调用流程为：</p>
+<ol>
+<li>运行服务端程序</li>
+<li>执行 TCPServer.<strong>init</strong>方法，创建服务端Socket对象并绑定 IP 和 端口</li>
+<li>执行 BaseServer.<strong>init</strong>方法，将自定义的继承自SocketServer.BaseRequestHandler 的类 MyRequestHandle,赋值给 self.RequestHandlerClass</li>
+<li>执行 BaseServer.server_forever 方法，While 循环一直监听是否有客户端请求到达 …</li>
+<li>当客户端连接到达服务器执行 ThreadingMixIn.process_request 方法，创建一个 “线程” 用来处理请求<br>执行 ThreadingMixIn.process_request_thread 方法<br>执行 BaseServer.finish_request 方法，执行 self.RequestHandlerClass()  即：执行 自定义 MyRequestHandler 的构造方法（自动调用基类BaseRequestHandler的构造方法，在该构造方法中又会调用 MyRequestHandler的handle方法）</li>
+</ol>
+<h3 id="源码精简版"><a href="#源码精简版" class="headerlink" title="源码精简版"></a>源码精简版</h3><pre><code class="python">import socket
+import threading
+import select
+
+
+def process(request, client_address):  # 模拟定义的handle()方法，这个方法内的代码是socket server与Client端交互代码
+    print(request,client_address)
+    conn = request
+    conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)
+    flag = True
+    while flag:
+        data = conn.recv(1024)
+        if data == &#39;exit&#39;:
+            flag = False
+        elif data == &#39;0&#39;:
+            conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+        else:
+            conn.sendall(&#39;请重新输入.&#39;)
+
+
+sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sk.bind((&#39;127.0.0.1&#39;, 8002))
+sk.listen(5)
+
+while True:  # 监控sk文件句柄,循环接受连接请求
+    r, w, e = select.select([sk, ], [], [], 1)
+    print(&#39;looping&#39;)
+    if sk in r:  # 当sk文件句柄发生变化的时候说明是新的客户端连接过来了
+        print(&#39;get request&#39;)
+        request, client_address = sk.accept()
+        t = threading.Thread(target=process, args=(request, client_address))  # 创建一个线程，并调用自己定义的process方法执行~然后样客户端与之交互
+        t.daemon = False
+        t.start()
+
+sk.close()
+</code></pre>
+<blockquote>
+<p>如精简代码可以看出，SocketServer的ThreadingTCPServer之所以可以同时处理请求得益于 <code>select</code> 和 <code>Threading</code> 两个东西，其实本质上就是在服务器端为每一个客户端创建一个线程，当前线程用来处理对应客户端的请求，所以，可以支持同时n个客户端链接（长连接）。</p>
+</blockquote>
+<h2 id="ForkingTCPServer"><a href="#ForkingTCPServer" class="headerlink" title="ForkingTCPServer"></a>ForkingTCPServer</h2><p>ForkingTCPServer和ThreadingTCPServer的使用和执行流程基本一致，只不过在内部分别为请求者建立 “线程”  和 “进程”。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><h4 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a>服务端</h4><pre><code class="python">import socketserver
+
+class MyServer(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        # print self.request,self.client_address,self.server
+        conn = self.request
+        conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)
+        Flag = True
+        while Flag:
+            data = conn.recv(1024)
+            if data == &#39;exit&#39;:
+                Flag = False
+            elif data == &#39;0&#39;:
+                conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+            else:
+                conn.sendall(&#39;请重新输入.&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    # 这里使用socketserver ForkingTCPServer类创建对象
+    server = socketserver.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyServer)
+    server.serve_forever()
+</code></pre>
+<h4 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h4><pre><code class="python">import socket
+
+
+ip_port = (&#39;127.0.0.1&#39;,8000)
+sk = socket.socket()
+sk.connect(ip_port)
+sk.settimeout(5)
+
+while True:
+    data = sk.recv(1024)
+    print(&#39;receive:&#39;,data)
+    inp = input(&#39;please input:&#39;)
+    sk.sendall(inp)
+    if inp == &#39;exit&#39;:
+        break
+
+sk.close()
+</code></pre>
+<p>以上<code>ForkingTCPServer</code>只是将 <code>ThreadingTCPServer</code> 实例中的代码：</p>
+<pre><code>server = SocketServer.ThreadingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandler)
+变更为：
+server = SocketServer.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandler)
+</code></pre><p>SocketServer的ThreadingTCPServer之所以可以同时处理请求得益于 <code>select</code> 和 <code>os.fork</code> 两个东西，其实本质上就是在服务器端为每一个客户端创建一个<code>进程</code>，当前新创建的进程用来处理对应客户端的请求，所以，可以支持同时n个客户端链接（长连接）。</p>
+<blockquote>
+<p>源码剖析参考: ThreadingTCPServer</p>
+</blockquote>
+<h2 id="socketserver-模块练习"><a href="#socketserver-模块练习" class="headerlink" title="socketserver 模块练习"></a>socketserver 模块练习</h2><blockquote>
+<p>开发一个支持多用户在线的FTP程序</p>
+</blockquote>
+<p><strong>要求：</strong></p>
+<ol>
+<li>用户加密认证</li>
+<li>允许同时多用户登录</li>
+<li>每个用户有自己的家目录 ，且只能访问自己的家目录</li>
+<li>对用户进行磁盘配额，每个用户的可用空间不同</li>
+<li>允许用户在ftp server上随意切换目录</li>
+<li>允许用户查看当前目录下文件</li>
+<li>允许上传和下载文件，保证文件一致性</li>
+<li>文件传输过程中显示进度条</li>
+<li>附加功能：支持文件的断点续传</li>
+</ol>
+<p>可参考: <a href="https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP" target="_blank" rel="external">https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP</a></p>
+<div class="github-widget" data-repo="LiangXianSen/python_-study/tree/master/day9/FTP"></div>
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2016-08-10, 20:47:28</p>
+        <p><span>最后更新:</span>2017-08-10, 14:16:29</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/10/socketserver/" title="Python之路：(十六）socketserver模块">http://www.liangxiansen.cn/2016/08/10/socketserver/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/10/socketserver/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/08/11/Python-MySQL/">
+                    Python对MySQL进行操作
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/08/python-thread-process-gevent/">
+                    Python之路：(十五）进程、线程和协程
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Python之路：(十六）socketserver模块　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadingTCPServer"><span class="toc-number">1.</span> <span class="toc-text">ThreadingTCPServer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadingTCPServer基础"><span class="toc-number">1.1.</span> <span class="toc-text">ThreadingTCPServer基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务端"><span class="toc-number">1.2.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端"><span class="toc-number">1.3.</span> <span class="toc-text">客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadingTCPServer源码剖析"><span class="toc-number">1.4.</span> <span class="toc-text">ThreadingTCPServer源码剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码精简版"><span class="toc-number">1.5.</span> <span class="toc-text">源码精简版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ForkingTCPServer"><span class="toc-number">2.</span> <span class="toc-text">ForkingTCPServer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本使用"><span class="toc-number">2.1.</span> <span class="toc-text">基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#服务端-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#客户端-1"><span class="toc-number">2.1.2.</span> <span class="toc-text">客户端</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socketserver-模块练习"><span class="toc-number">3.</span> <span class="toc-text">socketserver 模块练习</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/08/11/Python-MySQL/" title="上一篇: Python对MySQL进行操作">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/08/python-thread-process-gevent/" title="下一篇: Python之路：(十五）进程、线程和协程">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/20/单元6食物/">单元6食物</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/11/单元5购物/">单元5购物</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/01/单元4人/">单元4人</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/26/安排假期/">话题-假期安排</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/02/12/单元3城市和国家/">单元3城市和国家</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/15/单元2办公室和学校/">单元2办公室和学校</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/14/健身计划/">话题-健身计划</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/14/离开聚会/">话题-离开聚会</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/10/单元1问候及介绍/">单元1问候及介绍</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/08/ABC/">Beginner Basics ABC</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/26/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2016-2017 梁先森
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+    <script src="/js/GithubRepoWidget.js"></script>
+
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+             github: ".github-widget a", 
+            
+            
+            
+            
+            
+            
+            
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(つェ⊂) 我藏好了哦~ " + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "(*´∇｀*) 被你发现啦~ " + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+
+<script>
+(function(){
+    var bp = document.createElement('script');
+    bp.src = '//push.zhanzhang.baidu.com/push.js';
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+  </div>
+</body>
+</html>
