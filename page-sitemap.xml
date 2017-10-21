@@ -7,21 +7,21 @@
     </url>
     
     <url>
+        <loc>http://www.liangxiansen.cn/EF/</loc>
+        <lastmod>2017-10-21T11:09:03.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
         <loc>http://www.liangxiansen.cn/Python/</loc>
-        <lastmod>2017-09-04T06:17:57.000Z</lastmod>
+        <lastmod>2017-09-07T03:04:09.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
     </url>
     
     <url>
         <loc>http://www.liangxiansen.cn//404.html</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.8</priority>
-    </url>
-    
-    <url>
-        <loc>http://www.liangxiansen.cn/EF/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.8</priority>
