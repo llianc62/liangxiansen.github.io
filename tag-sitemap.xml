@@ -79,13 +79,6 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/JavaScript/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://www.liangxiansen.cn/tags/CSS/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -93,7 +86,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/HTML/</loc>
+        <loc>http://www.liangxiansen.cn/tags/JavaScript/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -101,6 +94,13 @@
 
     <url>
         <loc>http://www.liangxiansen.cn/tags/HAproxy/</loc>
+        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
+        <loc>http://www.liangxiansen.cn/tags/HTML/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
