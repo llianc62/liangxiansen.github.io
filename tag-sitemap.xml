@@ -23,20 +23,6 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/Beginner/</loc>
-        <lastmod>2017-07-02T04:05:02.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/tags/Level-0A/</loc>
-        <lastmod>2017-07-02T04:05:02.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
         <loc>http://www.liangxiansen.cn/tags/Git/</loc>
         <lastmod>2017-08-02T02:52:15.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -46,27 +32,6 @@
     <url>
         <loc>http://www.liangxiansen.cn/tags/Github/</loc>
         <lastmod>2017-08-02T02:52:15.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/tags/EF/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/tags/Beginner-Basics/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/tags/%E8%AF%9D%E9%A2%98/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
@@ -86,14 +51,14 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/CSS/</loc>
+        <loc>http://www.liangxiansen.cn/tags/HAproxy/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/HAproxy/</loc>
+        <loc>http://www.liangxiansen.cn/tags/CSS/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>

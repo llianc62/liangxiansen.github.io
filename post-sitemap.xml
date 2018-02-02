@@ -79,7 +79,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/01/13/python%E5%87%BD%E6%95%B0%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%9D%91/</loc>
+        <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
         <lastmod>2017-08-02T11:10:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -87,7 +87,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
+        <loc>http://www.liangxiansen.cn/2017/01/13/python%E5%87%BD%E6%95%B0%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%9D%91/</loc>
         <lastmod>2017-08-02T11:10:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -135,14 +135,6 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/01/08/ABC/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://www.liangxiansen.cn/2016/09/02/DOM/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -159,7 +151,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2016/09/29/css/</loc>
+        <loc>http://www.liangxiansen.cn/2017/03/06/haproxy/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -167,7 +159,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/03/06/haproxy/</loc>
+        <loc>http://www.liangxiansen.cn/2016/09/29/css/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -215,80 +207,8 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/03/20/%E5%8D%95%E5%85%836%E9%A3%9F%E7%89%A9/</loc>
-        <lastmod>2017-07-02T04:05:02.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/02/12/%E5%8D%95%E5%85%833%E5%9F%8E%E5%B8%82%E5%92%8C%E5%9B%BD%E5%AE%B6/</loc>
-        <lastmod>2017-07-02T04:02:38.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/01/15/%E5%8D%95%E5%85%832%E5%8A%9E%E5%85%AC%E5%AE%A4%E5%92%8C%E5%AD%A6%E6%A0%A1/</loc>
-        <lastmod>2017-07-02T04:00:13.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/01/10/%E5%8D%95%E5%85%831%E9%97%AE%E5%80%99%E5%8F%8A%E4%BB%8B%E7%BB%8D/</loc>
-        <lastmod>2017-07-02T03:55:23.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/03/01/%E5%8D%95%E5%85%834%E4%BA%BA/</loc>
-        <lastmod>2017-05-13T14:51:52.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/03/11/%E5%8D%95%E5%85%835%E8%B4%AD%E7%89%A9/</loc>
-        <lastmod>2017-04-06T06:12:40.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/02/26/%E5%AE%89%E6%8E%92%E5%81%87%E6%9C%9F/</loc>
-        <lastmod>2017-04-06T06:12:40.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/01/14/%E7%A6%BB%E5%BC%80%E8%81%9A%E4%BC%9A/</loc>
-        <lastmod>2017-04-06T06:12:40.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://www.liangxiansen.cn/2016/10/08/%E9%9A%8F%E6%89%8B%E7%AC%94%E8%AE%B0/</loc>
         <lastmod>2017-03-27T09:59:21.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2017/01/14/%E5%81%A5%E8%BA%AB%E8%AE%A1%E5%88%92/</loc>
-        <lastmod>2017-03-07T06:47:00.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
 
