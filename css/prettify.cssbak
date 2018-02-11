@@ -8,12 +8,12 @@
 
 pre .str, code .str { color: #e6db5a; } /* string */
 /*pre .str, code .str { color: #fd0000; } !* string *!*/
-pre .str, code .str { color: #349a9c; } /* string */
-pre .kwd, code .kwd { color: #efae3a; } /* keyword */
+pre .str, code .str { color: #d32; } /* string */
+pre .kwd, code .kwd { color: #66d9ef; } /* keyword */
 pre .com, code .com { color: #75715e; font-style: italic; } /* comment */
 /*pre .com, code .com { color: #f1860d; } !* comment *!*/
-pre .typ, code .typ { color: #c2c34b; } /* type */
-pre .lit, code .lit { color: #ff4d46; } /* literal */
+pre .typ, code .typ { color: #66d9ef; } /* type */
+pre .lit, code .lit { color: #ae81ff; } /* literal */
 pre .pun, code .pun { color: #fff; } /* punctuation */
 /*pre .pun, code .pun { color: #f1860d; } !* punctuation *!*/
 pre .pln, code .pln { color: #fff; } /* plaintext */

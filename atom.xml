@@ -4944,9 +4944,9 @@ f. String statesText
       <category term="前端" scheme="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
-      <category term="Ajax" scheme="http://www.liangxiansen.cn/tags/Ajax/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Ajax" scheme="http://www.liangxiansen.cn/tags/Ajax/"/>
     
   </entry>
   
@@ -5757,9 +5757,9 @@ clearTimeout                清除单次定时器
       <category term="前端" scheme="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="DOM" scheme="http://www.liangxiansen.cn/tags/DOM/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   

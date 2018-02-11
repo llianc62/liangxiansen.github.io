@@ -196,16 +196,18 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
+    <loc>http://www.liangxiansen.cn/2016/09/04/web/</loc>
     <lastmod>2017-08-02T11:10:20.000Z</lastmod>
     <data>
         <display>
-        <title>Python其他理解与思考</title>
-        <pubTime>2016-08-03T08:27:54.000Z</pubTime>
+        <title>Python Web框架</title>
+        <pubTime>2016-09-04T14:49:01.000Z</pubTime>
         
         <tag>编程</tag>
          
         <tag>Python</tag>
+         
+        <tag>Web</tag>
          
          
            
@@ -264,18 +266,16 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/10/26/tornado/</loc>
+    <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
     <lastmod>2017-08-02T11:10:20.000Z</lastmod>
     <data>
         <display>
-        <title>Python Web框架之Tornado</title>
-        <pubTime>2016-10-26T06:02:02.000Z</pubTime>
+        <title>Python其他理解与思考</title>
+        <pubTime>2016-08-03T08:27:54.000Z</pubTime>
         
         <tag>编程</tag>
          
         <tag>Python</tag>
-         
-        <tag>Tornado</tag>
          
          
            
@@ -288,18 +288,18 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/09/04/web/</loc>
+    <loc>http://www.liangxiansen.cn/2016/10/26/tornado/</loc>
     <lastmod>2017-08-02T11:10:20.000Z</lastmod>
     <data>
         <display>
-        <title>Python Web框架</title>
-        <pubTime>2016-09-04T14:49:01.000Z</pubTime>
+        <title>Python Web框架之Tornado</title>
+        <pubTime>2016-10-26T06:02:02.000Z</pubTime>
         
         <tag>编程</tag>
          
         <tag>Python</tag>
          
-        <tag>Web</tag>
+        <tag>Tornado</tag>
          
          
            
@@ -371,61 +371,19 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/08/04/%E7%BE%8E%E4%B8%BD%E5%BE%97%E6%97%85%E9%80%94-%E4%BA%91%E5%8D%97/</loc>
+    <loc>http://www.liangxiansen.cn/2017/04/06/consul/</loc>
     <lastmod>2017-08-02T06:15:20.000Z</lastmod>
     <data>
         <display>
-        <title>美丽得旅途-云南</title>
-        <pubTime>2016-08-04T08:42:45.000Z</pubTime>
+        <title>Consul 使用手册</title>
+        <pubTime>2017-04-06T11:25:40.000Z</pubTime>
         
-        <tag>旅游</tag>
-         
-         
-           
-             
-              <breadCrumb title="个人日记" url="http://www.liangxiansen.cn/categories/%E4%B8%AA%E4%BA%BA%E6%97%A5%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.liangxiansen.cn/2017/01/06/supervisor-shell/</loc>
-    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>使用supervisor管理python脚本守护进程踩的一个坑</title>
-        <pubTime>2017-01-06T07:47:35.000Z</pubTime>
-        
-        <tag>Supervisor</tag>
+        <tag>Consul</tag>
          
          
            
              
               <breadCrumb title="Linux笔记" url="http://www.liangxiansen.cn/categories/Linux%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.liangxiansen.cn/2016/09/27/html/</loc>
-    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>HTML 基础</title>
-        <pubTime>2016-09-27T06:09:51.000Z</pubTime>
-        
-        <tag>编程</tag>
-         
-        <tag>HTML</tag>
-         
-         
-           
-             
-              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
           
         </display>
     </data>
@@ -475,6 +433,49 @@
 
     
   <url>
+    <loc>http://www.liangxiansen.cn/2016/08/04/%E7%BE%8E%E4%B8%BD%E5%BE%97%E6%97%85%E9%80%94-%E4%BA%91%E5%8D%97/</loc>
+    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>美丽得旅途-云南</title>
+        <pubTime>2016-08-04T08:42:45.000Z</pubTime>
+        
+        <tag>旅游</tag>
+         
+         
+           
+             
+              <breadCrumb title="个人日记" url="http://www.liangxiansen.cn/categories/%E4%B8%AA%E4%BA%BA%E6%97%A5%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+    
+  <url>
+    <loc>http://www.liangxiansen.cn/2016/09/27/html/</loc>
+    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>HTML 基础</title>
+        <pubTime>2016-09-27T06:09:51.000Z</pubTime>
+        
+        <tag>编程</tag>
+         
+        <tag>HTML</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.liangxiansen.cn/2016/08/22/JavaScript/</loc>
     <lastmod>2017-08-02T06:15:20.000Z</lastmod>
     <data>
@@ -497,36 +498,14 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/09/02/DOM/</loc>
+    <loc>http://www.liangxiansen.cn/2017/01/06/supervisor-shell/</loc>
     <lastmod>2017-08-02T06:15:20.000Z</lastmod>
     <data>
         <display>
-        <title>DOM 操作</title>
-        <pubTime>2016-09-02T13:31:23.000Z</pubTime>
+        <title>使用supervisor管理python脚本守护进程踩的一个坑</title>
+        <pubTime>2017-01-06T07:47:35.000Z</pubTime>
         
-        <tag>编程</tag>
-         
-        <tag>DOM</tag>
-         
-         
-           
-             
-              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.liangxiansen.cn/2017/04/06/consul/</loc>
-    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>Consul 使用手册</title>
-        <pubTime>2017-04-06T11:25:40.000Z</pubTime>
-        
-        <tag>Consul</tag>
+        <tag>Supervisor</tag>
          
          
            
@@ -539,6 +518,27 @@
 
     
     
+  <url>
+    <loc>http://www.liangxiansen.cn/2016/09/02/DOM/</loc>
+    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>DOM 操作</title>
+        <pubTime>2016-09-02T13:31:23.000Z</pubTime>
+        
+        <tag>DOM</tag>
+         
+        <tag>编程</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
     
   <url>
     <loc>http://www.liangxiansen.cn/2016/09/14/git_notes/</loc>
@@ -592,9 +592,9 @@
         <title>Ajax 学习</title>
         <pubTime>2016-09-04T14:52:15.000Z</pubTime>
         
-        <tag>Ajax</tag>
-         
         <tag>编程</tag>
+         
+        <tag>Ajax</tag>
          
          
            

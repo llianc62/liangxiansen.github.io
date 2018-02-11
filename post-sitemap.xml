@@ -79,7 +79,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
+        <loc>http://www.liangxiansen.cn/2017/01/13/python%E5%87%BD%E6%95%B0%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%9D%91/</loc>
         <lastmod>2017-08-02T11:10:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -87,7 +87,7 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/01/13/python%E5%87%BD%E6%95%B0%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%9D%91/</loc>
+        <loc>http://www.liangxiansen.cn/2016/08/03/python%E5%85%B6%E4%BB%96%E7%90%86%E8%A7%A3%E4%B8%8E%E6%80%9D%E8%80%83/</loc>
         <lastmod>2017-08-02T11:10:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
@@ -111,14 +111,6 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/2017/07/28/jupyter/</loc>
-        <lastmod>2017-08-02T11:09:55.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
         <loc>http://www.liangxiansen.cn/2017/07/14/scl/</loc>
         <lastmod>2017-08-02T11:09:55.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -128,6 +120,14 @@
 
     <url>
         <loc>http://www.liangxiansen.cn/2017/05/17/%E5%8C%BA%E9%97%B4%E6%95%B0%E5%80%BC%E7%BB%9F%E8%AE%A1/</loc>
+        <lastmod>2017-08-02T11:09:55.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
+        <loc>http://www.liangxiansen.cn/2017/07/28/jupyter/</loc>
         <lastmod>2017-08-02T11:09:55.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
