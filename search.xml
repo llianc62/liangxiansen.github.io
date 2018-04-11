@@ -4,6 +4,610 @@
   
     
     <entry>
+      <title><![CDATA[Python Web框架之Tornado]]></title>
+      <url>http://www.liangxiansen.cn/2018/04/11/tornado/</url>
+      <content type="html"><![CDATA[<h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
+<p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="external">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="external">C10K problem</a>。）</p>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><pre><code>pip install tornado
+
+源码安装
+https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
+</code></pre><a id="more"></a>
+<h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+
+import tornado.ioloop
+import tornado.web
+
+# 继承tornado.web.RequestHandler
+class MainHandler(tornado.web.RequestHandler):
+    # 如果用户是GET请求，将执行这个类的get方法
+    def get(self):
+        self.write(&quot;Hello, world&quot;)
+
+# 路由映射
+application = tornado.web.Application([
+    # 访问index页面，交由MainHandler类处理
+    (r&quot;/index&quot;, MainHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    # 内部创建了个socket，侦听8888端口
+    application.listen(8888)
+    # epool + socket
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p>执行过程：</p>
+<ul>
+<li>第一步：运行程序，启动 8888 端口侦听</li>
+<li>第二步：浏览器客户端访问 /index  –&gt;  <a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>第三步：服务器接受请求，并交由对应的类处理该请求</li>
+<li>第四步：类接受到请求之后，根据请求方式（post / get / delete …）的不同调用并执行相应的方法（Resutful方式）</li>
+<li>第五步：方法返回值的字符串内容发送到用户浏览器</li>
+</ul>
+<h3 id="Tronado-原生支持Resutful"><a href="#Tronado-原生支持Resutful" class="headerlink" title="Tronado 原生支持Resutful"></a>Tronado 原生支持Resutful</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import tornado.ioloop
+import tornado.web
+
+
+class MainHandler(tornado.web.RequestHandler):
+    # 不同类型的请求执行下面相应的方法
+    def get(self):
+        self.write(&quot;GET, Test Site&quot;)
+
+    def post(self):
+        self.write(&quot;POST, Test Site&quot;)
+
+    def delete(self):
+        self.write(&quot;DEL, Test Site&quot;)
+
+    def put(self):
+        self.write(&quot;PUT, Test Site&quot;)
+
+# 内部其实就是通过反射实现的
+# obj = MainHandler()
+# func = getattr(obj, &#39;get&#39;)
+# func()
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, MainHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="异步非阻塞示例"><a href="#异步非阻塞示例" class="headerlink" title="异步非阻塞示例"></a>异步非阻塞示例</h3><h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>
+<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+import tornado.ioloop
+import tornado.web
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&quot;Hello, world&quot;)
+
+
+class CMDBHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&quot;cmdb.lianglian.com&quot;)
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, MainHandler),
+])
+
+# 添加一个二级域名
+application.add_handlers(&#39;cmdb.lianglian.com&#39;, [
+    (r&#39;/index&#39;, CMDBHandler),
+])
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<blockquote>
+<p>Note： 本地测试先配置好系统hosts文件域名指向</p>
+</blockquote>
+<h3 id="二级域名"><a href="#二级域名" class="headerlink" title="二级域名"></a>二级域名</h3><p>Tornado中原生支持二级域名的路由，如：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">主机头</th>
+<th style="text-align:left">url正则</th>
+<th style="text-align:left">Handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">cmdb</td>
+<td style="text-align:left">/index/\d*</td>
+<td style="text-align:left">CMDBHandler</td>
+</tr>
+<tr>
+<td style="text-align:left">cmdb</td>
+<td style="text-align:left">/admin/\w*</td>
+<td style="text-align:left">AdminHandler</td>
+</tr>
+<tr>
+<td style="text-align:left">cmdb</td>
+<td style="text-align:left">/car/\w*</td>
+<td style="text-align:left">CarHandler</td>
+</tr>
+<tr>
+<td style="text-align:left">*.</td>
+<td style="text-align:left">/index/\w*</td>
+<td style="text-align:left">HomeHandler</td>
+</tr>
+<tr>
+<td style="text-align:left">*.</td>
+<td style="text-align:left">/pro/\w*</td>
+<td style="text-align:left">ProHandler</td>
+</tr>
+<tr>
+<td style="text-align:left">*.</td>
+<td style="text-align:left">/.*</td>
+<td style="text-align:left">AllHandler</td>
+</tr>
+</tbody>
+</table>
+<h2 id="模版语言"><a href="#模版语言" class="headerlink" title="模版语言"></a>模版语言</h2><p>Tornado中的模板语言和django中类似，模板引擎将模板文件载入内存，然后将数据嵌入其中，最终获取到一个完整的字符串，再将字符串返回给请求者。<br>
+Tornado 的模板支持“控制语句”和“表达语句”，控制语句是使用{% 和 %}包起来的 例如 {% if len(items) > 2 %}。表达语句是使用 {{ 和 }} 包起来的，例如 {{ items[0] }}。
+</p>
+<p>
+控制语句和对应的 Python 语句的格式基本完全相同。我们支持 if、for、while 和 try，这些语句逻辑结束的位置需要用 {% end %} 做标记。还通过 "extends" 和 "block" 语句实现了模板继承。这些在 <a href="http://www.github.com/facebook/tornado/blob/master/tornado/template.py" target="_blank" rel="external">template 模块</a> 的代码文档中有着详细的描述。</p>
+<blockquote>
+<p>注：在使用模板前需要在setting中设置模板路径：”template_path” : “Templates”</p>
+</blockquote>
+<h3 id="模版渲染"><a href="#模版渲染" class="headerlink" title="模版渲染"></a>模版渲染</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+import tornado.ioloop
+import tornado.web
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        # self.write(&quot;Hello, world&quot;)
+        self.render(&#39;main.html&#39;, li=[11, 22, 33, 44])  # 返回一个html页面和一个数组&quot;li&quot;
+
+# 配置模版文件路径
+settings = {
+    &#39;template_path&#39;: &#39;Templates&#39;,  # 本地Templates文件夹
+}
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, MainHandler),
+], **settings)  # 把settings这个字典传给application，配置生效
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p>Tornado中模版语言里面语法和python基本一样,这也是Tornado前端用python语法直接写逻辑很强大。</p>
+<p><img src="http://www.liangxiansen.cn/images/tornado/模版语法.png" alt="模版语言"></p>
+<p>在模板中默认提供了一些函数、字段、类以供模板使用：</p>
+<pre><code>escape: tornado.escape.xhtml_escape 的別名
+xhtml_escape: tornado.escape.xhtml_escape 的別名
+url_escape: tornado.escape.url_escape 的別名
+json_encode: tornado.escape.json_encode 的別名
+squeeze: tornado.escape.squeeze 的別名
+linkify: tornado.escape.linkify 的別名
+datetime: Python 的 datetime 模组
+handler: 当前的 RequestHandler 对象
+request: handler.request 的別名
+current_user: handler.current_user 的別名
+locale: handler.locale 的別名
+_: handler.locale.translate 的別名
+static_url: for handler.static_url 的別名
+xsrf_form_html: handler.xsrf_form_html 的別名
+</code></pre><h3 id="模版继承"><a href="#模版继承" class="headerlink" title="模版继承"></a>模版继承</h3><p>Tornado中的模版继承和Django中一样，通过一个大的母版，规定一个大体框架内容，子版继承母版得内容后只需要写自己的内容就行了。</p>
+<h4 id="母版（main-html）"><a href="#母版（main-html）" class="headerlink" title="母版（main.html）"></a>母版（main.html）</h4><p><img src="http://www.liangxiansen.cn/images/tornado/母版.png" alt="母版"></p>
+<h4 id="子版"><a href="#子版" class="headerlink" title="子版"></a>子版</h4><p><img src="http://www.liangxiansen.cn/images/tornado/子版.png" alt="子版"></p>
+<h3 id="模板导入"><a href="#模板导入" class="headerlink" title="模板导入"></a>模板导入</h3><ul>
+<li>header.html</li>
+</ul>
+<pre><code class="html">&lt;div&gt;
+    &lt;ul&gt;
+        &lt;li&gt;1024&lt;/li&gt;
+        &lt;li&gt;42区&lt;/li&gt;
+    &lt;/ul&gt;
+&lt;/div&gt;
+</code></pre>
+<ul>
+<li>index.html</li>
+</ul>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;
+    &lt;title&gt;Index&lt;/title&gt;
+    &lt;link href=&quot;{{static_url("css/common.css")}}&quot; rel=&quot;stylesheet&quot; /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;div class=&quot;pg-header&quot;&gt;
+        {% include 'header.html' %} # 导入header.html得内容到这里
+    &lt;/div&gt;
+
+    &lt;script src=&quot;{{static_url("js/jquery-1.8.2.min.js")}}&quot;&gt;&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<h3 id="UIMethod和UIModule"><a href="#UIMethod和UIModule" class="headerlink" title="UIMethod和UIModule"></a>UIMethod和UIModule</h3><ul>
+<li>定义</li>
+</ul>
+<pre><code class="python"># uimethods.py
+
+def tab(self):
+    return &#39;UIMethod&#39;
+</code></pre>
+<pre><code class="python"># uimodules.py
+
+#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+from tornado.web import UIModule
+from tornado import escape
+
+class custom(UIModule):
+
+    def render(self, *args, **kwargs):
+        return escape.xhtml_escape(&#39;&lt;h1&gt;wupeiqi&lt;/h1&gt;&#39;)
+        #return escape.xhtml_escape(&#39;&lt;h1&gt;wupeiqi&lt;/h1&gt;&#39;)
+</code></pre>
+<ul>
+<li>注册</li>
+</ul>
+<pre><code class="python">import tornado.ioloop
+import tornado.web
+import uimodules  # 导入刚刚写的uimodules.py
+import uimethods  # 导入刚刚写的uimodules.py
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        # self.write(&quot;Hello, world&quot;)
+        self.render(&#39;index.html&#39;, li=[11, 22, 33, 44])  # 返回一个html页面和一个数组&quot;li&quot;
+
+
+# 配置
+settings = {
+    &#39;template_path&#39;: &#39;Templates&#39;,
+    &#39;static_path&#39;: &#39;static&#39;,
+    &#39;static_url_prefix&#39;: &#39;/statics/&#39;,
+    &#39;ui_methods&#39;: uimethods,  # 在settings中注册我写的uimethods.py
+    &#39;ui_modules&#39;: uimodules,  # 在settings中注册我写的uimodules.py
+}
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, MainHandler),
+], **settings)  # 把settings这个字典传给application，配置生效
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<ul>
+<li>使用</li>
+</ul>
+<p><img src="http://www.liangxiansen.cn/images/tornado/UIMethod.png" alt="子版"></p>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>Tornado默认是单进程单线程。实时的web特性通常需要为每个用户一个大部分时间都处于空闲的长连接. 在传统的同步web服务器中,这意味着需要给每个用户分配一个专用的线程,这样的开销是十分巨大的.</p>
+<p>为了减小对于并发连接需要的开销,Tornado使用了一种单线程事件循环的方式. 这意味着所有应用程序代码都应该是异步和非阻塞的,因为在同一时刻只有一个操作是有效的.</p>
+<p>Tornado 中推荐用 <strong>协程</strong> 来编写异步代码. 协程使用 Python 中的关键字 <code>yield</code> 来替代链式回调来实现挂起和继续程序的执行(像在 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 中使用的轻量级线程合作的方法有时也称作协程, 但是在 Tornado 中所有协程使用异步函数来实现的明确的上下文切换).</p>
+<h3 id="同步阻塞（Blocking）"><a href="#同步阻塞（Blocking）" class="headerlink" title="同步阻塞（Blocking）"></a>同步阻塞（Blocking）</h3><p>一个函数通常在它等待返回值的时候被 <strong>阻塞</strong> .一个函数被阻塞可能由于很多原因: 网络I/O,磁盘I/O,互斥锁等等.事实上, <em>每一个</em> 函数都会被阻塞,只是时间会比较短而已, 当一个函数运行时并且占用CPU(举一个极端的例子来说明为什么CPU阻塞的时间必须考虑在内, 考虑以下密码散列函数像<a href="http://bcrypt.sourceforge.net/" target="_blank" rel="external">bcrypt</a>, 这个函数需要占据几百毫秒的CPU时间, 远远超过了通常对于网络和磁盘请求的时间). 一个函数可以在某些方面阻塞而在其他方面不阻塞.举例来说, <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/httpclient.html#module-tornado.httpclient" target="_blank" rel="external"><code>tornado.httpclient</code></a> 在默认设置下将阻塞与DNS解析,但是在其它网络请求时不会阻塞 (为了减轻这种影响,可以用 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/netutil.html#tornado.netutil.ThreadedResolver" target="_blank" rel="external"><code>ThreadedResolver</code></a> 或通过正确配置 <code>libcurl</code> 使用 <code>tornado.curl_httpclient</code> ). 在Tornado的上下文中我们通常讨论网络I/O上下文阻塞, 虽然各种阻塞已经被最小化了.</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import time
+import tornado.web
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+def doing():
+    time.sleep(10)
+    return &#39;Blocking&#39;
+
+
+class BlockingHandler(tornado.web.RequestHandler):
+    def get(self):
+        result = doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/blocking&quot;, BlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<ul>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/blocking" target="_blank" rel="external">http://127.0.0.1:8888/blocking</a></li>
+<li>你会发现blocking会一直在转圈，处于一个堵塞状态。</li>
+<li>你再访问index页面，你发现index页面也会堵塞住。</li>
+</ul>
+<h3 id="异步非阻塞（Non-Blocking）"><a href="#异步非阻塞（Non-Blocking）" class="headerlink" title="异步非阻塞（Non Blocking）"></a>异步非阻塞（Non Blocking）</h3><p>一个 <strong>异步</strong> 函数在它结束前就已经返回了,而且通常会在程序中触发一些动作然后在后台执行一些任务. (和正常的 <strong>同步</strong> 函数相比, 同步函数在返回之前做完了所有的事). 这里有几种类型的异步接口:</p>
+<ul>
+<li>回调函数</li>
+<li>返回一个占位符 (<a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a>, <code>Promise</code>, <code>Deferred</code>)</li>
+<li>传送一个队列</li>
+<li>回调注册 (例如. POSIX 信号)</li>
+</ul>
+<p>不论使用哪一种类型的接口, <em>依据定义</em> 异步函数与他们的调用者有不同的交互方式; 但没有一种对调用者透明的方式可以将同步函数变成异步函数 (像 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 通过一种轻量的线程库来提供异步系统,但是实际上它并不能让事情变得异步)</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    &quot;&quot;&quot;
+    穿上@gen.coroutine 装饰器之后，最终结果会返回一个可以被yield 的生成器 Future 对象
+    与众不同的是这个函数的返回值需要以 raise gen.Return() 这种形式返回。
+    :return: Future object
+    &quot;&quot;&quot;
+    # time.sleep(10)     # time.sleep() 是blocking 的，不支持异步操作，我刚开始测试tornado的时候坑了
+    yield gen.sleep(10)  # 使用这个方法代替上面的方法模拟 I/O 等待的情况, 可以点进去看下这个方法的介绍
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<ul>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/nonblocking" target="_blank" rel="external">http://127.0.0.1:8888/nonblocking</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>你会发现nonblocking会一直在转圈，处于一个堵塞状态。</li>
+<li>你再访问index页面，你发现index页面能够访问不受影响。</li>
+</ul>
+<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。</p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="external"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+from tornado.concurrent import Future
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+def doing():
+    future = Future()
+    # here doing some things ...
+    future.set_result(&#39;Non-Blocking&#39;)
+    return future
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="Python-3-5-async-and-await"><a href="#Python-3-5-async-and-await" class="headerlink" title="Python 3.5: async and await"></a>Python 3.5: <code>async</code> and <code>await</code></h3><p>官方还介绍了在另一种写法， Python 3.5 引入了 <code>async</code> 和 <code>await</code> 关键字(使用这些关键字的 函数也被称为”原生协程”). 从Tornado 4.3, 你可以用它们代替 <code>yield</code> 为基础的协程. 只需要简单的使用 <code>async def foo()</code> 在函数定义的时候代替 <code>@gen.coroutine</code> 装饰器, 用 <code>await</code> 代替yield. 本文档的其他部分会继续使用 <code>yield</code>的风格来和旧版本的Python兼容, 但是如果 <code>async</code> 和 <code>await</code> 可用的话，它们运行起来会更快</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+async def doing():
+    await gen.sleep(10)  # here are doing some things
+    return &#39;Non-Blocking&#39;
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+
+    async def get(self):
+        result = await doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="并行执行"><a href="#并行执行" class="headerlink" title="并行执行"></a>并行执行</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    yield gen.sleep(10)
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result1, result2 = yield [doing(), doing()]
+        self.write(result1)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p>那async ，await 那种方式能并行执行吗？  答案也是可以的：</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+# Date: 2017/12/13
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+async def doing():
+    await gen.sleep(10)
+    return &#39;Non-Blocking&#39;
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+
+    async def get(self):
+        result1, result2 = await gen.convert_yielded([doing(), doing()])
+        self.write(result1)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
+<h3 id="多进程运行"><a href="#多进程运行" class="headerlink" title="多进程运行"></a>多进程运行</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+from tornado.httpserver import HTTPServer
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    yield gen.sleep(10)
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+def make_app():
+    return tornado.web.Application([
+        (r&quot;/index&quot;, IndexHandler),
+        (r&quot;/nonblocking&quot;, NonBlockingHandler),
+    ])
+
+
+def main():
+    app = make_app()
+    server = HTTPServer(app)
+    server.bind(8888)
+    server.start(2)  # 设置启动多少个进程
+    tornado.ioloop.IOLoop.current().start()
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
+]]></content>
+    </entry>
+    
+    <entry>
       <title><![CDATA[Jupyter 使用]]></title>
       <url>http://www.liangxiansen.cn/2017/07/28/jupyter/</url>
       <content type="html"><![CDATA[<h2 id="安装Jupyter"><a href="#安装Jupyter" class="headerlink" title="安装Jupyter"></a>安装Jupyter</h2><pre><code>pip3 install --upgrade pip
@@ -1845,305 +2449,6 @@ exec python -u ./new_whitelist_mb.py
 <blockquote>
 <p>Note: 在脚本中使用exec，exec会替换掉原进程，而且执行完会退出，不会执行下面的，类似于python的retrun，所以使用的时候下面不要再写内容。</p>
 </blockquote>
-]]></content>
-    </entry>
-    
-    <entry>
-      <title><![CDATA[Python Web框架之Tornado]]></title>
-      <url>http://www.liangxiansen.cn/2016/10/26/tornado/</url>
-      <content type="html"><![CDATA[<h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
-<p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="external">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="external">C10K problem</a>。）</p>
-<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><pre><code>pip install tornado
-
-源码安装
-https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
-</code></pre><a id="more"></a>
-<h3 id="快速使用"><a href="#快速使用" class="headerlink" title="快速使用"></a>快速使用</h3><pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-
-import tornado.ioloop
-import tornado.web
-
-# 继承tornado.web.RequestHandler
-class MainHandler(tornado.web.RequestHandler):
-    # 如果用户是GET请求，将执行这个类的get方法
-    def get(self):
-        self.write(&quot;Hello, world&quot;)
-
-# 路由映射
-application = tornado.web.Application([
-    # 访问index页面，交由MainHandler类处理
-    (r&quot;/index&quot;, MainHandler),
-])
-
-
-if __name__ == &quot;__main__&quot;:
-    # 内部创建了个socket，侦听8888端口
-    application.listen(8888)
-    # epool + socket
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
-<p>执行过程：</p>
-<ul>
-<li>第一步：运行程序，启动 8888 端口侦听</li>
-<li>第二步：浏览器客户端访问 /index  –&gt;  <a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
-<li>第三步：服务器接受请求，并交由对应的类处理该请求</li>
-<li>第四步：类接受到请求之后，根据请求方式（post / get / delete …）的不同调用并执行相应的方法（Resutful方式）</li>
-<li>第五步：方法返回值的字符串内容发送到用户浏览器</li>
-</ul>
-<h3 id="Tronado-原生支持Resutful"><a href="#Tronado-原生支持Resutful" class="headerlink" title="Tronado 原生支持Resutful"></a>Tronado 原生支持Resutful</h3><pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-# Author: Liang Lian
-# Python 3.5
-
-import tornado.ioloop
-import tornado.web
-
-
-class MainHandler(tornado.web.RequestHandler):
-    # 不同类型的请求执行下面相应的方法
-    def get(self):
-        self.write(&quot;GET, Test Site&quot;)
-
-    def post(self):
-        self.write(&quot;POST, Test Site&quot;)
-
-    def delete(self):
-        self.write(&quot;DEL, Test Site&quot;)
-
-    def put(self):
-        self.write(&quot;PUT, Test Site&quot;)
-
-# 内部其实就是通过反射实现的
-# obj = MainHandler()
-# func = getattr(obj, &#39;get&#39;)
-# func()
-
-application = tornado.web.Application([
-    (r&quot;/index&quot;, MainHandler),
-])
-
-
-if __name__ == &quot;__main__&quot;:
-    application.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
-<h3 id="异步非阻塞示例"><a href="#异步非阻塞示例" class="headerlink" title="异步非阻塞示例"></a>异步非阻塞示例</h3><h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>
-<h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-import tornado.ioloop
-import tornado.web
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write(&quot;Hello, world&quot;)
-
-
-class CMDBHandler(tornado.web.RequestHandler):
-    def get(self):
-        self.write(&quot;cmdb.lianglian.com&quot;)
-
-application = tornado.web.Application([
-    (r&quot;/index&quot;, MainHandler),
-])
-
-# 添加一个二级域名
-application.add_handlers(&#39;cmdb.lianglian.com&#39;, [
-    (r&#39;/index&#39;, CMDBHandler),
-])
-
-if __name__ == &quot;__main__&quot;:
-    application.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
-<blockquote>
-<p>Note： 本地测试先配置好系统hosts文件域名指向</p>
-</blockquote>
-<h3 id="二级域名"><a href="#二级域名" class="headerlink" title="二级域名"></a>二级域名</h3><p>Tornado中原生支持二级域名的路由，如：</p>
-<table>
-<thead>
-<tr>
-<th style="text-align:left">主机头</th>
-<th style="text-align:left">url正则</th>
-<th style="text-align:left">Handler</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">cmdb</td>
-<td style="text-align:left">/index/\d*</td>
-<td style="text-align:left">CMDBHandler</td>
-</tr>
-<tr>
-<td style="text-align:left">cmdb</td>
-<td style="text-align:left">/admin/\w*</td>
-<td style="text-align:left">AdminHandler</td>
-</tr>
-<tr>
-<td style="text-align:left">cmdb</td>
-<td style="text-align:left">/car/\w*</td>
-<td style="text-align:left">CarHandler</td>
-</tr>
-<tr>
-<td style="text-align:left">*.</td>
-<td style="text-align:left">/index/\w*</td>
-<td style="text-align:left">HomeHandler</td>
-</tr>
-<tr>
-<td style="text-align:left">*.</td>
-<td style="text-align:left">/pro/\w*</td>
-<td style="text-align:left">ProHandler</td>
-</tr>
-<tr>
-<td style="text-align:left">*.</td>
-<td style="text-align:left">/.*</td>
-<td style="text-align:left">AllHandler</td>
-</tr>
-</tbody>
-</table>
-<h2 id="模版语言"><a href="#模版语言" class="headerlink" title="模版语言"></a>模版语言</h2><p>Tornado中的模板语言和django中类似，模板引擎将模板文件载入内存，然后将数据嵌入其中，最终获取到一个完整的字符串，再将字符串返回给请求者。<br>
-Tornado 的模板支持“控制语句”和“表达语句”，控制语句是使用{% 和 %}包起来的 例如 {% if len(items) > 2 %}。表达语句是使用 {{ 和 }} 包起来的，例如 {{ items[0] }}。
-</p>
-<p>
-控制语句和对应的 Python 语句的格式基本完全相同。我们支持 if、for、while 和 try，这些语句逻辑结束的位置需要用 {% end %} 做标记。还通过 "extends" 和 "block" 语句实现了模板继承。这些在 <a href="http://www.github.com/facebook/tornado/blob/master/tornado/template.py" target="_blank" rel="external">template 模块</a> 的代码文档中有着详细的描述。</p>
-<blockquote>
-<p>注：在使用模板前需要在setting中设置模板路径：”template_path” : “Templates”</p>
-</blockquote>
-<h3 id="模版渲染"><a href="#模版渲染" class="headerlink" title="模版渲染"></a>模版渲染</h3><pre><code class="python">#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-import tornado.ioloop
-import tornado.web
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        # self.write(&quot;Hello, world&quot;)
-        self.render(&#39;main.html&#39;, li=[11, 22, 33, 44])  # 返回一个html页面和一个数组&quot;li&quot;
-
-# 配置模版文件路径
-settings = {
-    &#39;template_path&#39;: &#39;Templates&#39;,  # 本地Templates文件夹
-}
-
-application = tornado.web.Application([
-    (r&quot;/index&quot;, MainHandler),
-], **settings)  # 把settings这个字典传给application，配置生效
-
-
-if __name__ == &quot;__main__&quot;:
-    application.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
-<p>Tornado中模版语言里面语法和python基本一样,这也是Tornado前端用python语法直接写逻辑很强大。</p>
-<p><img src="http://www.liangxiansen.cn/images/tornado/模版语法.png" alt="模版语言"></p>
-<p>在模板中默认提供了一些函数、字段、类以供模板使用：</p>
-<pre><code>escape: tornado.escape.xhtml_escape 的別名
-xhtml_escape: tornado.escape.xhtml_escape 的別名
-url_escape: tornado.escape.url_escape 的別名
-json_encode: tornado.escape.json_encode 的別名
-squeeze: tornado.escape.squeeze 的別名
-linkify: tornado.escape.linkify 的別名
-datetime: Python 的 datetime 模组
-handler: 当前的 RequestHandler 对象
-request: handler.request 的別名
-current_user: handler.current_user 的別名
-locale: handler.locale 的別名
-_: handler.locale.translate 的別名
-static_url: for handler.static_url 的別名
-xsrf_form_html: handler.xsrf_form_html 的別名
-</code></pre><h3 id="模版继承"><a href="#模版继承" class="headerlink" title="模版继承"></a>模版继承</h3><p>Tornado中的模版继承和Django中一样，通过一个大的母版，规定一个大体框架内容，子版继承母版得内容后只需要写自己的内容就行了。</p>
-<h4 id="母版（main-html）"><a href="#母版（main-html）" class="headerlink" title="母版（main.html）"></a>母版（main.html）</h4><p><img src="http://www.liangxiansen.cn/images/tornado/母版.png" alt="母版"></p>
-<h4 id="子版"><a href="#子版" class="headerlink" title="子版"></a>子版</h4><p><img src="http://www.liangxiansen.cn/images/tornado/子版.png" alt="子版"></p>
-<h3 id="模板导入"><a href="#模板导入" class="headerlink" title="模板导入"></a>模板导入</h3><ul>
-<li>header.html</li>
-</ul>
-<pre><code class="html">&lt;div&gt;
-    &lt;ul&gt;
-        &lt;li&gt;1024&lt;/li&gt;
-        &lt;li&gt;42区&lt;/li&gt;
-    &lt;/ul&gt;
-&lt;/div&gt;
-</code></pre>
-<ul>
-<li>index.html</li>
-</ul>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head&gt;
-    &lt;meta http-equiv=&quot;Content-Type&quot; content=&quot;text/html; charset=UTF-8&quot;/&gt;
-    &lt;title&gt;Index&lt;/title&gt;
-    &lt;link href=&quot;{{static_url("css/common.css")}}&quot; rel=&quot;stylesheet&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;div class=&quot;pg-header&quot;&gt;
-        {% include 'header.html' %} # 导入header.html得内容到这里
-    &lt;/div&gt;
-
-    &lt;script src=&quot;{{static_url("js/jquery-1.8.2.min.js")}}&quot;&gt;&lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="UIMethod和UIModule"><a href="#UIMethod和UIModule" class="headerlink" title="UIMethod和UIModule"></a>UIMethod和UIModule</h3><ul>
-<li>定义</li>
-</ul>
-<pre><code class="python"># uimethods.py
-
-def tab(self):
-    return &#39;UIMethod&#39;
-</code></pre>
-<pre><code class="python"># uimodules.py
-
-#!/usr/bin/env python
-# -*- coding:utf-8 -*-
-from tornado.web import UIModule
-from tornado import escape
-
-class custom(UIModule):
-
-    def render(self, *args, **kwargs):
-        return escape.xhtml_escape(&#39;&lt;h1&gt;wupeiqi&lt;/h1&gt;&#39;)
-        #return escape.xhtml_escape(&#39;&lt;h1&gt;wupeiqi&lt;/h1&gt;&#39;)
-</code></pre>
-<ul>
-<li>注册</li>
-</ul>
-<pre><code class="python">import tornado.ioloop
-import tornado.web
-import uimodules  # 导入刚刚写的uimodules.py
-import uimethods  # 导入刚刚写的uimodules.py
-
-
-class MainHandler(tornado.web.RequestHandler):
-    def get(self):
-        # self.write(&quot;Hello, world&quot;)
-        self.render(&#39;index.html&#39;, li=[11, 22, 33, 44])  # 返回一个html页面和一个数组&quot;li&quot;
-
-
-# 配置
-settings = {
-    &#39;template_path&#39;: &#39;Templates&#39;,
-    &#39;static_path&#39;: &#39;static&#39;,
-    &#39;static_url_prefix&#39;: &#39;/statics/&#39;,
-    &#39;ui_methods&#39;: uimethods,  # 在settings中注册我写的uimethods.py
-    &#39;ui_modules&#39;: uimodules,  # 在settings中注册我写的uimodules.py
-}
-
-application = tornado.web.Application([
-    (r&quot;/index&quot;, MainHandler),
-], **settings)  # 把settings这个字典传给application，配置生效
-
-
-if __name__ == &quot;__main__&quot;:
-    application.listen(8888)
-    tornado.ioloop.IOLoop.instance().start()
-</code></pre>
-<ul>
-<li>使用</li>
-</ul>
-<p><img src="http://www.liangxiansen.cn/images/tornado/UIMethod.png" alt="子版"></p>
 ]]></content>
     </entry>
     

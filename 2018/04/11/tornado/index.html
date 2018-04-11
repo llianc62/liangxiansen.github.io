@@ -19,7 +19,7 @@
 Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Python Web框架之Tornado">
-<meta property="og:url" content="http://www.liangxiansen.cn/2016/10/26/tornado/index.html">
+<meta property="og:url" content="http://www.liangxiansen.cn/2018/04/11/tornado/index.html">
 <meta property="og:site_name" content="一个梦">
 <meta property="og:description" content="Tornado 介绍Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。
 Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：">
@@ -27,7 +27,7 @@ Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框�
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/母版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/子版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/UIMethod.png">
-<meta property="og:updated_time" content="2017-08-02T11:10:20.000Z">
+<meta property="og:updated_time" content="2018-04-11T15:43:45.262Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Web框架之Tornado">
 <meta name="twitter:description" content="Tornado 介绍Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。
@@ -364,8 +364,8 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
       <div class="body-wrap"><article id="post-tornado" class="article article-type-post" itemscope itemprop="blogPost">
   
     <div class="article-meta">
-      <a href="/2016/10/26/tornado/" class="article-date">
-      <time datetime="2016-10-26T06:02:02.000Z" itemprop="datePublished">2016-10-26</time>
+      <a href="/2018/04/11/tornado/" class="article-date">
+      <time datetime="2018-04-11T06:02:02.000Z" itemprop="datePublished">2018-04-11</time>
 </a>
 
 
@@ -698,6 +698,311 @@ if __name__ == &quot;__main__&quot;:
 <li>使用</li>
 </ul>
 <p><img src="http://www.liangxiansen.cn/images/tornado/UIMethod.png" alt="子版"></p>
+<h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>Tornado默认是单进程单线程。实时的web特性通常需要为每个用户一个大部分时间都处于空闲的长连接. 在传统的同步web服务器中,这意味着需要给每个用户分配一个专用的线程,这样的开销是十分巨大的.</p>
+<p>为了减小对于并发连接需要的开销,Tornado使用了一种单线程事件循环的方式. 这意味着所有应用程序代码都应该是异步和非阻塞的,因为在同一时刻只有一个操作是有效的.</p>
+<p>Tornado 中推荐用 <strong>协程</strong> 来编写异步代码. 协程使用 Python 中的关键字 <code>yield</code> 来替代链式回调来实现挂起和继续程序的执行(像在 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 中使用的轻量级线程合作的方法有时也称作协程, 但是在 Tornado 中所有协程使用异步函数来实现的明确的上下文切换).</p>
+<h3 id="同步阻塞（Blocking）"><a href="#同步阻塞（Blocking）" class="headerlink" title="同步阻塞（Blocking）"></a>同步阻塞（Blocking）</h3><p>一个函数通常在它等待返回值的时候被 <strong>阻塞</strong> .一个函数被阻塞可能由于很多原因: 网络I/O,磁盘I/O,互斥锁等等.事实上, <em>每一个</em> 函数都会被阻塞,只是时间会比较短而已, 当一个函数运行时并且占用CPU(举一个极端的例子来说明为什么CPU阻塞的时间必须考虑在内, 考虑以下密码散列函数像<a href="http://bcrypt.sourceforge.net/" target="_blank" rel="external">bcrypt</a>, 这个函数需要占据几百毫秒的CPU时间, 远远超过了通常对于网络和磁盘请求的时间). 一个函数可以在某些方面阻塞而在其他方面不阻塞.举例来说, <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/httpclient.html#module-tornado.httpclient" target="_blank" rel="external"><code>tornado.httpclient</code></a> 在默认设置下将阻塞与DNS解析,但是在其它网络请求时不会阻塞 (为了减轻这种影响,可以用 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/netutil.html#tornado.netutil.ThreadedResolver" target="_blank" rel="external"><code>ThreadedResolver</code></a> 或通过正确配置 <code>libcurl</code> 使用 <code>tornado.curl_httpclient</code> ). 在Tornado的上下文中我们通常讨论网络I/O上下文阻塞, 虽然各种阻塞已经被最小化了.</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import time
+import tornado.web
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+def doing():
+    time.sleep(10)
+    return &#39;Blocking&#39;
+
+
+class BlockingHandler(tornado.web.RequestHandler):
+    def get(self):
+        result = doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/blocking&quot;, BlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<ul>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/blocking" target="_blank" rel="external">http://127.0.0.1:8888/blocking</a></li>
+<li>你会发现blocking会一直在转圈，处于一个堵塞状态。</li>
+<li>你再访问index页面，你发现index页面也会堵塞住。</li>
+</ul>
+<h3 id="异步非阻塞（Non-Blocking）"><a href="#异步非阻塞（Non-Blocking）" class="headerlink" title="异步非阻塞（Non Blocking）"></a>异步非阻塞（Non Blocking）</h3><p>一个 <strong>异步</strong> 函数在它结束前就已经返回了,而且通常会在程序中触发一些动作然后在后台执行一些任务. (和正常的 <strong>同步</strong> 函数相比, 同步函数在返回之前做完了所有的事). 这里有几种类型的异步接口:</p>
+<ul>
+<li>回调函数</li>
+<li>返回一个占位符 (<a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a>, <code>Promise</code>, <code>Deferred</code>)</li>
+<li>传送一个队列</li>
+<li>回调注册 (例如. POSIX 信号)</li>
+</ul>
+<p>不论使用哪一种类型的接口, <em>依据定义</em> 异步函数与他们的调用者有不同的交互方式; 但没有一种对调用者透明的方式可以将同步函数变成异步函数 (像 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 通过一种轻量的线程库来提供异步系统,但是实际上它并不能让事情变得异步)</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    &quot;&quot;&quot;
+    穿上@gen.coroutine 装饰器之后，最终结果会返回一个可以被yield 的生成器 Future 对象
+    与众不同的是这个函数的返回值需要以 raise gen.Return() 这种形式返回。
+    :return: Future object
+    &quot;&quot;&quot;
+    # time.sleep(10)     # time.sleep() 是blocking 的，不支持异步操作，我刚开始测试tornado的时候坑了
+    yield gen.sleep(10)  # 使用这个方法代替上面的方法模拟 I/O 等待的情况, 可以点进去看下这个方法的介绍
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<ul>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/nonblocking" target="_blank" rel="external">http://127.0.0.1:8888/nonblocking</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>你会发现nonblocking会一直在转圈，处于一个堵塞状态。</li>
+<li>你再访问index页面，你发现index页面能够访问不受影响。</li>
+</ul>
+<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。</p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="external"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+from tornado.concurrent import Future
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+def doing():
+    future = Future()
+    # here doing some things ...
+    future.set_result(&#39;Non-Blocking&#39;)
+    return future
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="Python-3-5-async-and-await"><a href="#Python-3-5-async-and-await" class="headerlink" title="Python 3.5: async and await"></a>Python 3.5: <code>async</code> and <code>await</code></h3><p>官方还介绍了在另一种写法， Python 3.5 引入了 <code>async</code> 和 <code>await</code> 关键字(使用这些关键字的 函数也被称为”原生协程”). 从Tornado 4.3, 你可以用它们代替 <code>yield</code> 为基础的协程. 只需要简单的使用 <code>async def foo()</code> 在函数定义的时候代替 <code>@gen.coroutine</code> 装饰器, 用 <code>await</code> 代替yield. 本文档的其他部分会继续使用 <code>yield</code>的风格来和旧版本的Python兼容, 但是如果 <code>async</code> 和 <code>await</code> 可用的话，它们运行起来会更快</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+async def doing():
+    await gen.sleep(10)  # here are doing some things
+    return &#39;Non-Blocking&#39;
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+
+    async def get(self):
+        result = await doing()
+        self.write(result)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="并行执行"><a href="#并行执行" class="headerlink" title="并行执行"></a>并行执行</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    yield gen.sleep(10)
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result1, result2 = yield [doing(), doing()]
+        self.write(result1)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p>那async ，await 那种方式能并行执行吗？  答案也是可以的：</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+# Date: 2017/12/13
+
+import tornado.web
+from tornado import gen
+
+
+class IndexHandler(tornado.web.RequestHandler):
+
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+async def doing():
+    await gen.sleep(10)
+    return &#39;Non-Blocking&#39;
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+
+    async def get(self):
+        result1, result2 = await gen.convert_yielded([doing(), doing()])
+        self.write(result1)
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
+<h3 id="多进程运行"><a href="#多进程运行" class="headerlink" title="多进程运行"></a>多进程运行</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.web
+from tornado import gen
+from tornado.httpserver import HTTPServer
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+
+
+@gen.coroutine
+def doing():
+    yield gen.sleep(10)
+    raise gen.Return(&#39;Non-Blocking&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    @gen.coroutine
+    def get(self):
+        result = yield doing()
+        self.write(result)
+
+
+def make_app():
+    return tornado.web.Application([
+        (r&quot;/index&quot;, IndexHandler),
+        (r&quot;/nonblocking&quot;, NonBlockingHandler),
+    ])
+
+
+def main():
+    app = make_app()
+    server = HTTPServer(app)
+    server.bind(8888)
+    server.start(2)  # 设置启动多少个进程
+    tornado.ioloop.IOLoop.current().start()
+
+
+if __name__ == &quot;__main__&quot;:
+    main()
+</code></pre>
 
       
     </div>
@@ -706,13 +1011,13 @@ if __name__ == &quot;__main__&quot;:
   
     
     <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/10/26/tornado/">Python Web框架之Tornado</a></p>
+        <p><span>本文标题:</span><a href="/2018/04/11/tornado/">Python Web框架之Tornado</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-10-26, 14:02:02</p>
-        <p><span>最后更新:</span>2017-08-02, 19:10:20</p>
+        <p><span>发布时间:</span>2018-04-11, 14:02:02</p>
+        <p><span>最后更新:</span>2018-04-11, 23:43:45</p>
         <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/10/26/tornado/" title="Python Web框架之Tornado">http://www.liangxiansen.cn/2016/10/26/tornado/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/10/26/tornado/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <span>原始链接:</span><a class="post-url" href="/2018/04/11/tornado/" title="Python Web框架之Tornado">http://www.liangxiansen.cn/2018/04/11/tornado/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2018/04/11/tornado/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
             <script> var clipboard = new Clipboard('.copy-path'); </script>
         </p>
         <p>
@@ -724,16 +1029,10 @@ if __name__ == &quot;__main__&quot;:
 
     <nav id="article-nav">
         
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/01/06/supervisor-shell/">
-                    使用supervisor管理python脚本守护进程踩的一个坑
-                </a>
-            </div>
-        
         
             <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/10/08/随手笔记/">
-                    随手笔记
+                <a href="/2017/07/28/jupyter/">
+                    Jupyter 使用
                 </a>
             </div>
         
@@ -800,7 +1099,7 @@ if __name__ == &quot;__main__&quot;:
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tornado-介绍"><span class="toc-number">1.</span> <span class="toc-text">Tornado 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载安装"><span class="toc-number">1.1.</span> <span class="toc-text">下载安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速使用"><span class="toc-number">1.2.</span> <span class="toc-text">快速使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tronado-原生支持Resutful"><span class="toc-number">1.3.</span> <span class="toc-text">Tronado 原生支持Resutful</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步非阻塞示例"><span class="toc-number">1.4.</span> <span class="toc-text">异步非阻塞示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由系统"><span class="toc-number">2.</span> <span class="toc-text">路由系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例代码"><span class="toc-number">2.1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级域名"><span class="toc-number">2.2.</span> <span class="toc-text">二级域名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模版语言"><span class="toc-number">3.</span> <span class="toc-text">模版语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模版渲染"><span class="toc-number">3.1.</span> <span class="toc-text">模版渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模版继承"><span class="toc-number">3.2.</span> <span class="toc-text">模版继承</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#母版（main-html）"><span class="toc-number">3.2.1.</span> <span class="toc-text">母版（main.html）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子版"><span class="toc-number">3.2.2.</span> <span class="toc-text">子版</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模板导入"><span class="toc-number">3.3.</span> <span class="toc-text">模板导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UIMethod和UIModule"><span class="toc-number">3.4.</span> <span class="toc-text">UIMethod和UIModule</span></a></li></ol></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tornado-介绍"><span class="toc-number">1.</span> <span class="toc-text">Tornado 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载安装"><span class="toc-number">1.1.</span> <span class="toc-text">下载安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速使用"><span class="toc-number">1.2.</span> <span class="toc-text">快速使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tronado-原生支持Resutful"><span class="toc-number">1.3.</span> <span class="toc-text">Tronado 原生支持Resutful</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步非阻塞示例"><span class="toc-number">1.4.</span> <span class="toc-text">异步非阻塞示例</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由系统"><span class="toc-number">2.</span> <span class="toc-text">路由系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例代码"><span class="toc-number">2.1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级域名"><span class="toc-number">2.2.</span> <span class="toc-text">二级域名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模版语言"><span class="toc-number">3.</span> <span class="toc-text">模版语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模版渲染"><span class="toc-number">3.1.</span> <span class="toc-text">模版渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模版继承"><span class="toc-number">3.2.</span> <span class="toc-text">模版继承</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#母版（main-html）"><span class="toc-number">3.2.1.</span> <span class="toc-text">母版（main.html）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子版"><span class="toc-number">3.2.2.</span> <span class="toc-text">子版</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模板导入"><span class="toc-number">3.3.</span> <span class="toc-text">模板导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UIMethod和UIModule"><span class="toc-number">3.4.</span> <span class="toc-text">UIMethod和UIModule</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协程"><span class="toc-number">4.</span> <span class="toc-text">协程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步阻塞（Blocking）"><span class="toc-number">4.1.</span> <span class="toc-text">同步阻塞（Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步非阻塞（Non-Blocking）"><span class="toc-number">4.2.</span> <span class="toc-text">异步非阻塞（Non Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">4.3.</span> <span class="toc-text">Future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-3-5-async-and-await"><span class="toc-number">4.4.</span> <span class="toc-text">Python 3.5: async and await</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行执行"><span class="toc-number">4.5.</span> <span class="toc-text">并行执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#多进程运行"><span class="toc-number">4.6.</span> <span class="toc-text">多进程运行</span></a></li></ol></li></ol>
         
     </div>
     <style>
@@ -866,21 +1165,19 @@ if __name__ == &quot;__main__&quot;:
 
     <div class="scroll" id="post-nav-button">
         
-            <a href="/2017/01/06/supervisor-shell/" title="上一篇: 使用supervisor管理python脚本守护进程踩的一个坑">
-                <i class="fa fa-angle-left"></i>
-            </a>
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
         
 
         <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
 
         
-            <a href="/2016/10/08/随手笔记/" title="下一篇: 随手笔记">
+            <a href="/2017/07/28/jupyter/" title="下一篇: Jupyter 使用">
                 <i class="fa fa-angle-right"></i>
             </a>
         
     </div>
 
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/26/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
 
 
 

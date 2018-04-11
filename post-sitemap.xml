@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>http://www.liangxiansen.cn/2018/04/11/tornado/</loc>
+        <lastmod>2018-04-11T15:43:45.262Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>http://www.liangxiansen.cn/2016/08/05/python-queue/</loc>
         <lastmod>2017-08-12T02:48:22.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -88,14 +96,6 @@
 
     <url>
         <loc>http://www.liangxiansen.cn/2017/01/13/python%E5%87%BD%E6%95%B0%E9%BB%98%E8%AE%A4%E5%8F%82%E6%95%B0%E5%9D%91/</loc>
-        <lastmod>2017-08-02T11:10:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.6</priority>
-
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/2016/10/26/tornado/</loc>
         <lastmod>2017-08-02T11:10:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.6</priority>
