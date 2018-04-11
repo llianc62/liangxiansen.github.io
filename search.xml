@@ -558,7 +558,7 @@ if __name__ == &quot;__main__&quot;:
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
 <p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
-<h3 id="多进程运行"><a href="#多进程运行" class="headerlink" title="多进程运行"></a>多进程运行</h3><pre><code class="python">#!/usr/bin/env python
+<h2 id="多进程运行"><a href="#多进程运行" class="headerlink" title="多进程运行"></a>多进程运行</h2><pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
 # Python 3.5
