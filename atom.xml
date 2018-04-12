@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.liangxiansen.cn/"/>
-  <updated>2018-04-11T15:46:53.504Z</updated>
+  <updated>2018-04-12T08:00:44.642Z</updated>
   <id>http://www.liangxiansen.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.liangxiansen.cn/2018/04/11/tornado/"/>
     <id>http://www.liangxiansen.cn/2018/04/11/tornado/</id>
     <published>2018-04-11T06:02:02.000Z</published>
-    <updated>2018-04-11T15:46:53.504Z</updated>
+    <updated>2018-04-12T08:00:44.642Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
 <p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="external">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="external">C10K problem</a>。）</p>
@@ -99,7 +99,116 @@ if __name__ == &quot;__main__&quot;:
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
-<h3 id="异步非阻塞示例"><a href="#异步非阻塞示例" class="headerlink" title="异步非阻塞示例"></a>异步非阻塞示例</h3><h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>
+<h3 id="处理表单请求"><a href="#处理表单请求" class="headerlink" title="处理表单请求"></a>处理表单请求</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.ioloop
+import tornado.web
+
+
+class MyFormHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;&lt;html&gt;&lt;body&gt;&lt;form action=&quot;/&quot; method=&quot;POST&quot;&gt;&#39;
+                   &#39;&lt;input type=&quot;text&quot; name=&quot;message&quot;&gt;&#39;
+                   &#39;&lt;input type=&quot;submit&quot; value=&quot;Submit&quot;&gt;&#39;
+                   &#39;&lt;/form&gt;&lt;/body&gt;&lt;/html&gt;&#39;)
+
+    def post(self):
+        self.set_header(&quot;Content-Type&quot;, &quot;text/plain&quot;)
+        self.write(&quot;You wrote &quot; + self.get_body_argument(&quot;message&quot;))  # 获取form表单内容
+
+
+def make_app():
+    return tornado.web.Application([
+        (r&quot;/&quot;, MyFormHandler),
+    ])
+
+
+if __name__ == &quot;__main__&quot;:
+    app = make_app()
+    app.listen(8888)
+    tornado.ioloop.IOLoop.current().start()
+</code></pre>
+<h3 id="POST-application-json"><a href="#POST-application-json" class="headerlink" title="POST application/json"></a>POST application/json</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import json
+import tornado.ioloop
+import tornado.web
+
+
+class MainHandler(tornado.web.RequestHandler):
+
+    def initialize(self):
+        self.json_args = None
+
+    def prepare(self):
+        &quot;&quot;&quot;
+        复习接收到请求后做的准备操作，然后再执行HTTP方法（post/get/...）。
+        :return:
+        &quot;&quot;&quot;
+        if self.request.headers[&quot;Content-Type&quot;].startswith(&quot;application/json&quot;):
+            self.json_args = json.loads(self.request.body)
+        else:
+            # 我这个接口只定义是传输数据类型是json， 那么在处理请求前做一个json处理
+            # 如果不是json 数据类型就直接设置一个错误状态码，返回一个错误信息。
+            self.set_status(405)
+            self.write({&quot;error&quot;: &quot;ARGUMENT_ERROR: Not application/json&quot;})
+            self.finish()  # 关闭链接
+
+    def on_finish(self):
+        &quot;&quot;&quot;
+        请求结束后被调用，一般用于清理资源
+        :return:
+        &quot;&quot;&quot;
+        pass
+
+    def post(self):
+        if self.json_args:
+            self.write(self.json_args)  # 如果数据类型就是Json，response数据类型application/json
+
+
+def make_app():
+    return tornado.web.Application([
+        (r&quot;/&quot;, MainHandler),
+    ])
+
+
+if __name__ == &quot;__main__&quot;:
+    app = make_app()
+    app.listen(8888)
+    tornado.ioloop.IOLoop.current().start()
+</code></pre>
+<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">import time
+from tornado.web import RequestHandler, Application
+from tornado.ioloop import IOLoop
+
+
+class FlushHandler(RequestHandler):
+    def get(self, *args, **kwargs):
+        self.write(&#39;start\n&#39;)
+        self.flush()
+        for x in range(5):
+            self.write(&#39;{0}\n&#39;.format(x))
+            self.flush()       # 这里是一个for的循环体，这个方法可以将上面的write实时显示到用户浏览器上，如果去掉，你会发现整个循环体结束然后将最终结果显示在用户浏览器上。
+            time.sleep(1)
+        self.finish(&#39;stop\n&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    app = Application(
+        [
+            (r&#39;/flush&#39;, FlushHandler)
+        ]
+    )
+    app.listen(port=8000, address=&#39;0.0.0.0&#39;)
+    IOLoop.current().start()
+</code></pre>
+<h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>
 <h3 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h3><pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import tornado.ioloop
@@ -131,6 +240,42 @@ if __name__ == &quot;__main__&quot;:
 <blockquote>
 <p>Note： 本地测试先配置好系统hosts文件域名指向</p>
 </blockquote>
+<p>路由表是 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 对象(或元组)的列表, 其中每个都包含(至少)一个正则 表达式和一个处理类. 顺序问题; 第一个匹配的规则会被使用. 如果正则表达 式包含捕获组, 这些组会被作为 <em>路径参数</em> 传递给处理函数的HTTP方法. 如果一个字典作为 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 的第三个参数被传递, 它会作为 <em>初始参数</em> 传递给 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.initialize" target="_blank" rel="external"><code>RequestHandler.initialize</code></a>. 最后 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 可能有一个名字 , 这将允许它被 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.reverse_url" target="_blank" rel="external"><code>RequestHandler.reverse_url</code></a> 使用.</p>
+<pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import tornado.ioloop
+import tornado.web
+
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;&lt;a href=&quot;%s&quot;&gt;link to story 1&lt;/a&gt;&#39; % self.reverse_url(&quot;story&quot;, &quot;1&quot;))   # /story/1
+
+
+class StoryHandler(tornado.web.RequestHandler):
+    def initialize(self):
+        pass
+
+    def get(self, story_id):
+        self.write(&quot;this is story %s&quot; % story_id)
+
+
+def make_app():
+    return tornado.web.Application([
+        tornado.web.url(r&quot;/&quot;, MainHandler),
+        # Tornado通过正则表达式做到分页
+        tornado.web.url(r&quot;/story/([0-9]+)&quot;, StoryHandler, name=&quot;story&quot;)  # 设置name属性可以在self.reverse_url被调用
+    ])
+
+
+if __name__ == &quot;__main__&quot;:
+    app = make_app()
+    app.listen(8888)
+    tornado.ioloop.IOLoop.current().start()
+</code></pre>
 <h3 id="二级域名"><a href="#二级域名" class="headerlink" title="二级域名"></a>二级域名</h3><p>Tornado中原生支持二级域名的路由，如：</p>
 <table>
 <thead>
@@ -173,7 +318,7 @@ if __name__ == &quot;__main__&quot;:
 </tr>
 </tbody>
 </table>
-<h2 id="模版语言"><a href="#模版语言" class="headerlink" title="模版语言"></a>模版语言</h2><p>Tornado中的模板语言和django中类似，模板引擎将模板文件载入内存，然后将数据嵌入其中，最终获取到一个完整的字符串，再将字符串返回给请求者。<br>
+<h2 id="模板语言"><a href="#模板语言" class="headerlink" title="模板语言"></a>模板语言</h2><p>Tornado中的模板语言和django中类似，模板引擎将模板文件载入内存，然后将数据嵌入其中，最终获取到一个完整的字符串，再将字符串返回给请求者。<br>
 Tornado 的模板支持“控制语句”和“表达语句”，控制语句是使用{% 和 %}包起来的 例如 {% if len(items) > 2 %}。表达语句是使用 {{ 和 }} 包起来的，例如 {{ items[0] }}。
 </p>
 <p>
@@ -181,7 +326,7 @@ Tornado 的模板支持“控制语句”和“表达语句”，控制语句是
 <blockquote>
 <p>注：在使用模板前需要在setting中设置模板路径：”template_path” : “Templates”</p>
 </blockquote>
-<h3 id="模版渲染"><a href="#模版渲染" class="headerlink" title="模版渲染"></a>模版渲染</h3><pre><code class="python">#!/usr/bin/env python
+<h3 id="模板渲染"><a href="#模板渲染" class="headerlink" title="模板渲染"></a>模板渲染</h3><pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 import tornado.ioloop
 import tornado.web
@@ -192,7 +337,7 @@ class MainHandler(tornado.web.RequestHandler):
         # self.write(&quot;Hello, world&quot;)
         self.render(&#39;main.html&#39;, li=[11, 22, 33, 44])  # 返回一个html页面和一个数组&quot;li&quot;
 
-# 配置模版文件路径
+# 配置模板文件路径
 settings = {
     &#39;template_path&#39;: &#39;Templates&#39;,  # 本地Templates文件夹
 }
@@ -206,7 +351,7 @@ if __name__ == &quot;__main__&quot;:
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
-<p>Tornado中模版语言里面语法和python基本一样,这也是Tornado前端用python语法直接写逻辑很强大。</p>
+<p>Tornado中模板语言里面语法和python基本一样,这也是Tornado前端用python语法直接写逻辑很强大。</p>
 <p><img src="http://www.liangxiansen.cn/images/tornado/模版语法.png" alt="模版语言"></p>
 <p>在模板中默认提供了一些函数、字段、类以供模板使用：</p>
 <pre><code>escape: tornado.escape.xhtml_escape 的別名
