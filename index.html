@@ -359,945 +359,781 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
 </nav>
       <div class="body-wrap">
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+    <article id="post-tornado" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2018/04/11/tornado/" class="article-date">
+      <time datetime="2018-04-11T06:02:02.000Z" itemprop="datePublished">2018-04-11</time>
+</a>
+
+
     </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+        
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/04/11/tornado/">Python Web框架之Tornado</a>
+    </h1>
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+
       </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+              <h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
+<p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html">C10K problem</a>。）</p>
+<h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><pre><code>pip install tornado
+
+源码安装
+https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
+</code></pre>
+          
+      
     </div>
-    <% if (index){ %>
+    
     <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Tornado/">Tornado</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
+      
         <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+          <a href="/2018/04/11/tornado/#more">阅读全文 >></a>
         </p>
-      <% } %>
+      
       <div class="clearfix"></div>
     </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
 
-<%- partial('_partial/post-nav-button') %>
 
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+
+
+
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
-    <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
-    </div>
-  <%}%>
-  <div class="article-inner">
-    <% if (theme.fancybox){ %>
-      <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
-      <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
-      </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
-    <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
-    </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
-  </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
-</article>
-<%- partial('_partial/toc') %>
-
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
-
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
-
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+    <article id="post-jupyter" class="article article-type-post" itemscope itemprop="blogPost">
   
-    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2017/07/28/jupyter/" class="article-date">
+      <time datetime="2017-07-28T02:51:29.000Z" itemprop="datePublished">2017-07-28</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/28/jupyter/">Jupyter 使用</a>
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
-      <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
-        <div class="clearfix"></div>
-      </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <h2 id="安装Jupyter"><a href="#安装Jupyter" class="headerlink" title="安装Jupyter"></a>安装Jupyter</h2><pre><code>pip3 install --upgrade pip
+pip3 install jupyter
+</code></pre><p><a href="http://www.jupyter.org/" target="_blank" rel="external">官网</a>  |  <a href="http://www.jupyter-notebook.readthedocs.io/en/latest/index.html" target="_blank" rel="external">文档</a></p>
+<h2 id="配置Jupyter"><a href="#配置Jupyter" class="headerlink" title="配置Jupyter"></a>配置Jupyter</h2><h3 id="生成配置文件"><a href="#生成配置文件" class="headerlink" title="生成配置文件"></a>生成配置文件</h3><pre><code>jupyter notebook --generate-config
+</code></pre><h3 id="设置访问密码"><a href="#设置访问密码" class="headerlink" title="设置访问密码"></a>设置访问密码</h3><pre><code>jupyter notebook password
+</code></pre><h3 id="关闭启动浏览器"><a href="#关闭启动浏览器" class="headerlink" title="关闭启动浏览器"></a>关闭启动浏览器</h3><ul>
+<li>vim ~/.jupyter/jupyter_notebook_config.py</li>
+</ul>
+<pre><code>c.NotebookApp.open_browser = False
+</code></pre><h3 id="启动Jupyter"><a href="#启动Jupyter" class="headerlink" title="启动Jupyter"></a>启动Jupyter</h3><pre><code>jupyter notebook
+</code></pre><h2 id="制作幻灯片"><a href="#制作幻灯片" class="headerlink" title="制作幻灯片"></a>制作幻灯片</h2><h3 id="安装生产幻灯片插件"><a href="#安装生产幻灯片插件" class="headerlink" title="安装生产幻灯片插件"></a>安装生产幻灯片插件</h3><p>这部分实现主要依靠<a href="https://github.com/damianavila/RISE" target="_blank" rel="external"> RISE </a>这个jupyter notebook插件，关于它的使用可以参考它的文档</p>
+<h3 id="生成静态幻灯片"><a href="#生成静态幻灯片" class="headerlink" title="生成静态幻灯片"></a>生成静态幻灯片</h3><p>可以参考这个<a href="https://www.youtube.com/watch?v=EOpcxy0RA1A" target="_blank" rel="external">视频</a>，简述步骤如下：</p>
+<p>在notebook中设置cell 的slide属性，确认好，然后保存</p>
+<p>在自己的notebook文件目录（包含.ipynb的目录），制作幻灯片网页，需要 <a href="https://github.com/hakimel/reveal.js" target="_blank" rel="external">reveal.js</a> </p>
+<pre><code>jupyter-nbconvert --to slides test.ipynb --reveal-prefix=&quot;http://liangxiansen.cn/files/reveal.js&quot;
+</code></pre>
+      
     </div>
-    <% if (index){ %>
+    
     <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/工具/">工具</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jupyter/">Jupyter</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
       <div class="clearfix"></div>
     </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+
+  
+
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
 
-<%- partial('_partial/post-nav-button') %>
 
-<% if (!index) { %>
-    <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
-    </script>
-<% } %>
+
+
+
+  
+    <article id="post-scl" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/07/14/scl/" class="article-date">
+      <time datetime="2017-07-14T08:59:17.000Z" itemprop="datePublished">2017-07-14</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/07/14/scl/">Software Collections</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>SCL(Software Collections)可以让你在同一个操作系统上安装和使用多个版本的软件，而不会影响整个系统的安装包。SCL为社区的以下需求而设计：创建和使用软件集合生产系统、概念验证系统、开发测试平台。SCL目前已经支持Fedora和RHEL(衍生版本如CentOS也包含在内)。</p>
+<p>SCL的创建就是为了给RHEL/CentOS用户提供一种以方便、安全地安装和使用应用程序和运行时环境的多个(而且可能是更新的)版本的方式，同时避免把系统搞乱。与之相对的是第三方源，它们可能会在已安装的包之间引起冲突。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SCL/">SCL</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/07/14/scl/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-区间数值统计" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/05/17/区间数值统计/" class="article-date">
+      <time datetime="2017-05-17T02:54:39.000Z" itemprop="datePublished">2017-05-17</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/05/17/区间数值统计/">区间数值统计</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <pre><code>#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Date: 2017/5/15
+
+
+number_list = []
+f = open(&#39;/Users/lianliang/Desktop/true.csv&#39;)
+for line in f:
+    number = line.split(&#39;,&#39;)[-2].strip()
+    number = int(float(number))
+    number_list.append(number)
+
+
+from itertools import groupby
+map_list = []
+num_list = []
+for k, g in groupby(sorted(number_list), key=lambda x: x//10):
+    total = len(list(g))
+    map_list.append(total)
+    num_list.append(k*10)
+    print(&#39;{}-{}: {}&#39;.format(k*10, (k+1)*10-1, total))
+
+print map_list
+print num_list
+
+import matplotlib.pyplot as plt
+plt.plot(num_list, map_list, &#39;b-&#39;)
+plt.show()
+</code></pre>
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+    </div>
+
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-consul" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/04/06/consul/" class="article-date">
+      <time datetime="2017-04-06T11:25:40.000Z" itemprop="datePublished">2017-04-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/04/06/consul/">Consul 使用手册</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="使用consul"><a href="#使用consul" class="headerlink" title="使用consul"></a>使用consul</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>Consul包含多个组件,但是作为一个整体,为你的基础设施提供服务发现和服务配置的工具.他提供以下关键特性:</p>
+<ul>
+<li><strong>服务发现</strong> Consul的客户端可用提供一个服务,比如 api 或者mysql ,另外一些客户端可用使用Consul去发现一个指定服务的提供者.通过DNS或者HTTP应用程序可用很容易的找到他所依赖的服务.</li>
+<li><strong>健康检查</strong> Consul客户端可用提供任意数量的健康检查,指定一个服务(比如:webserver是否返回了200 OK 状态码)或者使用本地节点(比如:内存使用是否大于90%). 这个信息可由operator用来监视集群的健康.被服务发现组件用来避免将流量发送到不健康的主机.</li>
+<li><strong>Key/Value存储</strong> 应用程序可用根据自己的需要使用Consul的层级的Key/Value存储.比如动态配置,功能标记,协调,领袖选举等等,简单的HTTP API让他更易于使用.</li>
+<li><strong>多数据中心</strong>: Consul支持开箱即用的多数据中心.这意味着用户不需要担心需要建立额外的抽象层让业务扩展到多个区域.</li>
+</ul>
+<p>Consul面向DevOps和应用开发者友好.是他适合现代的弹性的基础设施.<br>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Consul/">Consul</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/04/06/consul/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-haproxy" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/03/06/haproxy/" class="article-date">
+      <time datetime="2017-03-06T06:25:29.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/03/06/haproxy/">HAproxy</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="HAproxy"><a href="#HAproxy" class="headerlink" title="HAproxy"></a>HAproxy</h2><h3 id="HAProxy介绍"><a href="#HAProxy介绍" class="headerlink" title="HAProxy介绍"></a>HAProxy介绍</h3><p>HAProxy提供<strong>高可用性</strong>、<strong>负载均衡</strong>以及基于TCP和HTTP应用的代理，<strong>支持虚拟主机</strong>，它是免费、快速并且可靠的一种解决方案。根据官方数据，其最高极限支持10G的并发。 </p>
+<p> HAProxy特别适用于那些负载特大的web站点， 这些站点通常又需要会话保持或七层处理。HAProxy运行在当前的硬件上，完全可以支持数以万计的并发连接。并且它的运行模式使得它可以很简单安全的整合进您当前的架构中， 同时可以保护你的web服务器不被暴露到网络上。</p>
+<p>其支持从4层至7层的网络交换，即覆盖所有的TCP协议。就是说，Haproxy 甚至还支持 Mysql 的均衡负载。。</p>
+<p>如果说在功能上，能以proxy反向代理方式实现 WEB均衡负载，这样的产品有很多。包括 Nginx，ApacheProxy，lighttpd，Cheroke 等。但要明确一点的，Haproxy 并不是 Http 服务器。以上提到所有带反向代理均衡负载的产品，都清一色是 WEB 服务器。简单说，就是他们能自个儿提供静态(html,jpg,gif..)或动态(php,cgi..)文件的传输以及处理。而Haproxy 仅仅，而且专门是一款的用于均衡负载的应用代理。其自身并不能提供http服务。 </p>
+<p>但其配置简单，拥有非常不错的服务器健康检查功能还有专门的系统状态监控页面，当其代理的后端服务器出现故障, HAProxy会自动将该服务器摘除，故障恢复后再自动将该服务器加入。自1.3版本开始还引入了frontend,backend,frontend根据任意HTTP请求头内容做规则匹配，然后把请求定向到相关的backend。 </p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAproxy/">HAproxy</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/03/06/haproxy/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-python函数默认参数坑" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/13/python函数默认参数坑/" class="article-date">
+      <time datetime="2017-01-13T10:01:46.000Z" itemprop="datePublished">2017-01-13</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h3 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h3><pre><code class="python">def func(a,b=[]):
+    b.append(a)
+    print(b)
+
+func(1)
+func(2)
+func(3)
+</code></pre>
+<p>有个考python特性的面试题，func（3）的时候，b 这个list是啥。</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/01/13/python函数默认参数坑/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-supervisor-shell" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/01/06/supervisor-shell/" class="article-date">
+      <time datetime="2017-01-06T07:47:35.000Z" itemprop="datePublished">2017-01-06</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="使用supervisor管理python脚本守护进程踩的一个坑"><a href="#使用supervisor管理python脚本守护进程踩的一个坑" class="headerlink" title="使用supervisor管理python脚本守护进程踩的一个坑"></a>使用supervisor管理python脚本守护进程踩的一个坑</h2><h3 id="脚本内容"><a href="#脚本内容" class="headerlink" title="脚本内容"></a>脚本内容</h3><pre><code class="shell">#!/bin/bash
+
+export LD_LIBRARY_PATH=/root/FRI_FACEID/instantclient_12_1
+export ORACLE_HOME=/root/FRI_FACEID/instantclient_12_1
+
+source ../env/bin/activate
+python -u ./new_whitelist_mb.py
+</code></pre>
+<h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p><img src="http://www.liangxiansen.cn/images/supervisor/shell.jpg" alt="shell"></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Supervisor/">Supervisor</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2017/01/06/supervisor-shell/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-随手笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/10/08/随手笔记/" class="article-date">
+      <time datetime="2016-10-08T12:53:17.000Z" itemprop="datePublished">2016-10-08</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/10/08/随手笔记/">随手笔记</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <p>windows 默认结束符<code>\n\r</code> 类unix下是<code>\r</code> 所以需要转换,<br>tr -d ‘\r’ &lt; testsource.sh &gt; ./testsource.shbak</p>
+<p>source 需要有<code>/</code>不然它找不到它得话就从系统环境变量PATH中找,</p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/笔记/">笔记</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2016/10/08/随手笔记/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
+  
+    <article id="post-css" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2016/09/29/css/" class="article-date">
+      <time datetime="2016-09-29T10:23:09.000Z" itemprop="datePublished">2016-09-29</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2016/09/29/css/">CSS 基础</a>
+    </h1>
+  
+
+      </header>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+              <h2 id="CSS-介绍"><a href="#CSS-介绍" class="headerlink" title="CSS 介绍"></a>CSS 介绍</h2><p>css是英文<code>Cascading Style Sheets</code>的缩写,称为层叠样式表，用于对页面进行美化，CSS的可以使页面更加的美观。基本上所有的html页面都或多或少的使用css。</p>
+<p>存在方式有三种：<code>标签嵌入</code>、<code>页面嵌入</code>和<code>外部样式文件嵌入</code></p>
+          
+      
+    </div>
+    
+    <div class="article-info article-info-index">
+      
+      
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+    </div>
+
+
+      
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
+      
+        <p class="article-more-link">
+          <a href="/2016/09/29/css/#more">阅读全文 >></a>
+        </p>
+      
+      <div class="clearfix"></div>
+    </div>
+    
+  </div>
+  
+
+  
+
+  
+
+</article>
+
+
+
+
+
+
+
   
   
     <nav id="page-nav">

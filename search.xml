@@ -167,7 +167,8 @@ if __name__ == &quot;__main__&quot;:
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
 </code></pre>
-<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">#!/usr/bin/env python
+<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><p>将当前输出缓冲区写到网络.</p>
+<pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
 # Python 3.5
@@ -187,13 +188,14 @@ class FlushHandler(RequestHandler):
             time.sleep(1)
         self.finish(&#39;stop\n&#39;)
 
+def make_app():
+    return Application([
+        (r&#39;/flush&#39;, FlushHandler),
+    ])
+
 
 if __name__ == &#39;__main__&#39;:
-    app = Application(
-        [
-            (r&#39;/flush&#39;, FlushHandler)
-        ]
-    )
+    app = make_app()
     app.listen(port=8888)
     IOLoop.current().start()
 </code></pre>
