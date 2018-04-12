@@ -27,7 +27,7 @@ Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框�
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/母版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/子版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/UIMethod.png">
-<meta property="og:updated_time" content="2018-04-12T08:28:18.849Z">
+<meta property="og:updated_time" content="2018-04-12T08:32:00.924Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Web框架之Tornado">
 <meta name="twitter:description" content="Tornado 介绍Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。
@@ -524,7 +524,7 @@ import tornado.ioloop
 import tornado.web
 
 
-class MainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
 
     def initialize(self):
         self.json_args = None
@@ -549,6 +549,9 @@ class MainHandler(tornado.web.RequestHandler):
         :return:
         &quot;&quot;&quot;
         pass
+
+
+class MainHandler(BaseHandler):
 
     def post(self):
         if self.json_args:
@@ -1166,7 +1169,7 @@ if __name__ == &quot;__main__&quot;:
         <p><span>本文标题:</span><a href="/2018/04/11/tornado/">Python Web框架之Tornado</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
         <p><span>发布时间:</span>2018-04-11, 14:02:02</p>
-        <p><span>最后更新:</span>2018-04-12, 16:28:18</p>
+        <p><span>最后更新:</span>2018-04-12, 16:32:00</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/04/11/tornado/" title="Python Web框架之Tornado">http://www.liangxiansen.cn/2018/04/11/tornado/</a>
             <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2018/04/11/tornado/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>

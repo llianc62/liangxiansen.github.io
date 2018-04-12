@@ -125,7 +125,7 @@ import tornado.ioloop
 import tornado.web
 
 
-class MainHandler(tornado.web.RequestHandler):
+class BaseHandler(tornado.web.RequestHandler):
 
     def initialize(self):
         self.json_args = None
@@ -150,6 +150,9 @@ class MainHandler(tornado.web.RequestHandler):
         :return:
         &quot;&quot;&quot;
         pass
+
+
+class MainHandler(BaseHandler):
 
     def post(self):
         if self.json_args:
