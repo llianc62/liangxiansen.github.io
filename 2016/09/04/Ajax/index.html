@@ -353,568 +353,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-Ajax" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/09/04/Ajax/" class="article-date">
-      <time datetime="2016-09-04T14:52:15.000Z" itemprop="datePublished">2016-09-04</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Ajax 学习
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Ajax/">Ajax</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>对于WEB应用程序：用户浏览器发送请求，服务器接收并处理请求，然后返回结果，往往返回就是字符串（HTML），浏览器将字符串（HTML）<code>渲染</code>并显示浏览器上。</p>
-<a id="more"></a>
-<p>1、 传统的Web应用</p>
-<blockquote>
-<p>一个页面上的简单操作就需把整个页面重新加载一遍</p>
-</blockquote>
-<p>2、 AJAX</p>
-<blockquote>
-<p>AJAX，Asynchronous JavaScript and XML (异步的JavaScript和XML)，一种创建交互式网页应用的网页开发技术方案。</p>
-<ul>
-<li><code>异步的JavaScript：</code></li>
-</ul>
-<p>使用 【JavaScript语言】 以及 相关【浏览器提供类库】 的功能向服务端发送请求，当服务端处理完请求之后，【自动执行某个JavaScript的回调函数】。<br>PS：以上请求和响应的整个过程是【偷偷】进行的，页面上无任何感知(页面不会刷新)。</p>
-<ul>
-<li><code>XML:</code></li>
-</ul>
-<p>XML是一种标记语言，是Ajax在和后台交互时传输数据的格式之一</p>
-<p>利用AJAX可以做：</p>
-<ul>
-<li>1、注册时，输入用户名自动检测用户是否已经存在。</li>
-<li>2、登陆时，提示用户名密码错误</li>
-<li>3、删除数据行时，将行ID发送到后台，后台在数据库中删除，数据库删除成功后，在页面DOM中将数据行也删除。（博客园）</li>
-</ul>
-</blockquote>
-<h3 id="‘伪’AJAX"><a href="#‘伪’AJAX" class="headerlink" title="‘伪’AJAX"></a>‘伪’AJAX</h3><p>由于HTML标签的<code>iframe</code>标签具有局部加载内容的特性，所以可以使用其来<code>伪造</code>Ajax请求。</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-
-    &lt;head lang=&quot;en&quot;&gt;
-        &lt;meta charset=&quot;UTF-8&quot;&gt;
-        &lt;title&gt;test&lt;/title&gt;
-    &lt;/head&gt;
-
-    &lt;body&gt;
-
-        &lt;div&gt;
-            &lt;p&gt;请输入要加载的地址：&lt;span id=&quot;currentTime&quot;&gt;&lt;/span&gt;&lt;/p&gt;
-            &lt;p&gt;
-                &lt;input id=&quot;url&quot; type=&quot;text&quot; /&gt;
-                &lt;input type=&quot;button&quot; value=&quot;刷新&quot; onclick=&quot;LoadPage();&quot;&gt;
-            &lt;/p&gt;
-        &lt;/div&gt;
-
-
-        &lt;div&gt;
-            &lt;h3&gt;加载页面位置：&lt;/h3&gt;
-            &lt;iframe id=&quot;iframePosition&quot; style=&quot;width: 100%;height: 800px;&quot;&gt;&lt;/iframe&gt;
-        &lt;/div&gt;
-
-
-        &lt;script type=&quot;text/javascript&quot;&gt;
-            // 页面刚刚加载完得时候执行
-            window.onload= function(){
-                var myDate = new Date();   // 获取当前时间,通过new关键字创建时间对象
-                document.getElementById(&#39;currentTime&#39;).innerText = myDate.getTime();
-
-            };
-
-            function LoadPage(){
-                var targetUrl =  document.getElementById(&#39;url&#39;).value;
-                document.getElementById(&quot;iframePosition&quot;).src = targetUrl;
-            }
-
-        &lt;/script&gt;
-
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h2 id="原生AJAX"><a href="#原生AJAX" class="headerlink" title="原生AJAX"></a>原生AJAX</h2><p>Ajax主要就是使用 <code>【XmlHttpRequest】</code>对象来完成请求的操作，该对象在主流浏览器中均存在(除早起的IE)，Ajax首次出现IE5.5中存在（ActiveX控件）。</p>
-<h3 id="XmlHttpRequest对象介绍"><a href="#XmlHttpRequest对象介绍" class="headerlink" title="XmlHttpRequest对象介绍"></a>XmlHttpRequest对象介绍</h3><p>XmlHttpRequest对象的主要方法：</p>
-<pre><code>a. void open(String method,String url,Boolen async)
-   用于创建请求
-
-   参数：
-       method： 请求方式（字符串类型），如：POST、GET、DELETE...
-       url：    要请求的地址（字符串类型）
-       async：  是否异步（布尔类型）
-
-b. void send(String body)
-    用于发送请求
-
-    参数：
-        body： 要发送的数据（字符串类型）
-
-c. void setRequestHeader(String header,String value)
-    用于设置请求头
-
-    参数：
-        header： 请求头的key（字符串类型）
-        vlaue：  请求头的value（字符串类型）
-
-d. String getAllResponseHeaders()
-    获取所有响应头
-
-    返回值：
-        响应头数据（字符串类型）
-
-e. String getResponseHeader(String header)
-    获取响应头中指定header的值
-
-    参数：
-        header： 响应头的key（字符串类型）
-
-    返回值：
-        响应头中指定的header对应的值
-
-f. void abort()
-
-    终止请求
-</code></pre><p>XmlHttpRequest对象的主要属性：</p>
-<pre><code>a. Number readyState
-   状态值（整数）
-
-   详细：
-      0-未初始化，尚未调用open()方法；
-      1-启动，调用了open()方法，未调用send()方法；
-      2-发送，已经调用了send()方法，未接收到响应；
-      3-接收，已经接收到部分响应数据；
-      4-完成，已经接收到全部响应数据；
-
-b. Function onreadystatechange
-   当readyState的值改变时自动触发执行其对应的函数（回调函数）
-
-c. String responseText
-   服务器返回的数据（字符串类型）
-
-d. XmlDocument responseXML
-   服务器返回的数据（Xml对象）
-
-e. Number states
-   状态码（整数），如：200、404...
-
-f. String statesText
-   状态文本（字符串），如：OK、NotFound...
-</code></pre><h3 id="跨浏览器支持"><a href="#跨浏览器支持" class="headerlink" title="跨浏览器支持"></a>跨浏览器支持</h3><ul>
-<li><code>XmlHttpRequest:</code></li>
-</ul>
-<p>IE7+, Firefox, Chrome, Opera, etc.</p>
-<ul>
-<li><code>ActiveXObject(&quot;Microsoft.XMLHTTP&quot;)</code></li>
-</ul>
-<p>IE6, IE5</p>
-<h3 id="基于原生AJAX-Demo"><a href="#基于原生AJAX-Demo" class="headerlink" title="基于原生AJAX - Demo"></a>基于原生AJAX - Demo</h3><pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;h1&gt;XMLHttpRequest - Ajax请求&lt;/h1&gt;
-    &lt;input type=&quot;button&quot; onclick=&quot;XmlGetRequest();&quot; value=&quot;Get发送请求&quot; /&gt;
-    &lt;input type=&quot;button&quot; onclick=&quot;XmlPostRequest();&quot; value=&quot;Post发送请求&quot; /&gt;
-
-    &lt;script src=&quot;jquery-1.12.4.js&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-
-        function GetXHR(){
-            var xhr = null;
-            if(XMLHttpRequest){
-                xhr = new XMLHttpRequest();
-            }else{
-                xhr = new ActiveXObject(&quot;Microsoft.XMLHTTP&quot;);
-            }
-            return xhr;
-
-        }
-
-        function XhrPostRequest(){
-            var xhr = GetXHR();
-            // 定义回调函数
-            xhr.onreadystatechange = function(){
-                if(xhr.readyState == 4){
-                    // 已经接收到全部响应数据，执行以下操作
-                    var data = xhr.responseText;
-                    console.log(data);
-                }
-            };
-            // 指定连接方式和地址----文件方式
-            xhr.open(&#39;POST&#39;, &quot;/test/&quot;, true);
-            // 设置请求头
-            xhr.setRequestHeader(&#39;Content-Type&#39;, &#39;application/x-www-form-urlencoded; charset-UTF-8&#39;);
-            // 发送请求
-            xhr.send(&#39;n1=1;n2=2;&#39;);
-        }
-
-        function XhrGetRequest(){
-            var xhr = GetXHR();
-            // 定义回调函数
-            xhr.onreadystatechange = function(){
-                if(xhr.readyState == 4){
-                    // 已经接收到全部响应数据，执行以下操作
-                    var data = xhr.responseText;
-                    console.log(data);
-                }
-            };
-            // 指定连接方式和地址----文件方式
-            xhr.open(&#39;get&#39;, &quot;/test/&quot;, true);
-            // 发送请求
-            xhr.send();
-        }
-
-    &lt;/script&gt;
-
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h2 id="jQuery-Ajax"><a href="#jQuery-Ajax" class="headerlink" title="jQuery Ajax"></a>jQuery Ajax</h2><p><code>jQuery</code>其实就是一个<code>JavaScript</code>的<code>类库</code>，其将复杂的功能做了上层封装，使得开发者可以在其基础上写更少的代码实现更多的功能。</p>
-<ul>
-<li>jQuery 不是生产者，而是大自然搬运工。</li>
-<li>jQuery Ajax本质 XMLHttpRequest 或 ActiveXObject</li>
-</ul>
-<p><em>注：2.+版本不再支持IE9以下的浏览器</em></p>
-<h3 id="jQuery-Ajax-方法"><a href="#jQuery-Ajax-方法" class="headerlink" title="jQuery Ajax 方法"></a>jQuery Ajax 方法</h3><pre><code class="jquery">    jQuery.get(...)
-    所有参数：
-         url: 待载入页面的URL地址
-        data: 待发送 Key/value 参数。
-     success: 载入成功时回调函数。
-    dataType: 返回内容格式，xml, json,  script, text, html
-
-
-    jQuery.post(...)
-        所有参数：
-             url: 待载入页面的URL地址
-            data: 待发送 Key/value 参数
-         success: 载入成功时回调函数
-        dataType: 返回内容格式，xml, json,  script, text, html
-
-
-    jQuery.getJSON(...)
-        所有参数：
-             url: 待载入页面的URL地址
-            data: 待发送 Key/value 参数。
-         success: 载入成功时回调函数。
-
-
-    jQuery.getScript(...)
-        所有参数：
-             url: 待载入页面的URL地址
-            data: 待发送 Key/value 参数。
-         success: 载入成功时回调函数。
-
-
-    jQuery.ajax(...)
-
-        部分参数：
-
-            url：请求地址
-           type：请求方式，GET、POST（1.9.0之后用method）
-        headers：请求头
-           data：要发送的数据
-    contentType：即将发送信息至服务器的内容编码类型(默认: &quot;application/x-www-form-urlencoded; charset=UTF-8&quot;)
-          async：是否异步
-        timeout：设置请求超时时间（毫秒）
-
-     beforeSend：发送请求前执行的函数(全局)
-       complete：完成之后执行的回调函数(全局)
-        success：成功之后执行的回调函数(全局)
-          error：失败之后执行的回调函数(全局)
-
-
-        accepts：通过请求头发送给服务器，告诉服务器当前客户端可接受的数据类型
-       dataType：将服务器端返回的数据转换成指定类型
-                       &quot;xml&quot;: 将服务器端返回的内容转换成xml格式
-                      &quot;text&quot;: 将服务器端返回的内容转换成普通文本格式
-                      &quot;html&quot;: 将服务器端返回的内容转换成普通文本格式，在插入DOM中时，如果包含JavaScript标签，则会尝试去执行。
-                    &quot;script&quot;: 尝试将返回值当作JavaScript去执行，然后再将服务器端返回的内容转换成普通文本格式
-                      &quot;json&quot;: 将服务器端返回的内容转换成相应的JavaScript对象
-                     &quot;jsonp&quot;: JSONP 格式
-                              使用 JSONP 形式调用函数时，如 &quot;myurl?callback=?&quot; jQuery 将自动替换 ? 为正确的函数名，以执行回调函数
-                              如果不指定，jQuery 将自动根据HTTP包MIME信息返回相应类型(an XML MIME type will yield XML, in 1.4 JSON will yield a JavaScript object, in 1.4 script willexecute the script, and anything else will be returned as a string)
-
-     converters： 转换器，将服务器端的内容根据指定的dataType转换类型，并传值给success回调函数
-                     $.ajax({
-                          accepts: {
-                            mycustomtype: &#39;application/x-some-custom-type&#39;
-                          },
-
-                          // Expect a `mycustomtype` back from server
-                          dataType: &#39;mycustomtype&#39;
-
-                          // Instructions for how to deserialize a `mycustomtype`
-                          converters: {
-                            &#39;text mycustomtype&#39;: function(result) {
-                              // Do Stuff
-                              return newresult;
-                            }
-                          },
-                        });
-</code></pre>
-<h3 id="基于jQuery-Ajax-Demo"><a href="#基于jQuery-Ajax-Demo" class="headerlink" title="基于jQuery Ajax - Demo"></a>基于jQuery Ajax - Demo</h3><pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;p&gt;
-        &lt;input type=&quot;button&quot; onclick=&quot;JqSendRequest();&quot; value=&#39;Ajax请求&#39; /&gt;
-    &lt;/p&gt;
-
-
-    &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-1.12.4.js&quot;&gt;&lt;/script&gt;
-    &lt;script&gt;
-
-        function JqSendRequest(){
-            $.ajax({
-                url: &quot;http://c2.com:8000/test/&quot;,
-                type: &#39;GET&#39;,
-                dataType: &#39;text&#39;,
-                success: function(data, statusText, xmlHttpRequest){
-                    console.log(data);
-                }
-            })
-        }
-
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h2 id="跨域Ajax"><a href="#跨域Ajax" class="headerlink" title="跨域Ajax"></a>跨域Ajax</h2><p>由于浏览器存在同源策略机制，同源策略阻止从一个源加载的文档或脚本获取或设置另一个源加载的文档的属性。</p>
-<p>特别的：由于同源策略是浏览器的限制，所以请求的发送和响应是可以进行，只不过浏览器不接受罢了。</p>
-<p>浏览器同源策略并不是对所有的请求均制约：</p>
-<ul>
-<li>制约： XmlHttpRequest</li>
-<li>不叼： img、iframe、script等具有src属性的标签</li>
-</ul>
-<p><em>跨域，跨域名访问，如：<a href="http://www.c1.com" target="_blank" rel="external">http://www.c1.com</a> 域名向 <a href="http://www.c2.com域名发送请求。" target="_blank" rel="external">http://www.c2.com域名发送请求。</a></em></p>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/09/04/Ajax/">Ajax 学习</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-09-04, 22:52:15</p>
-        <p><span>最后更新:</span>2017-03-06, 16:05:15</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/09/04/Ajax/" title="Ajax 学习">http://www.liangxiansen.cn/2016/09/04/Ajax/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/09/04/Ajax/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/09/05/Django/">
-                    Django 学习
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/09/04/web/">
-                    Python Web框架
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Ajax 学习　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#概述"><span class="toc-number">1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#‘伪’AJAX"><span class="toc-number">1.1.</span> <span class="toc-text">‘伪’AJAX</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#原生AJAX"><span class="toc-number">2.</span> <span class="toc-text">原生AJAX</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#XmlHttpRequest对象介绍"><span class="toc-number">2.1.</span> <span class="toc-text">XmlHttpRequest对象介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#跨浏览器支持"><span class="toc-number">2.2.</span> <span class="toc-text">跨浏览器支持</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于原生AJAX-Demo"><span class="toc-number">2.3.</span> <span class="toc-text">基于原生AJAX - Demo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#jQuery-Ajax"><span class="toc-number">3.</span> <span class="toc-text">jQuery Ajax</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#jQuery-Ajax-方法"><span class="toc-number">3.1.</span> <span class="toc-text">jQuery Ajax 方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#基于jQuery-Ajax-Demo"><span class="toc-number">3.2.</span> <span class="toc-text">基于jQuery Ajax - Demo</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#跨域Ajax"><span class="toc-number">4.</span> <span class="toc-text">跨域Ajax</span></a></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/09/05/Django/" title="上一篇: Django 学习">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2016/09/04/web/" title="下一篇: Python Web框架">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">

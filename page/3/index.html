@@ -359,592 +359,663 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
 </nav>
       <div class="body-wrap">
   
-    <article id="post-python-queue" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/05/python-queue/" class="article-date">
-      <time datetime="2016-08-05T15:15:17.000Z" itemprop="datePublished">2016-08-05</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="Queue-先进先出队列"><a href="#Queue-先进先出队列" class="headerlink" title="Queue(先进先出队列)"></a>Queue(先进先出队列)</h2><h3 id="队列特点"><a href="#队列特点" class="headerlink" title="队列特点"></a>队列特点</h3><blockquote>
-<p>队列特点：先进先出（FIFO)——先进队列的元素先出队列。来源于我们生活中的队列（先排队的先办完事）。</p>
-</blockquote>
-<pre><code class="python">import queue
-
-q = queue.Queue() #调用队列生成对象
-q.put(1)  #存放第一个值到队列
-q.put(2)  #存放第二个值到队列
-
-print(&#39;get frist one:%s&#39; % q.get())  # 获取队列的第一个值
-print(&#39;get second on:%s &#39; % q.get())  # 获取队列的第二个值
-</code></pre>
-<ul>
-<li>先进先出原则第一次存放的是1，第二次存放的是2，那么我们在获取值得时候，第一次获取的就是1，第二次就是2</li>
-</ul>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/队列/">队列</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/05/python-queue/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-IO Module" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/05/IO Module/" class="article-date">
-      <time datetime="2016-08-05T04:46:13.000Z" itemprop="datePublished">2016-08-05</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="回顾原生Socket"><a href="#回顾原生Socket" class="headerlink" title="回顾原生Socket"></a>回顾原生Socket</h2><blockquote>
-<p>“他是所有WEB服务器的祖宗”</p>
-</blockquote>
-<p><code>套接字</code>，用于描述IP地址和端口，是一个通信链的<code>句柄</code>，可以用来实现不同虚拟机或不同计算机之间的通信。在<code>Internet</code>上的主机一般运行了多个服务软件，同时提供几种服务。每种服务都打开一个Socket，并绑定到一个<code>端口</code>上，不同的端口对应于不同的服务,这些服务通过”套接字”向网络发出请求或者应答网络请求。</p>
-<p><code>pupepet、ansible、他们也可以通过输入命令然后返回结果这个也是基于Socket来实现的。</code><br>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/05/IO Module/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-python-socket" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/05/python-socket/" class="article-date">
-      <time datetime="2016-08-05T02:44:00.000Z" itemprop="datePublished">2016-08-05</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h2 id="What-is-Socket"><a href="#What-is-Socket" class="headerlink" title="What is Socket"></a>What is Socket</h2><p>网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个<code>socket</code>。<br>Socket的英文原义是<code>孔</code>或<code>插座</code>。作为<code>BSD UNIX</code>的<code>进程通信</code>机制，取后一种意思。通常也称作<code>套接字</code>，用于描述IP地址和端口，是一个通信链的<code>句柄</code>，可以用来实现不同虚拟机或不同计算机之间的通信。在Internet上的主机一般运行了多个服务软件，同时提供几种服务。每种服务都打开一个Socket，并绑定到一个端口上，不同的端口对应于不同的服务,这些服务通过”套接字”向网络发出请求或者应答网络请求。</p>
-<blockquote>
-<p>上面是不是很乱？但是概念一定要了解<br>现在是初学，我把Socket理解为一个电话拨通电话，接听电话！通信的一个概念！<br>Scket在写的时候要记住：<code>有发就有收，收发必相等！</code><br>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socket/">Socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/05/python-socket/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-美丽得旅途-云南" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/04/美丽得旅途-云南/" class="article-date">
-      <time datetime="2016-08-04T08:42:45.000Z" itemprop="datePublished">2016-08-04</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p> <font size=5>旅行</font>一直是在我脑海里憧憬得画面，从未真正为自己得心踏出过这一步。除了偶尔得家庭组织出去玩和工作得变迁在几个地方待过，真的没怎么出去看过我们生活得这个世界是什么样的。</p>
-<center><img src="http://www.liangxiansen.cn/images/yunnan/yunnan0.jpg" alt="看看世界"></center><br>在今年得十一月，我有一个必须请假离开北京，回老家得理由。（我弟生日，[笑哭] <code>-_-|||</code> ，他说他过生日我不回去要打死我，<code>╮(╯_╰)╭</code> 我弟只比我小几个月，是表弟！），好吧，虽然你会觉得这个理由有点扯，但是我真的是必须要回去。<br>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/个人日记/">个人日记</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/旅游/">旅游</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/04/美丽得旅途-云南/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-python其他理解与思考" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/03/python其他理解与思考/" class="article-date">
-      <time datetime="2016-08-03T08:27:54.000Z" itemprop="datePublished">2016-08-03</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <h3 id="Python中作用域"><a href="#Python中作用域" class="headerlink" title="Python中作用域"></a>Python中作用域</h3><ul>
-<li>python中无块级作用域,python中以<code>函数为作用域</code></li>
-</ul>
-<pre><code class="python">if 1 == 1:
-    name = &#39;alex&#39;
-
-print(name)
-</code></pre>
-<p>输出结果：<code>alex</code><br>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/03/python其他理解与思考/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-zabbix-mosa" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/02/zabbix-mosa/" class="article-date">
-      <time datetime="2016-08-02T06:25:59.000Z" itemprop="datePublished">2016-08-02</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <p>Zabbix 一直想监控服务器硬件信息,而DELL OMSA很好的反馈满足了我想要监控得内容,通过OMSA和脚本的实现,对zabbix得熟练玩法实现了服务器的硬件信息监控和自动生成服务器硬件资产信息.</p>
-<p>1、服务器自带的工具，比如HP的hpacucli，DELL的OMSA等<br>2、智能平台管理接口 （IPMI，全称Intelligent Platform Management Interface）<br>基于以上两种，通过nagios、zabbix或自研运维平台等包裹，进行预警操作。<br>由于公司使用的服务器全部为DELL PowerEdge系列的，这里将以如何对DELL PowerEdge系列服务器硬件进行监控这一实际案例为主。</p>
-          
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Zabbix/">Zabbix</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/监控/">监控</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/硬件/">硬件</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
         <p class="article-more-link">
-          <a href="/2016/08/02/zabbix-mosa/#more">阅读全文 >></a>
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
         </p>
-      
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
-    <article id="post-hexo" class="article article-type-post" itemscope itemprop="blogPost">
-  
+    <article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/03/05/hexo/" class="article-date">
-      <time datetime="2016-03-05T02:40:00.000Z" itemprop="datePublished">2016-03-05</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a>
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
-    
+      <% if (!index){ %>
+      <div class="article-info article-info-post">
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
+        <div class="clearfix"></div>
+      </div>
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Hexo-搭建个人博客"><a href="#Hexo-搭建个人博客" class="headerlink" title="Hexo 搭建个人博客"></a>Hexo 搭建个人博客</h2><p>你可以选择购买主机搭建动态博客 - <a href="https://wordpress.org/" target="_blank" rel="external">WordPress</a>等，也可以使用<a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a>来搭建一个静态的个人博客。我选择了现在很热门的<a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a> + <a href="https://hexo.io/" target="_blank" rel="external">Hexo</a> 的方式来搭建独立的个人博客。</p>
-<p>在搭建个人博客的过程中，你可能会使用到下面几个网站。在这几个网站中都有相应的官方文档及教程。如果官方文档不能满足你，那么请<a href="https://www.google.com/" target="_blank" rel="external">Google</a>。</p>
-<p><a href="https://github.com/" target="_blank" rel="external">Github 官网</a><br><a href="https://pages.github.com/" target="_blank" rel="external">Github Pages</a><br><a href="https://hexo.io/" target="_blank" rel="external">Hexo 官网</a><br><a href="https://nodejs.org/" target="_blank" rel="external">Node.js 官网</a><br><a href="http://www.git-scm.com/" target="_blank" rel="external">Git 官网</a></p>
-<h3 id="创建Github-Pages"><a href="#创建Github-Pages" class="headerlink" title="创建Github Pages"></a>创建Github Pages</h3><p>登入<a href="https://github.com/" target="_blank" rel="external">Github 网站</a>，在你的主页点击图标<a href="https://github.com/new" target="_blank" rel="external"> New Repository </a>创建一个新的版本库，因为我们是使用Github 仓库的<a href="https://pages.github.com" target="_blank" rel="external"> Github Pages </a>去搭建我们的静态博客，所以版本库的名称是你以后博客的地址，博客名 +  <code>.github.io</code>。如：我的用户名是：<code>liangxiansen</code>，那么版本库的名字应该是：<a href="https://github.com/LiangXianSen/liangxiansen.github.io" target="_blank" rel="external"> liangxiansen.github.io </a>，这个是一定不能出错的。因为之后你将要访问的你的博客地址就是：<a href="https://liangxiansen.github.io" target="_blank" rel="external"> https://liangxiansen.github.io </a>。</p>
-<p><img src="http://www.liangxiansen.cn/images/hexo/github.io.png" alt="github.io"></p>
-<blockquote>
-<p>这个仓库地址 命名格式必须是 +  <code>github.io</code> 的形式</p>
-</blockquote>
-<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>Hexo的安装在其<a href="https://hexo.io/zh-cn/docs/" target="_blank" rel="external">官方文档</a>中有很详细的说明。下面将简单介绍Hexo的安装。</p>
-<ul>
-<li>安装<a href="https://nodejs.org/" target="_blank" rel="external"> Node.js </a>，请进入Node.js 的官网下载安装。</li>
-</ul>
-<ul>
-<li>安装<a href="http://www.git-scm.com/" target="_blank" rel="external"> Git </a>，前面已经说明，不再赘述。</li>
-</ul>
-<p>上面两个工具安装完整之后，只需要使用npm即可完成Hexo的安装。</p>
-<pre><code>npm install -g hexo-cli
-</code></pre><p>安装Hexo完成之后，执行下面的命令，Hexo将会在你制定的文件夹中新建所需要的文件。</p>
-<pre><code>hexo init &lt;folder&gt;
-cd &lt;folder&gt;
-npm install
-</code></pre><p>新建完成后，文件夹下的目录如下：</p>
-<pre><code>.
-├── _config.yml
-├── package.json
-├── scaffolds
-├── source
-|   ├── _drafts
-|   └── _posts
-└── themes
-</code></pre><ul>
-<li><strong>_config.yml</strong> 文件是网站的配置文件，可以在其中配置网站的大部分参数。</li>
-<li><strong>package.json</strong> 文件是应用程序的信息。</li>
-<li><strong>source</strong> 是资源文件夹，是用来存放用户资源的地方。</li>
-<li><strong>themes</strong> 是<a href="https://hexo.io/themes" target="_blank" rel="external">主题</a>文件夹，Hexo会根据主题来生成不同的静态页面。</li>
-<li><strong>scaffolds</strong>是模板件夹，当新建文章的时候，Hexo会根据模板来建立文件。</li>
-</ul>
-<h3 id="修改主题"><a href="#修改主题" class="headerlink" title="修改主题"></a>修改主题</h3><p>先进入你的Hexo文件夹 <code>themes</code> 里面，选择一个<a href="https://hexo.io/themes/" target="_blank" rel="external">主题</a>下载：</p>
-<pre><code>git clone https://github.com/iissnan/hexo-theme-next.git
-</code></pre><p>然后打开Hexo主文件夹下的<strong>_config.yml</strong>，修改其中的<code>theme</code> 属性。<code>theme:</code> 后面要加空格。</p>
-<h3 id="本地测试"><a href="#本地测试" class="headerlink" title="本地测试"></a>本地测试</h3><pre><code>hexo generate #生成静态页面，生成的内容在public文件夹下
-hexo server #启动本地服务，进行文章预览调试。hexo s --debug 命令可以用来调试
-</code></pre><p>在浏览器输入： <a href="http://127.0.0.1:4000" target="_blank" rel="external">http://127.0.0.1:4000</a> 进行查看</p>
-<h3 id="发布到Github"><a href="#发布到Github" class="headerlink" title="发布到Github"></a>发布到Github</h3><p>先使用下面的命令对Git进行初始配置。</p>
-<pre><code>git config --global user.name &quot;your name&quot;
-git config --global user.email &quot;email@email.com&quot;
-</code></pre><p>然后打开Hexo主文件夹下的<strong>_config.yml</strong>，设置其中的<code>deploy</code> 参数，详细请查看Hexo官方文档中<a href="https://hexo.io/zh-cn/docs/deployment.html" target="_blank" rel="external">部署部分</a>。</p>
-<p>我的设置如下所示：</p>
-<pre><code>deploy:
-  type: git 
-  repository: https://github.com/LiangXianSen/liangxiansen.github.io.git
-  branch: master
-</code></pre><p>在上面的参数设置好了之后，使用下面的命令安装<a href="https://github.com/hexojs/hexo-deployer-git" target="_blank" rel="external"> hexo-deployer-git </a>插件，只有安装了插件之后才可以部署到Github Pages。</p>
-<pre><code>npm install hexo-deployer-git --save
-</code></pre><p>安装完插件之后使用下面的命令进行部署：</p>
-<pre><code>hexo generate #生成静态文件
-hexo deploy #部署到github
-</code></pre><p>还有一个更快捷的命令：</p>
-<pre><code>hexo deploy -g #在部署前先生成
-</code></pre><blockquote>
-<p>在浏览器输入：<a href="https://xxx.github.io" target="_blank" rel="external">https://xxx.github.io</a> 即可访问刚刚发布的网站了。</p>
-</blockquote>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
-<li><code>hexo</code> 目录下的 <code>db.json</code> 文件不要随便删除，里面记录了好多信息，我删了后发现我的blog的访问量的纪录全没了（手动捂脸～）。</li>
-</ul>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
+    <% if (index){ %>
     <div class="article-info article-info-index">
-      
-      
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Hexo/">Hexo</a>
-    </div>
-
-
-      
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hexo/">Hexo</a></li></ul>
-    </div>
-
-      
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
+        </div>
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
       <div class="clearfix"></div>
     </div>
-    
+    <% } %>
   </div>
-  
-
-  
-
-  
-
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
 
-
-
-
+<% if (!index) { %>
+    <script>
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
+    </script>
+<% } %>
   
   
     <nav id="page-nav">

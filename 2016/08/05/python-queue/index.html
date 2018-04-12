@@ -382,449 +382,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-python-queue" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/08/05/python-queue/" class="article-date">
-      <time datetime="2016-08-05T15:15:17.000Z" itemprop="datePublished">2016-08-05</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Python之路：(十二）队列(queue)
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/队列/">队列</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="Queue-先进先出队列"><a href="#Queue-先进先出队列" class="headerlink" title="Queue(先进先出队列)"></a>Queue(先进先出队列)</h2><h3 id="队列特点"><a href="#队列特点" class="headerlink" title="队列特点"></a>队列特点</h3><blockquote>
-<p>队列特点：先进先出（FIFO)——先进队列的元素先出队列。来源于我们生活中的队列（先排队的先办完事）。</p>
-</blockquote>
-<pre><code class="python">import queue
-
-q = queue.Queue() #调用队列生成对象
-q.put(1)  #存放第一个值到队列
-q.put(2)  #存放第二个值到队列
-
-print(&#39;get frist one:%s&#39; % q.get())  # 获取队列的第一个值
-print(&#39;get second on:%s &#39; % q.get())  # 获取队列的第二个值
-</code></pre>
-<ul>
-<li>先进先出原则第一次存放的是1，第二次存放的是2，那么我们在获取值得时候，第一次获取的就是1，第二次就是2</li>
-</ul>
-<a id="more"></a>
-<p><strong>看下面的例子如果队列里没有值怎么办？他会等待直到有数据为止：</strong></p>
-<pre><code class="python">import queue
-
-q = queue.Queue()  # 调用队列生成对象
-
-q.put(1)  #存放第一个值到队列
-q.put(2)  #存放第二个值到队列
-
-a = q.get()  # 获取队列的第一个值
-print(&#39;get frist one:%s&#39; % a)
-b = q.get()  # 获取队列的第二个值
-print(&#39;get second one:%s&#39; % b)
-c = q.get()  # 获取队列的第三个值
-print(&#39;get third one:%s&#39; % c)
-
-#结果:
-&#39;&#39;&#39;
-get frist one:1
-get second one:2
-#这里没有获取到值堵塞住,一直在等待着值进来~
-&#39;&#39;&#39;
-</code></pre>
-<ul>
-<li>如果不想让他等待，不管是否队列里都取数据，可以使用<code>get_nowait()</code>，但是如果队列中没有数据就会报错！</li>
-</ul>
-<pre><code class="python">import queue
-
-q = queue.Queue()  # 调用队列生成对象
-
-q.put(1)  #存放第一个值到队列
-q.put(2)  #存放第二个值到队列
-
-a = q.get()  # 获取队列的第一个值
-print(&#39;get frist one:%s&#39; % a)
-b = q.get()  # 获取队列的第二个值
-print(&#39;get second one:%s&#39; % b)
-c = q.get_nowait()  # 获取队列的第三个值,使用：get_nowait() 不堵塞!
-print(&#39;get third one:%s&#39; % c)
-</code></pre>
-<ul>
-<li>如果队列为空的时候可以通过异常处理进行捕获：</li>
-</ul>
-<pre><code class="python">import queue
-
-q = queue.Queue()  # 调用队列生成对象
-
-q.put(1)  #存放第一个值到队列
-q.put(2)  #存放第二个值到队列
-
-try:
-    a = q.get()  # 获取队列的第一个值
-    print(&#39;get frist one:%s&#39; % a)
-    b = q.get()  # 获取队列的第二个值
-    print(&#39;get second one:%s&#39; % b)
-    c = q.get_nowait()  # 获取队列的第三个值,使用：get_nowait() 不堵塞!
-    print(&#39;get third one:%s&#39; % c)
-except queue.Empty as q_error:
-    print(&#39;The Queue is empty!&#39;)
-</code></pre>
-<ul>
-<li>同样的如果队列长度为2，如果队列满了之后，同样他也是等待，直到有位置才会继续如下代码：</li>
-</ul>
-<pre><code class="python">import queue
-
-q = queue.Queue(2)  # 调用队列生成对象,2:设置队列长度为2
-
-q.put(1)  # 存放第一个值到队列
-print(&#39;put value 1 done&#39;)
-q.put(2)  # 存放第二个值到队列
-print(&#39;put vlaue 2 done&#39;)
-q.put(3)  # 存放第三个值到队列
-print(&#39;put value 3 done&#39;)
-
-#结果：
-&#39;&#39;&#39;
-put value 1 done
-put vlaue 2 done
-#这里会一直等待~
-&#39;&#39;&#39;
-</code></pre>
-<ul>
-<li>同样如果存放数值的时候如果不想让他等待，使用<code>put_nowait()</code>但是队列无法存放后会报错！</li>
-</ul>
-<pre><code class="python">import queue
-
-q = queue.Queue(2)  # 调用队列生成对象,2:设置队列长度为2
-
-q.put(1)  # 存放第一个值到队列
-print(&#39;put value 1 done&#39;)
-q.put(2)  # 存放第二个值到队列
-print(&#39;put vlaue 2 done&#39;)
-# q.put(33, block=False)  # 不堵塞
-# q.put(33, block=False, timeout=2)  # 不堵塞,等待2秒
-q.put_nowait(3)  # 存放第三个值到队列,使用：put_nowait() 不堵塞!
-print(&#39;put value 3 done&#39;)
-</code></pre>
-<ul>
-<li>也可以使用empty()方法判断队列是否为空</li>
-</ul>
-<pre><code class="python">import queue
-
-# 队列最大长度,
-# qsize()真实队列个数
-# maxsize 最大支持的个数
-
-q = queue.Queue(2)  # 队列最大长度
-print(q.empty())    # 检查是否为空(初始默认是空)
-q.put(11)
-q.put(22)
-print(q.empty())
-print(q.qsize())   # 获取队列长度
-</code></pre>
-<h3 id="生产者消费者模型"><a href="#生产者消费者模型" class="headerlink" title="生产者消费者模型"></a>生产者消费者模型</h3><p><strong>什么是生产者消费者模型?</strong></p>
-<blockquote>
-<p>在工作中，大家可能会碰到这样一种情况：某个模块负责产生数据，这些数据由另一个模块来负责处理（此处的模块是广义的，可以是类、函数、线程、进程等）。产 生数据的模块，就形象地称为生产者；而处理数据的模块，就称为消费者。在生产者与消费者之间在加个缓冲区，我们形象的称之为仓库，生产者负责往仓库了进商 品，而消费者负责从仓库里拿商品，这就构成了生产者消费者模型。结构图如下：</p>
-</blockquote>
-<p><img src="http://www.liangxiansen.cn/images/socket编程/queue.jpg" alt="生产者消费者模型"></p>
-<p>生产者消费者模型的优点：</p>
-<p>1、解耦</p>
-<p>假设生产者和消费者分别是两个类。如果让生产者直接调用消费者的某个方法，那么生产者对于消费者就会产生依赖（也就是耦合）。将来如果消费者的代码发生变化， 可能会影响到生产者。而如果两者都依赖于某个缓冲区，两者之间不直接依赖，耦合也就相应降低了。</p>
-<p>举个例子，我们去邮局投递信件，如果不使用邮筒（也就是缓冲区），你必须得把信直接交给邮递员。有同学会说，直接给邮递员不是挺简单的嘛？其实不简单，你必须 得认识谁是邮递员，才能把信给他（光凭身上穿的制服，万一有人假冒，就惨了）。这就产生和你和邮递员之间的依赖（相当于生产者和消费者的强耦合）。万一哪天邮递员换人了，你还要重新认识一下（相当于消费者变化导致修改生产者代码）。而邮筒相对来说比较固定，你依赖它的成本就比较低（相当于和缓冲区之间的弱耦合）。</p>
-<p>2、支持并发</p>
-<p>由于生产者与消费者是两个独立的并发体，他们之间是用缓冲区作为桥梁连接，生产者只需要往缓冲区里丢数据，就可以继续生产下一个数据，而消费者只需要从缓冲区了拿数据即可，这样就不会因为彼此的处理速度而发生阻塞。</p>
-<p>接上面的例子，如果我们不使用邮筒，我们就得在邮局等邮递员，直到他回来，我们把信件交给他，这期间我们啥事儿都不能干（也就是生产者阻塞），或者邮递员得挨家挨户问，谁要寄信（相当于消费者轮询）。</p>
-<p>3、支持忙闲不均</p>
-<p>缓冲区还有另一个好处。如果制造数据的速度时快时慢，缓冲区的好处就体现出来了。当数据制造快的时候，消费者来不及处理，未处理的数据可以暂时存在缓冲区中。 等生产者的制造速度慢下来，消费者再慢慢处理掉。</p>
-<p>为了充分复用，我们再拿寄信的例子来说事。假设邮递员一次只能带走1000封信。万一某次碰上情人节（也可能是圣诞节）送贺卡，需要寄出去的信超过1000封，这时 候邮筒这个缓冲区就派上用场了。邮递员把来不及带走的信暂存在邮筒中，等下次过来 时再拿走。</p>
-<p><strong> 简单的生产者消费者模型: </strong></p>
-<pre><code class="python">import queue
-import threading
-import time
-
-q = queue.Queue()
-
-# 生成者(client)
-def productor(arg):
-    # 序号加包子,将做好的包子放到篮子(队列)里
-    q.put(str(arg) + &#39;包子&#39;)
-
-# 创建30个包子
-for i in range(30):
-    t = threading.Thread(target=productor, args=(i,))
-    t.start()
-
-# ============================================================== #
-
-# 消费者(server)
-def consumer(arg):
-    while True:
-        # arg(0-3)吃包子得人, q.get()从篮子(队列)里取包子,包子有序号
-        print(arg, q.get())
-        time.sleep(2)
-
-# 三个线程一起吃包子
-for j in range(3):
-    t = threading.Thread(target=consumer, args=(j,))
-    t.start()
-</code></pre>
-<h2 id="PriorityQueue-优先级队列"><a href="#PriorityQueue-优先级队列" class="headerlink" title="PriorityQueue(优先级队列)"></a>PriorityQueue(优先级队列)</h2><h3 id="队列特点-1"><a href="#队列特点-1" class="headerlink" title="队列特点"></a>队列特点</h3><blockquote>
-<p>队列特点: 根据优先级处理,数字最小的优先级最高</p>
-</blockquote>
-<pre><code class="python">import queue
-q = queue.PriorityQueue()   # 根据优先级处理,数字最小的优先级最高
-# put() 参数一为优先级,第二个参数是value
-q.put((3, &quot;alex3&quot;))
-q.put((2, &quot;alex2&quot;))
-q.put((1, &quot;alex1&quot;))
-print(q.get())
-</code></pre>
-<h2 id="deque-双向队列"><a href="#deque-双向队列" class="headerlink" title="deque(双向队列)"></a>deque(双向队列)</h2><h3 id="队列特点-2"><a href="#队列特点-2" class="headerlink" title="队列特点"></a>队列特点</h3><blockquote>
-<p>队列特点: 两边都能插入数据,都能取数据</p>
-</blockquote>
-<pre><code class="python">import queue
-q= queue.deque()          #双向队列
-q.append((123))
-q.append(234)
-q.appendleft(456)
-print(list(q))
-q.pop()
-q.popleft()
-print(list(q))
-</code></pre>
-<h3 id="append-x"><a href="#append-x" class="headerlink" title="append(x)"></a>append(x)</h3><p>将x添加到 deque 的右侧。</p>
-<h3 id="appendleft-x"><a href="#appendleft-x" class="headerlink" title="appendleft(x)"></a>appendleft(x)</h3><p>将x添加到 deque 的左侧。</p>
-<h3 id="clear"><a href="#clear" class="headerlink" title="clear()"></a>clear()</h3><p>从留下长度为 0 的 deque 中移除所有元素。</p>
-<h3 id="count-x"><a href="#count-x" class="headerlink" title="count(x)"></a>count(x)</h3><p>统计 deque 中值为x的个数。</p>
-<h3 id="extend-iterable"><a href="#extend-iterable" class="headerlink" title="extend(iterable)"></a>extend(iterable)</h3><p>通过追加元素从可迭代参数扩展的 deque 的右侧。</p>
-<h3 id="extendleft-iterable"><a href="#extendleft-iterable" class="headerlink" title="extendleft(iterable)"></a>extendleft(iterable)</h3><p>通过将附加元素从扩展 deque 的左侧可迭代。请注意，左边的一系列附加结果在扭转可迭代参数中元素的顺序。</p>
-<h3 id="pop"><a href="#pop" class="headerlink" title="pop()"></a>pop()</h3><p>删除并从右侧的双端队列中返回的元素。如果没有元素存在，提出了IndexError。</p>
-<h3 id="popleft"><a href="#popleft" class="headerlink" title="popleft()"></a>popleft()</h3><p>移除并返回一个元素从 deque 的左侧。如果没有元素存在，提出了IndexError。</p>
-<h3 id="remove-value"><a href="#remove-value" class="headerlink" title="remove(value)"></a>remove(value)</h3><p>删除值的第一个匹配项。如果未找到，引发ValueError。</p>
-<h3 id="reverse"><a href="#reverse" class="headerlink" title="reverse()"></a>reverse()</h3><p>翻转 deque 的元素，然后返回None。</p>
-<h3 id="rotate-n"><a href="#rotate-n" class="headerlink" title="rotate(n)"></a>rotate(n)</h3><p>deque中的元素向右移动n个位置。如果n是负数的向左移动。向右移动一步相当于： d.appendleft(d.pop())。</p>
-<h3 id="maxlen"><a href="#maxlen" class="headerlink" title="maxlen"></a>maxlen</h3><p><code>maxlen</code><br>Deque 的最大长度。如果没有边界，则返回None。</p>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-08-05, 23:15:17</p>
-        <p><span>最后更新:</span>2017-08-12, 10:48:22</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/08/05/python-queue/" title="Python之路：(十二）队列(queue)">http://www.liangxiansen.cn/2016/08/05/python-queue/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/05/python-queue/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/08/08/python-thread-process-gevent/">
-                    Python之路：(十五）进程、线程和协程
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/08/05/IO Module/">
-                    Python之路：(十四）I/O多路复用
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"Python之路：(十二）队列(queue)　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Queue-先进先出队列"><span class="toc-number">1.</span> <span class="toc-text">Queue(先进先出队列)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#队列特点"><span class="toc-number">1.1.</span> <span class="toc-text">队列特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#生产者消费者模型"><span class="toc-number">1.2.</span> <span class="toc-text">生产者消费者模型</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PriorityQueue-优先级队列"><span class="toc-number">2.</span> <span class="toc-text">PriorityQueue(优先级队列)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#队列特点-1"><span class="toc-number">2.1.</span> <span class="toc-text">队列特点</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#deque-双向队列"><span class="toc-number">3.</span> <span class="toc-text">deque(双向队列)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#队列特点-2"><span class="toc-number">3.1.</span> <span class="toc-text">队列特点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#append-x"><span class="toc-number">3.2.</span> <span class="toc-text">append(x)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#appendleft-x"><span class="toc-number">3.3.</span> <span class="toc-text">appendleft(x)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#clear"><span class="toc-number">3.4.</span> <span class="toc-text">clear()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#count-x"><span class="toc-number">3.5.</span> <span class="toc-text">count(x)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extend-iterable"><span class="toc-number">3.6.</span> <span class="toc-text">extend(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#extendleft-iterable"><span class="toc-number">3.7.</span> <span class="toc-text">extendleft(iterable)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#pop"><span class="toc-number">3.8.</span> <span class="toc-text">pop()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#popleft"><span class="toc-number">3.9.</span> <span class="toc-text">popleft()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#remove-value"><span class="toc-number">3.10.</span> <span class="toc-text">remove(value)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#reverse"><span class="toc-number">3.11.</span> <span class="toc-text">reverse()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#rotate-n"><span class="toc-number">3.12.</span> <span class="toc-text">rotate(n)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#maxlen"><span class="toc-number">3.13.</span> <span class="toc-text">maxlen</span></a></li></ol></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/08/08/python-thread-process-gevent/" title="上一篇: Python之路：(十五）进程、线程和协程">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2016/08/05/IO Module/" title="下一篇: Python之路：(十四）I/O多路复用">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">

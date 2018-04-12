@@ -167,7 +167,12 @@ if __name__ == &quot;__main__&quot;:
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
 </code></pre>
-<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">import time
+<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import time
 from tornado.web import RequestHandler, Application
 from tornado.ioloop import IOLoop
 
@@ -189,7 +194,7 @@ if __name__ == &#39;__main__&#39;:
             (r&#39;/flush&#39;, FlushHandler)
         ]
     )
-    app.listen(port=8000, address=&#39;0.0.0.0&#39;)
+    app.listen(port=8888)
     IOLoop.current().start()
 </code></pre>
 <h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>

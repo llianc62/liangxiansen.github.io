@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.liangxiansen.cn/"/>
-  <updated>2018-04-12T08:00:44.642Z</updated>
+  <updated>2018-04-12T08:23:55.846Z</updated>
   <id>http://www.liangxiansen.cn/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://www.liangxiansen.cn/2018/04/11/tornado/"/>
     <id>http://www.liangxiansen.cn/2018/04/11/tornado/</id>
     <published>2018-04-11T06:02:02.000Z</published>
-    <updated>2018-04-12T08:00:44.642Z</updated>
+    <updated>2018-04-12T08:23:55.846Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
 <p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="external">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="external">C10K problem</a>。）</p>
@@ -183,7 +183,12 @@ if __name__ == &quot;__main__&quot;:
     app.listen(8888)
     tornado.ioloop.IOLoop.current().start()
 </code></pre>
-<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">import time
+<h3 id="Flush-mothed"><a href="#Flush-mothed" class="headerlink" title="Flush mothed"></a>Flush mothed</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import time
 from tornado.web import RequestHandler, Application
 from tornado.ioloop import IOLoop
 
@@ -205,7 +210,7 @@ if __name__ == &#39;__main__&#39;:
             (r&#39;/flush&#39;, FlushHandler)
         ]
     )
-    app.listen(port=8000, address=&#39;0.0.0.0&#39;)
+    app.listen(port=8888)
     IOLoop.current().start()
 </code></pre>
 <h2 id="路由系统"><a href="#路由系统" class="headerlink" title="路由系统"></a>路由系统</h2><p>路由系统其实就是 url 和 类 的对应关系，这里不同于其他框架，其他很多框架均是 url 对应函数，Tornado中每个url对应的是一个类。</p>
