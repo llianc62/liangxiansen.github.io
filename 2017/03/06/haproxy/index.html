@@ -358,99 +358,535 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
+      <div class="body-wrap"><article id="post-haproxy" class="article article-type-post" itemscope itemprop="blogPost">
+  
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2017/03/06/haproxy/" class="article-date">
+      <time datetime="2017-03-06T06:25:29.000Z" itemprop="datePublished">2017-03-06</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 class="article-title" itemprop="name">
+      HAproxy
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
+      
       <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Linux笔记/">Linux笔记</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HAproxy/">HAproxy</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <h2 id="HAproxy"><a href="#HAproxy" class="headerlink" title="HAproxy"></a>HAproxy</h2><h3 id="HAProxy介绍"><a href="#HAProxy介绍" class="headerlink" title="HAProxy介绍"></a>HAProxy介绍</h3><p>HAProxy提供<strong>高可用性</strong>、<strong>负载均衡</strong>以及基于TCP和HTTP应用的代理，<strong>支持虚拟主机</strong>，它是免费、快速并且可靠的一种解决方案。根据官方数据，其最高极限支持10G的并发。 </p>
+<p> HAProxy特别适用于那些负载特大的web站点， 这些站点通常又需要会话保持或七层处理。HAProxy运行在当前的硬件上，完全可以支持数以万计的并发连接。并且它的运行模式使得它可以很简单安全的整合进您当前的架构中， 同时可以保护你的web服务器不被暴露到网络上。</p>
+<p>其支持从4层至7层的网络交换，即覆盖所有的TCP协议。就是说，Haproxy 甚至还支持 Mysql 的均衡负载。。</p>
+<p>如果说在功能上，能以proxy反向代理方式实现 WEB均衡负载，这样的产品有很多。包括 Nginx，ApacheProxy，lighttpd，Cheroke 等。但要明确一点的，Haproxy 并不是 Http 服务器。以上提到所有带反向代理均衡负载的产品，都清一色是 WEB 服务器。简单说，就是他们能自个儿提供静态(html,jpg,gif..)或动态(php,cgi..)文件的传输以及处理。而Haproxy 仅仅，而且专门是一款的用于均衡负载的应用代理。其自身并不能提供http服务。 </p>
+<p>但其配置简单，拥有非常不错的服务器健康检查功能还有专门的系统状态监控页面，当其代理的后端服务器出现故障, HAProxy会自动将该服务器摘除，故障恢复后再自动将该服务器加入。自1.3版本开始还引入了frontend,backend,frontend根据任意HTTP请求头内容做规则匹配，然后把请求定向到相关的backend。 </p>
+<a id="more"></a>
+<h3 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h3><ul>
+<li>内容交换 : 可以根据请求(request)的任何一部分 来选择一组服务器, 比如请求的 URI , Host头(header) , cookie , 以及其他任何东西. 当然，对那些静态分离的站点来说，对此特性还有更多的需求。 </li>
+</ul>
+<ul>
+<li>全透明代理 : 可以用 客户端IP地址 或者任何其他地址来连接后端服务器. 这个特性仅在Linux 2.4/2.6内核打了cttproxy 补丁后才可以使用. 这个特性也使得为某特殊服务器处理部分流量同时又不修改服务器的地址成为可能。</li>
+</ul>
+<ul>
+<li>基于树的更快的调度器 : 1.2.16以上的版本要求所有的超时都设成同样的值以支持数以万计的全速连接. 这个特性已经移植到1.2.17. </li>
+</ul>
+<ul>
+<li>内核TCP拼接 : 避免了内核到用户然后用户到内核端的数据拷贝, 提高了吞吐量同时又降低了CPU使用率 . Haproxy 1.3支持Linux L7SW 以满足在商用硬件上数Gbps 的吞吐的需求。 </li>
+</ul>
+<ul>
+<li>连接拒绝 : 因为维护一个连接的打开的开销是很低的，有时我们很需要限制攻击蠕虫(attack bots)，也就是说限制它们的连接打开从而限制它们的危害。 这个已经为一个陷于小型DDoS攻击的网站开发了而且已经拯救了很多站点。 </li>
+</ul>
+<ul>
+<li>细微的头部处理 : 使得编写基于header的规则更为简单，同时可以处理URI的某部分。 </li>
+</ul>
+<ul>
+<li>快而可靠的头部处理 : 使用完全RFC2616 兼容的完整性检查对一般的请求全部进行分析和索引仅仅需要不到2ms 的时间。 </li>
+</ul>
+<ul>
+<li>模块化设计 : 允许更多人加入进此项目，调试也非常简单. poller已经分离, 已经使得它们的开发简单了很多. HTTP已经从TCP分离出来了，这样增加新的七层特性变得非常简单. 其他子系统也会很快实现模块化 </li>
+</ul>
+<ul>
+<li>投机I/O 处理 : 在一个套接字就绪前就尝试从它读取数据。poller仅推测哪个可能就绪哪个没有，尝试猜测，并且如果成功，一些开销很大的系统调用就可以省去了。如果失败，就会调用这些系统调用。已知的使用Linux epoll()已经净提升起码10%了。 </li>
+</ul>
+<ul>
+<li>ACLs : 使用任意规则的任意组合作为某动作的执行条件。</li>
+</ul>
+<ul>
+<li>TCP 协议检查 : 结合ACL来对请求的任意部分进行检查，然后再进行转发。这就可以执行协议验证而不是盲目的进行转发。比如说允许SSL但拒绝SSH。</li>
+</ul>
+<ul>
+<li>更多的负载均衡算法 : 现在，动态加权轮循(Dynamic Round Robin)，加权源地址哈希(Weighted Source Hash)，加权URL哈希和加权参数哈希(Weighted Parameter Hash)已经实现。其他算法比如Weighted Measured Response Time也很快会实现。 </li>
+</ul>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），<strong>Fuck GFW</strong>。 可以通过直接访问<a href="http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令" target="_blank" rel="external">http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令</a></p>
+<pre><code> wget http://www.haproxy.org/download/1.7/src/haproxy-1.7.3.tar.gz
+</code></pre><p>下载，下载完成后，将其解压。</p>
+<pre><code>cd haproxy-1.7.3
+uname -a
+make TARGET=linux26 PREFIX=/usr/local/haproxy
+make install PREFIX=/usr/local/haproxy
+</code></pre><p>linux26,26表示linux系统的主次版本号。 执行上面的命令，输出done就正确安装完成。</p>
+<h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
+<li>修改配置</li>
+</ul>
+<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到<a href="http://www.cbonte.github.io/haproxy-dconv/index.html" target="_blank" rel="external">haproxy-dconv</a>查看。</p>
+<pre><code>mkdir /usr/local/haproxy/logs
+vim /etc/haproxy.cfg
+</code></pre><ul>
+<li>在/etc/syslog.conf文件中添加，如下：</li>
+</ul>
+<pre><code># Haproxy
+local5.*                                                /usr/local/haproxy/logs/haproxy.log
+</code></pre><ul>
+<li>如果系统需要设置接收外来日志，修改/etc/sysconfig/rsyslog文件：</li>
+</ul>
+<pre><code>SYSLOGD_OPTIONS=&quot;-r -m 0 -c 2&quot;
+</code></pre><ul>
+<li>开启rsyslog的日志记录功能</li>
+</ul>
+<p>vi /etc/rsyslog.conf 找到下面两行并去掉前面的#号</p>
+<pre><code>#$ModLoad imudp
+#$UDPServerRun 514
+</code></pre><ul>
+<li>重启rsyslog生效</li>
+</ul>
+<pre><code>/etc/init.d/rsyslog reload
+</code></pre><ul>
+<li>配置文件解释</li>
+</ul>
+<pre><code>####################全局配置信息########################
+#######参数是进程级的，通常和操作系统（OS）相关#########
+global
+       maxconn 20480                   #默认最大连接数
+       log 127.0.0.1 local3            #[err warning info debug]
+       chroot /var/haproxy             #chroot运行的路径
+       uid 99                          #所属运行的用户uid
+       gid 99                          #所属运行的用户组
+       daemon                          #以后台形式运行haproxy
+       nbproc 1                        #进程数量(可以设置多个进程提高性能)
+       pidfile /var/run/haproxy.pid    #haproxy的pid存放路径,启动进程的用户必须有权限访问此文件
+       ulimit-n 65535                  #ulimit的数量限制
+
+       #####################默认的全局设置######################
+       ##这些参数可以被利用配置到frontend，backend，listen组件##
+defaults
+       log global
+       mode http                       #所处理的类别 (#7层 http;4层tcp  )
+       maxconn 20480                   #最大连接数
+       option httplog                  #日志类别http日志格式
+       option httpclose                #每次请求完毕后主动关闭http通道
+       option dontlognull              #不记录健康检查的日志信息
+       option forwardfor               #如果后端服务器需要获得客户端真实ip需要配置的参数，可以从Http Header中获得客户端ip
+       option redispatch               #serverId对应的服务器挂掉后,强制定向到其他健康的服务器
+       option abortonclose             #当服务器负载很高的时候，自动结束掉当前队列处理比较久的连接
+       stats refresh 30                #统计页面刷新间隔
+       retries 3                       #3次连接失败就认为服务不可用，也可以通过后面设置
+       balance roundrobin              #默认的负载均衡的方式,轮询方式
+      #balance source                  #默认的负载均衡的方式,类似Nginx的ip_hash
+      #balance leastconn               #默认的负载均衡的方式,最小连接
+       contimeout 5000                 #连接超时
+       clitimeout 50000                #客户端超时
+       srvtimeout 50000                #服务器超时
+       timeout check 2000              #心跳检测超时
+
+       ####################监控页面的设置#######################
+listen admin_status                    #Frontend和Backend的组合体,监控组的名称，按需自定义名称
+        bind 0.0.0.0:65532             #监听端口
+        mode http                      #http的7层模式
+        log 127.0.0.1 local3 err       #错误日志记录
+        stats refresh 5s               #每隔5秒自动刷新监控页面
+        stats uri /admin?stats         #监控页面的url
+        stats realm itnihao itnihao   #监控页面的提示信息
+        stats auth admin:admin         #监控页面的用户和密码admin,可以设置多个用户名
+        stats auth admin1:admin1       #监控页面的用户和密码admin1
+        stats hide-version             #隐藏统计页面上的HAproxy版本信息
+        stats admin if TRUE            #手工启用/禁用,后端服务器(haproxy-1.4.9以后版本)
+
+       errorfile 403 /etc/haproxy/errorfiles/403.http
+       errorfile 500 /etc/haproxy/errorfiles/500.http
+       errorfile 502 /etc/haproxy/errorfiles/502.http
+       errorfile 503 /etc/haproxy/errorfiles/503.http
+       errorfile 504 /etc/haproxy/errorfiles/504.http
+
+       #################HAProxy的日志记录内容设置###################
+       capture request  header host           len 40
+       capture request  header Content-Length len 10
+       capture request  header Referer        len 200
+       capture response header Server         len 40
+       capture response header Content-Length len 10
+       capture response header Cache-Control  len 8
+
+       #######################网站监测listen配置#####################
+       ###########此用法主要是监控haproxy后端服务器的监控状态############
+listen site_status
+       bind 0.0.0.0:1081                    #监听端口
+       mode http                            #http的7层模式
+       log 127.0.0.1 local3 err             #[err warning info debug]
+       monitor-uri /site_status             #网站健康检测URL，用来检测HAProxy管理的网站是否可以用，正常返回200，不正常返回503
+       acl site_dead nbsrv(server_web) lt 2 #定义网站down时的策略当挂在负载均衡上的指定backend的中有效机器数小于1台时返回true
+       acl site_dead nbsrv(server_blog) lt 2
+       acl site_dead nbsrv(server_bbs)  lt 2
+       monitor fail if site_dead            #当满足策略的时候返回503，网上文档说的是500，实际测试为503
+       monitor-net 192.168.16.2/32          #来自192.168.16.2的日志信息不会被记录和转发
+       monitor-net 192.168.16.3/32
+
+       ########frontend配置############
+       #####注意，frontend配置里面可以定义多个acl进行匹配操作########
+frontend http_80_in
+       bind 0.0.0.0:80      #监听端口，即haproxy提供web服务的端口，和lvs的vip端口类似
+       mode http            #http的7层模式
+       log global           #应用全局的日志配置
+       option httplog       #启用http的log
+       option httpclose     #每次请求完毕后主动关闭http通道，HA-Proxy不支持keep-alive模式
+       option forwardfor    #如果后端服务器需要获得客户端的真实IP需要配置次参数，将可以从Http Header中获得客户端IP
+       ########acl策略配置#############
+       acl itnihao_web hdr_reg(host) -i ^(www.itnihao.cn|ww1.itnihao.cn)$
+       #如果请求的域名满足正则表达式中的2个域名返回true -i是忽略大小写
+       acl itnihao_blog hdr_dom(host) -i blog.itnihao.cn
+       #如果请求的域名满足www.itnihao.cn返回true -i是忽略大小写
+       #acl itnihao    hdr(host) -i itnihao.cn
+       #如果请求的域名满足itnihao.cn返回true -i是忽略大小写
+       #acl file_req url_sub -i  killall=
+       #在请求url中包含killall=，则此控制策略返回true,否则为false
+       #acl dir_req url_dir -i allow
+       #在请求url中存在allow作为部分地址路径，则此控制策略返回true,否则返回false
+       #acl missing_cl hdr_cnt(Content-length) eq 0
+       #当请求的header中Content-length等于0时返回true
+
+      ########acl策略匹配相应#############
+       #block if missing_cl
+       #当请求中header中Content-length等于0阻止请求返回403
+       #block if !file_req || dir_req
+       #block表示阻止请求，返回403错误，当前表示如果不满足策略file_req，或者满足策略dir_req，则阻止请求
+       use_backend  server_web  if itnihao_web
+       #当满足itnihao_web的策略时使用server_web的backend
+       use_backend  server_blog if itnihao_blog
+       #当满足itnihao_blog的策略时使用server_blog的backend
+       #redirect prefix http://blog.itniaho.cn code 301 if itnihao
+       #当访问itnihao.cn的时候，用http的301挑转到http://192.168.16.3
+       default_backend server_bbs
+       #以上都不满足的时候使用默认server_bbs的backend
+
+
+       ##########backend的设置##############
+       #下面我将设置三组服务器 server_web，server_blog，server_bbs
+###########backend server_web#################
+backend server_web
+       mode http            #http的7层模式
+       balance roundrobin   #负载均衡的方式，roundrobin平均方式
+       cookie SERVERID      #允许插入serverid到cookie中，serverid后面可以定义
+       option httpchk GET /index.html #心跳检测的文件
+       server web1 192.168.16.2:80 cookie web1 check inter 1500 rise 3 fall 3 weight 1
+       #服务器定义，cookie 1表示serverid为web1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+       #fall 3是3次失败认为服务器不可用，weight代表权重
+       server web2 192.168.16.3:80 cookie web2 check inter 1500 rise 3 fall 3 weight 2
+       #服务器定义，cookie 1表示serverid为web2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，
+       #fall 3是3次失败认为服务器不可用，weight代表权重
+
+#############backend server_blog##############
+backend server_blog
+       mode http            #http的7层模式
+       balance roundrobin   #负载均衡的方式，roundrobin平均方式
+
+       cookie SERVERID      #允许插入serverid到cookie中，serverid后面可以定义
+       option httpchk GET /index.html #心跳检测的文件
+       server blog1 192.168.16.2:80 cookie blog1 check inter 1500 rise 3 fall 3 weight 1
+       #服务器定义，cookie 1表示serverid为web1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+       server blog2 192.168.16.3:80 cookie blog2 check inter 1500 rise 3 fall 3 weight 2
+        #服务器定义，cookie 1表示serverid为web2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+
+#############backend server_bbs##############
+
+backend server_bbs
+       mode http            #http的7层模式
+       balance roundrobin   #负载均衡的方式，roundrobin平均方式
+       cookie SERVERID      #允许插入serverid到cookie中，serverid后面可以定义
+       option httpchk GET /index.html #心跳检测的文件
+       server bbs1 192.168.16.2:80 cookie bbs1 check inter 1500 rise 3 fall 3 weight 1
+       #服务器定义，cookie 1表示serverid为web1，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+       server bbs2 192.168.16.3:80 cookie bbs2 check inter 1500 rise 3 fall 3 weight 2
+        #服务器定义，cookie 1表示serverid为web2，check inter 1500是检测心跳频率rise 3是3次正确认为服务器可用，fall 3是3次失败认为服务器不可用，weight代表权重
+</code></pre><ul>
+<li>下面是我的配置</li>
+</ul>
+<pre><code>global
+        maxconn         20480
+        ulimit-n        65535
+        log             127.0.0.1 local5
+        uid             200
+        gid             200
+        chroot          /usr/local/haproxy
+        nbproc          1
+        daemon
+        pidfile         /usr/local/haproxy/logs/haproxy.pid
+
+defaults
+        log             global
+        mode            http
+        option          httplog
+        option          dontlognull
+        option          forwardfor
+        option          abortonclose
+        retries         3
+        maxconn         3000
+        stats           enable
+        stats           hide-version
+        stats   uri     /admin
+        stats   auth    admin:admin
+        stats   refresh 10s
+        balance         roundrobin
+        timeout connect 5000ms
+        timeout client 50000ms
+        timeout server 50000ms
+        timeout check 2000ms
+
+listen web_haproxy
+        bind 0.0.0.0:8080
+        mode http
+        log     127.0.0.1 local5 err
+        stats   refresh 5s
+        stats   uri /admin
+        stats   realm liang lian
+        stats   auth admin:admin
+        stats   hide-version
+        stats   admin if TRUE
+
+frontend consul
+        bind    0.0.0.0:8500
+        mode    http
+        log     global
+        default_backend consul-cluster
+
+backend consul-cluster
+        mode http
+        server s1 10.201.102.198:8500 check inter 5000 fall 1 rise 2 weight 2
+        server s2 10.201.102.199:8500 check inter 5000 fall 1 rise 2 weight 2
+        server s3 10.201.102.200:8500 check inter 5000 fall 1 rise 2 weight 2
+</code></pre><h3 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h3><pre><code>/usr/local/haproxy/sbin/haproxy -f /etc/haproxy.cfg
+</code></pre><ul>
+<li>启动脚本</li>
+</ul>
+<pre><code>cp haproxy-1.7.3/examples/haproxy.init /etc/init.d/haproxy
+chmod +x /etc/init.d/haproxy
+</code></pre><h3 id="web-Haproxy"><a href="#web-Haproxy" class="headerlink" title="web-Haproxy"></a>web-Haproxy</h3><p>我Haproxy服务器IP地址是10.201.102.185</p>
+<p><a href="http://10.201.102.185:8080/admin" target="_blank" rel="external">http://10.201.102.185:8080/admin</a></p>
+<p><img src="http://www.liangxiansen.cn/images/haproxy/web-haproxy.png" alt="web-haproxy"></p>
+<h3 id="Bakend-server"><a href="#Bakend-server" class="headerlink" title="Bakend_server"></a>Bakend_server</h3><p><a href="http://10.201.102.185:8500" target="_blank" rel="external">http://10.201.102.185:8500</a></p>
+
+      
     </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/03/06/haproxy/">HAproxy</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2017-03-06, 14:25:29</p>
+        <p><span>最后更新:</span>2017-08-02, 14:15:20</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/03/06/haproxy/" title="HAproxy">http://www.liangxiansen.cn/2017/03/06/haproxy/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2017/03/06/haproxy/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2017/04/06/consul/">
+                    Consul 使用手册
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/01/13/python函数默认参数坑/">
+                    python函数默认参数的一个坑
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"HAproxy　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#HAproxy"><span class="toc-number">1.</span> <span class="toc-text">HAproxy</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HAProxy介绍"><span class="toc-number">1.1.</span> <span class="toc-text">HAProxy介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#功能"><span class="toc-number">1.2.</span> <span class="toc-text">功能</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#安装"><span class="toc-number">1.3.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置"><span class="toc-number">1.4.</span> <span class="toc-text">配置</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#启动"><span class="toc-number">1.5.</span> <span class="toc-text">启动</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#web-Haproxy"><span class="toc-number">1.6.</span> <span class="toc-text">web-Haproxy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bakend-server"><span class="toc-number">1.7.</span> <span class="toc-text">Bakend_server</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
     <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
-<% } %></div>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2017/04/06/consul/" title="上一篇: Consul 使用手册">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/01/13/python函数默认参数坑/" title="下一篇: python函数默认参数的一个坑">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
