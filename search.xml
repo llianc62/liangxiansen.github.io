@@ -729,7 +729,6 @@ from concurrent.futures import ThreadPoolExecutor
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
         self.write(&#39;index&#39;)
-        self.write(&#39;index&#39;)
         print(&#39;index&#39;)
 
 
