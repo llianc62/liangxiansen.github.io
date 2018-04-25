@@ -383,641 +383,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-html" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/09/27/html/" class="article-date">
-      <time datetime="2016-09-27T06:09:51.000Z" itemprop="datePublished">2016-09-27</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      HTML 基础
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HTML/">HTML</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="什么是HTML？"><a href="#什么是HTML？" class="headerlink" title="什么是HTML？"></a>什么是HTML？</h2><p><code>HTML(HyperText MarkUp Language)</code>超文本标记语言,通过使用标记来描述文档结构和表现形式的一种语言,由浏览器进行解析,然后把结果显示在网页上，通俗的讲它就是服务器发送的字符串到浏览器，通过浏览器能解析的规则用HTML来描述， 它是网页构成的基础,你见到的所有网页都离不开HTML,所以学习HTML是基础中的基础</p>
-<blockquote>
-<ul>
-<li>HTML语言是一种标记语言,不需要编译,直接由浏览器执行</li>
-<li>HTML文件是一个文本文件,包含了一些HTML元素, HTML文件是一个文本文件,包含了一些HTML元素,标签等.</li>
-<li>HTML文件必须使用html或htm为文件名后缀</li>
-<li>HTML是大小写不敏感的,HTML与html是一样的</li>
-<li>html标签都是由&lt;??&gt;&lt;/??&gt;得形势存在的,&lt;??&gt;表示这个标签的开始&lt;/??&gt;表示这个标签的结束,中间这是这个标签的内容.</li>
-</ul>
-</blockquote>
-<a id="more"></a>
-<h3 id="Html和CSS、js的关系"><a href="#Html和CSS、js的关系" class="headerlink" title="Html和CSS、js的关系"></a>Html和CSS、js的关系</h3><p>如果把Html比作一个赤裸裸的人，那么css就是给这个人穿上华丽的服装，js就是可以把这个人动起来。</p>
-<p>HTML是网页内容的载体。内容就是网页制作者放在页面上想要让用户浏览的信息，可以包含文字、图片、视频等。<br>CSS样式是表现(外观控制)。就像网页的外衣。比如，标题字体、颜色变化，或为标题加入背景图片、边框等。所有这些用来改变内容外观的东西称之为表现。<br>JavaScript是用来实现网页上的特效效果。如：鼠标滑过弹出下拉菜单。或鼠标滑过表格的背景颜色改变。还有焦点新闻（新闻图片）的轮换。可以这么理解，有动画的，有交互的一般都是用JavaScript来实现的。<br>知道了概念性的知识，下面来看看Html的组成部分；</p>
-<h3 id="第一个HTML"><a href="#第一个HTML" class="headerlink" title="第一个HTML"></a>第一个HTML</h3><pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;index&lt;/title&gt;
-&lt;/head&gt;
-    &lt;body&gt;
-        &lt;h1&gt;Hello World&lt;/h1&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="Doctype"><a href="#Doctype" class="headerlink" title="Doctype"></a>Doctype</h3><p><code>Doctype</code>定义html解释标准,告诉浏览器使用什么样的html或xhtml规范来解析html文档，也就是用哪一种规则来将html变成用户看到的内容。</p>
-<p><strong>有和无的区别:</strong></p>
-<p><code>BackCompat</code>：标准兼容模式未开启（或叫怪异模式[Quirks mode]、混杂模式）<br><code>CSS1Compat</code>：标准兼容模式已开启（或叫严格模式[Standards mode/Strict mode]）</p>
-<p>这个属性会被浏览器识别并使用，但是如果你的页面没有DOCTYPE的声明，那么compatMode默认就是BackCompat,这也就是恶魔的开始 – 浏览器按照自己的方式解析渲染页面，那么，在不同的浏览器就会显示不同的样式。如果你的页面添加了那么，那么就等同于开启了标准模式，那么浏览器就得老老实实的按照W3C的标准解析渲染页面，这样一来，你的页面在所有的浏览器里显示的就都是一个样子了，总之而言就是要告诉浏览器，你要用标准的规则来来解析html,而不是用自己浏览器的规则来解析html。</p>
-<p>如下就是列举出来的部分解析html的规则。</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/html_doctype.png" alt="Doctype"></p>
-<h2 id="head部分"><a href="#head部分" class="headerlink" title="head部分"></a>head部分</h2><h3 id="Meta-metadata-information"><a href="#Meta-metadata-information" class="headerlink" title="Meta(metadata information)"></a>Meta(metadata information)</h3><p>提供有关页面的元信息，例：页面编码、刷新、跳转、针对搜索引擎和更新频度的描述和关键词</p>
-<p>1、页面编码</p>
-<pre><code>&lt;meta charset=&quot;UTF-8&quot;&gt;  #指定编码类型为UTF-8
-</code></pre><p>2、刷新和跳转</p>
-<pre><code>&lt;meta http-equiv=&quot;refresh&quot; content=&quot;5&quot;&gt;  #指定每5秒刷新一次
-&lt;meta http-equiv=&quot;refresh&quot; Content=&quot;1;|Url=http://www.cnblogs.com/luotianshuai/&quot; /&gt; #指定1秒之后跳转页面至另一个网页
-</code></pre><p>3、关键字</p>
-<p>关键字的作用：一般是让爬虫之类的收录程序，当他们在爬你的网站的时候，如果你有关键字，那么他们会优先把关键字收录到他们的记录中，比如百度：如果他们收录之后，他们搜索你的关键字的时候，就能找到咱们的网站。</p>
-<pre><code>&lt;meta name=&quot;keywords&quot; content=&quot;卧槽 ,啪啪啪、 嘿嘿嘿, 爬我呀， 爬我呀&quot; /&gt;
-</code></pre><p>4、描述</p>
-<p>例如cnblog里的就是一个描述：</p>
-<pre><code>&lt;meta name=&quot;description&quot; content=&quot;博客园是一个面向开发者的知识分享社区。自创建以来，博客园一直致力并专注于为开发者打造一个纯净的技术交流社区，推动并帮助开发者通过互联网分享知识，从而让更多开发者从中受益。博客园的使命是帮助开发者用代码改变世界。&quot;&gt;
-</code></pre><p>5、X-UA-Compatible</p>
-<p>X-UA-Compatible  这个是IE8特有的，知道即可，因为做前端的同学都很害怕IE因为他们问题比较多各个版本问题很诡异，当IE8的时候微软想把各个版本的统一，那么这个参数就出现了，他为了向下兼容，如下的代码如果使用IE8的时候他会以IE7的模式运行。</p>
-<pre><code>&lt;meta http-equiv=&quot;X-UA-Compatible&quot; content=&quot;IE=EmulateIE7&quot; /&gt;
-</code></pre><h3 id="Title"><a href="#Title" class="headerlink" title="Title"></a>Title</h3><p>网页头部信息</p>
-<p>如：加上<code>&lt;title&gt;test1&lt;/title&gt;</code></p>
-<p>效果：</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/title.png" alt="Title"></p>
-<h3 id="Link"><a href="#Link" class="headerlink" title="Link"></a>Link</h3><p>网页头部图标</p>
-<p>如加上：</p>
-<pre><code>&lt;link rel=&quot;shortcut icon&quot; href=&quot;favicon.ico&quot; /&gt;   #href是图片的路径+名字
-</code></pre><p>效果：</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/link.png" alt="Link"></p>
-<h3 id="Style"><a href="#Style" class="headerlink" title="Style"></a>Style</h3><ul>
-<li>1、在当前文件中写Css样式</li>
-<li>2、在其他文件中写Css样式类似python的模块导入的方式把Css样式导入到当前文件中使用</li>
-</ul>
-<p>导入CSS类似python中导入模块类似</p>
-<pre><code>&lt;link rel=&quot;stylesheet&quot; href=&quot;css/css_model.css&quot; /&gt;
-</code></pre><h3 id="Script"><a href="#Script" class="headerlink" title="Script"></a>Script</h3><ul>
-<li>1、在当前文件中写JS</li>
-<li>2、在其他文件中写JS类似python的模块导入的方式把JS导入到当前文件中使用</li>
-</ul>
-<p><code>可能细心的同学发现了,之前不是说所有标签都是&lt;???&gt;&lt;/???&gt;的形势形势吗?,但是也有只有一个的&lt;??&gt;就结束的了,这样浏览器在解析得时候认为这个标签没有结束是有问题的,不做解析或者解析报错吗?</code></p>
-<blockquote>
-<p>这位同学问得非常好! 浏览器会很智能的把有错误的标签内容不解析不做显示,也不会报错,但是&lt;??/&gt; 这种标签不是有问题的,这叫<code>自闭合</code>标签,&lt;??&gt;&lt;/??&gt;这种叫<code>闭合</code>标签,这种形势浏览是能够解析的,自闭合标签&lt;??&gt;标准写法是要写成&lt;??/&gt;在最后”&gt;”要结束的时候前面加个”/“,这是更规范得写法,让阅读代码的人一眼就能明白.</p>
-</blockquote>
-<h2 id="body部分"><a href="#body部分" class="headerlink" title="body部分"></a>body部分</h2><p>1、body里面分为两类标签：块级标签和内联标签，块级标签占用的是整行，内联标签占用的他所使用的实际大小如下图：</p>
-<p><code>块级别标签&amp;内联标签:</code></p>
-<p><img src="http://www.liangxiansen.cn/images/前端/body1.png" alt="label"></p>
-<p>2、特殊符号特殊处理<br>如<code>&lt;h1&gt;</code>这是个标签，如果我只想在页面上这个<code>&lt;h1&gt;</code>字符串，就是不想让浏览器解释这个字符的样式， 这里就需要做特殊处理了，特殊符号有自己定的规则如以下：</p>
-<center><img src="http://www.liangxiansen.cn/images/前端/特殊字符.png" alt="特殊字符"></center>
-
-
-<table>
-<thead>
-<tr>
-<th>HTML原代码</th>
-<th>显示结果</th>
-<th>描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&amp;lt;</code></td>
-<td>&lt;</td>
-<td>小于号或显示标记</td>
-</tr>
-<tr>
-<td><code>&amp;gt;</code></td>
-<td>&gt;</td>
-<td>大于号或显示标记</td>
-</tr>
-<tr>
-<td><code>&amp;amp;</code></td>
-<td>&amp;</td>
-<td>可用于显示其它特殊字符</td>
-</tr>
-<tr>
-<td><code>&amp;quot;</code></td>
-<td>“</td>
-<td>引号</td>
-</tr>
-<tr>
-<td><code>&amp;reg;</code></td>
-<td>®</td>
-<td>已注册</td>
-</tr>
-<tr>
-<td><code>&amp;copy;</code></td>
-<td>©</td>
-<td>版权</td>
-</tr>
-<tr>
-<td><code>&amp;trade;</code></td>
-<td>™</td>
-<td>商标</td>
-</tr>
-<tr>
-<td><code>&amp;ensp;</code></td>
-<td> </td>
-<td>半个空白位</td>
-</tr>
-<tr>
-<td><code>&amp;emsp;</code></td>
-<td> </td>
-<td>一个空白位</td>
-</tr>
-<tr>
-<td><code>&amp;nbsp;</code></td>
-<td></td>
-<td>不断行的空白</td>
-</tr>
-</tbody>
-</table>
-<h3 id="p标签和br标签"><a href="#p标签和br标签" class="headerlink" title="p标签和br标签"></a>p标签和br标签</h3><p><code>&lt;p&gt;&lt;/p&gt;</code>标签:段落标签,每一对p标签为一段,代码如下:</p>
-<pre><code class="html">&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-</code></pre>
-<p><code>&lt;br/&gt;</code>标签：换行标签；有一个<code>&lt;br/&gt;</code>为一个换行，看下面的代码:</p>
-<pre><code class="html">&lt;p&gt;段落段落段落段落段落段落段&lt;br/&gt;落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-&lt;p&gt;段落段落段落段落段落段落段落段落段落段落段落段落段落&lt;/p&gt;
-</code></pre>
-<h3 id="a标签"><a href="#a标签" class="headerlink" title="a标签"></a>a标签</h3><p><code>&lt;a&gt;&lt;/a&gt;</code>标签用来跳转和锚</p>
-<p><strong>1、跳转:</strong><br>默认如果在<code>&lt;a&gt;&lt;a/&gt;</code>标签中不设置那么他仅仅在浏览器中显示文本，如下面代码:</p>
-<pre><code class="html">&lt;a&gt;不能跳转&lt;/a&gt;
-&lt;a href=&quot;https://liangxiansen.github.io/&quot;&gt;能跳转&lt;/a&gt;
-</code></pre>
-<p>点击后将跳转到指定的连接地址~，在当前页面打开的！</p>
-<p>如果让他用一个新的标签中打开连接地址代码如下：</p>
-<pre><code class="html">&lt;a target=&quot;_blank&quot; href=&quot;https://liangxiansen.github.io/&quot;&gt;跳转到我的博客&lt;/a&gt;
-</code></pre>
-<p><strong>2、锚:</strong><br>锚的作用是类似于读书时候的书签，当你你点击这个“锚”=“书签”，的时候就跳转到指定的位置</p>
-<pre><code class="html">&lt;a href=&quot;#a2&quot;&gt;跳转至第二章&lt;/a&gt;
-&lt;!--在标签里，ID是这个标签的唯一的值，我们在做锚的时候指定他的ID即可--&gt;
-&lt;!--&lt;a href=&quot;#a2&quot;&gt; 上面的代码href=&quot;#要跳转的标签&quot;--&gt;
-&lt;div id=&quot;a1&quot; style=&quot;height:700px;&quot;&gt;第一章&lt;/div&gt;
-
-&lt;div id=&quot;a2&quot; style=&quot;height:700px;&quot;&gt;第二章&lt;/div&gt;
-</code></pre>
-<p>上面的代码中，如果点击了书签之后，那么就会跳转到id=a2的书签的位置！</p>
-<h3 id="h标签"><a href="#h标签" class="headerlink" title="h标签"></a>h标签</h3><p>标题标签,1~6级标题,代码:</p>
-<pre><code class="html">&lt;h1&gt;H1&lt;/h1&gt;
-&lt;h2&gt;H2&lt;/h2&gt;
-&lt;h3&gt;H3&lt;/h3&gt;
-&lt;h4&gt;H4&lt;/h4&gt;
-&lt;h5&gt;H5&lt;/h5&gt;
-&lt;h6&gt;H6&lt;/h6&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/h标签.png" alt="h标签"></p>
-<h3 id="img标签"><a href="#img标签" class="headerlink" title="img标签"></a>img标签</h3><p>img标签用于在页面上插入图片,img标签图片跳转的时候去边框,IE显示有问题</p>
-<pre><code class="html">&lt;!--插入图片--&gt;
-&lt;img src=&quot;皮卡丘.jpeg&quot; style=&quot;height: 500px;width: 500px;&quot;&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/img.png" alt="img标签"></p>
-<h3 id="Select标签"><a href="#Select标签" class="headerlink" title="Select标签"></a>Select标签</h3><p>未分组select标签:</p>
-<pre><code class="html">&lt;select&gt;
-    &lt;option value=&quot;1&quot;&gt;上海&lt;/option&gt;
-    &lt;option value=&quot;2&quot;&gt;北京&lt;/option&gt;
-    &lt;option value=&quot;3&quot; selected=&quot;selected&quot;&gt;广州&lt;/option&gt;
-    &lt;!--这里默认是广州因为这里设置selected=&quot;selected&quot; 这样页面刚加载完,显示默认选择的就是广州--&gt;
-&lt;/select&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/select标签.png" alt="select标签"></p>
-<p>分组后select标签:</p>
-<pre><code class="html">&lt;select&gt;
-    &lt;optgroup label=&quot;河北省&quot;&gt;
-        &lt;option&gt;石家庄&lt;/option&gt;
-        &lt;option&gt;邯郸&lt;/option&gt;
-    &lt;/optgroup&gt;
-    &lt;optgroup label=&quot;山西省&quot;&gt;
-        &lt;option&gt;太原&lt;/option&gt;
-        &lt;option&gt;平遥&lt;/option&gt;
-    &lt;/optgroup&gt;
-&lt;/select&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/selectgroup.png" alt="SelectGroup"></p>
-<p>设置select标签长度:</p>
-<pre><code class="html">&lt;select size=&quot;2&quot;&gt;
-    &lt;option value=&quot;1&quot;&gt;上海&lt;/option&gt;
-    &lt;option value=&quot;2&quot;&gt;北京&lt;/option&gt;
-    &lt;option value=&quot;3&quot;&gt;广州&lt;/option&gt;
-&lt;/select&gt;
-</code></pre>
-<h3 id="form表单"><a href="#form表单" class="headerlink" title="form表单"></a>form表单</h3><p><strong>1、单选框:</strong></p>
-<pre><code class="html">&lt;!--第一中情况不互斥--&gt;
-男&lt;input type=&quot;radio&quot;/&gt;
-女&lt;input type=&quot;radio&quot;/&gt;
-&lt;hr/&gt;
-&lt;!--对于input标签来说只要，radio的name值相同，那么他们就会互斥--&gt;
-男&lt;input type=&quot;radio&quot; name=&quot;gender&quot;/&gt;
-女r&lt;input type=&quot;radio&quot; name=&quot;gender&quot;/&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/radio.png" alt="单选框"></p>
-<hr>
-<p><strong>2、复选框:</strong></p>
-<pre><code class="html">娱乐&lt;input type=&quot;checkbox&quot;/&gt;
-时尚&lt;input type=&quot;checkbox&quot;/&gt;
-音乐&lt;input type=&quot;checkbox&quot; checked=&quot;checked&quot;/&gt;
-&lt;!--这里加一个标识checked=&quot;checked，为默认选择&quot;--&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/checkbox.png" alt="多选框"></p>
-<hr>
-<p><strong>3、text&amp;password输入框:</strong></p>
-<pre><code class="html">&lt;!--标准的输入框--&gt;
-&lt;input type=&quot;text&quot;/&gt;
-&lt;!--密码的输入框（输入的内容是保密的）--&gt;
-&lt;input type=&quot;password&quot;/&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/text.png" alt="文本框"></p>
-<hr>
-<p><strong>4、文件上传:</strong></p>
-<pre><code class="html">&lt;input type=&quot;file&quot;/&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/file.png" alt="上传文件"></p>
-<hr>
-<p><strong>5、多行文本框:</strong></p>
-<pre><code class="html">个性签名:&lt;textarea style=&quot;width: 200px; height: 100px&quot;&gt;&lt;/textarea&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/textarea.png" alt="多行文本框"></p>
-<hr>
-<p><strong>6、Label标签:</strong><br>使用label标签,可以在点击文字的时候将鼠标焦点转移到input内容上,帮助用户选择.</p>
-<pre><code class="html">&lt;div&gt;
-    &lt;label for=&quot;name_1&quot;&gt;
-        姓名:&lt;input id=&quot;name_1&quot; type=&quot;text&quot;/&gt;
-    &lt;/label&gt;
-
-    &lt;label for=&quot;name_2&quot;&gt;
-        婚否:&lt;input id=&quot;name_2&quot; type=&quot;checkbox&quot;/&gt;
-    &lt;/label&gt;
-&lt;/div&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/label.png" alt="Label"></p>
-<hr>
-<p><strong>7、提交表单:</strong><br><code>form</code></p>
-<pre><code class="html">&lt;form action=&quot;www.baidu.com&quot; method=&quot;POST&quot; &gt;
-    &lt;!--这里action是告诉html提交到哪里--&gt;
-    &lt;!--method是通过什么方法去action指定的地址--&gt;
-    &lt;p&gt;用户名:&lt;input type=&quot;text&quot; name=&quot;username&quot;/&gt;&lt;/p&gt;
-    &lt;p&gt;密码:&lt;input type=&quot;password&quot; name=&quot;password&quot;/&gt;&lt;/p&gt;
-    &lt;!--这里的name属性是当咱们将数据提交到指定的action地址时,服务端接收到的数据后如何去辨别数据--&gt;
-    &lt;!--服务端得到数据后,就是一个字典类型,把这里的用户的输入的内容复制给name作为为一个字典key:value形势--&gt;
-    &lt;input type=&quot;submit&quot; value=&quot;提交&quot;/&gt;
-    &lt;input type=&quot;button&quot; value=&quot;按钮&quot;/&gt;
-    &lt;!--这里提交按钮才有反映，submit是用来提交当前的表单的，当然可以有多个表单--&gt;
-    &lt;!--但是，这个submit需要写入表单内，那么提交的时候是提交的当前表单--&gt;
-    &lt;!--button按钮是没有任何功能的,需要给他添加上动作(js)--&gt;
-&lt;/form&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/form.png" alt="form"></p>
-<h3 id="序号标签"><a href="#序号标签" class="headerlink" title="序号标签"></a>序号标签</h3><pre><code class="html">&lt;!--项目序号--&gt;
-&lt;ul&gt;
-    &lt;li&gt;line1&lt;/li&gt;
-    &lt;li&gt;line2&lt;/li&gt;
-    &lt;li&gt;line3&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;ol&gt;
-    &lt;li&gt;line1&lt;/li&gt;
-    &lt;li&gt;line2&lt;/li&gt;
-    &lt;li&gt;line3&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;dl&gt;
-    &lt;dt&gt;北京市&lt;/dt&gt;
-    &lt;dd&gt;海淀区&lt;/dd&gt;
-    &lt;dd&gt;东城区&lt;/dd&gt;
-    &lt;dd&gt;朝阳去&lt;/dd&gt;
-    &lt;dt&gt;湖南省&lt;/dt&gt;
-    &lt;dd&gt;长沙&lt;/dd&gt;
-&lt;/dl&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/序号.png" alt="序号"></p>
-<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><pre><code class="html">&lt;!--表格,表格边框1--&gt;
-&lt;table border=&quot;1&quot;&gt;
-    &lt;tr&gt;
-        &lt;!--列合并居中,colspan指的是合并多少个--&gt;
-        &lt;th colspan=&quot;3&quot;&gt;标题一&lt;/th&gt;
-        &lt;th&gt;标题二&lt;/th&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;内容一&lt;/td&gt;
-        &lt;td&gt;内容二&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;内容一&lt;/td&gt;
-        &lt;!--行合并居中--&gt;
-        &lt;td rowspan=&quot;2&quot;&gt;内容二&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;内容一&lt;/td&gt;
-
-        &lt;td&gt;内容三&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-        &lt;td&gt;内容一&lt;/td&gt;
-        &lt;td&gt;内容二&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-        &lt;td&gt;内容三&lt;/td&gt;
-    &lt;/tr&gt;
-&lt;/table&gt;
-
-
-&lt;!--水平线--&gt;
-&lt;hr /&gt;
-
-
-&lt;!--表格,表格边框1--&gt;
-&lt;table  border=&quot;1&quot;&gt;
-    &lt;thead&gt;
-    &lt;!--表头--&gt;
-        &lt;tr&gt;
-            &lt;th&gt;标题一&lt;/th&gt;
-            &lt;th&gt;标题二&lt;/th&gt;
-            &lt;th&gt;标题三&lt;/th&gt;
-            &lt;th&gt;标题四&lt;/th&gt;
-        &lt;/tr&gt;
-    &lt;/thead&gt;
-    &lt;tbody&gt;
-    &lt;!--表格主体--&gt;
-        &lt;tr&gt;
-            &lt;td&gt;第一列&lt;/td&gt;
-            &lt;td&gt;第二列&lt;/td&gt;
-            &lt;td&gt;第三列&lt;/td&gt;
-            &lt;td&gt;第四列&lt;/td&gt;
-        &lt;/tr&gt;
-         &lt;tr&gt;
-            &lt;td&gt;第一列&lt;/td&gt;
-            &lt;td&gt;第二列&lt;/td&gt;
-            &lt;td&gt;第三列&lt;/td&gt;
-            &lt;td&gt;第四列&lt;/td&gt;
-        &lt;/tr&gt;
-
-    &lt;/tbody&gt;
-&lt;/table&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/table.png" alt="table"></p>
-<h3 id="ifram标签"><a href="#ifram标签" class="headerlink" title="ifram标签"></a>ifram标签</h3><pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;h1&gt;汽车之家&lt;/h1&gt;
-    &lt;!--框架嵌入--&gt;
-    &lt;iframe style=&quot;width: 100%;height: 2000px;&quot; src=&quot;http://autohome.com.cn&quot;&gt;&lt;/iframe&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/iframe.png" alt="iframe"></p>
-<h3 id="fieldset标签"><a href="#fieldset标签" class="headerlink" title="fieldset标签"></a>fieldset标签</h3><pre><code class="html">&lt;fieldset&gt;
-    &lt;legend&gt;协议&lt;/legend&gt;
-    请仔细阅读协议内容：
-&lt;/fieldset&gt;
-</code></pre>
-<p>效果:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/fieldset.png" alt="table"></p>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/09/27/html/">HTML 基础</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-09-27, 14:09:51</p>
-        <p><span>最后更新:</span>2017-08-02, 14:15:20</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/09/27/html/" title="HTML 基础">http://www.liangxiansen.cn/2016/09/27/html/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/09/27/html/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/09/29/css/">
-                    CSS 基础
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/09/14/git_notes/">
-                    Git 笔记
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"HTML 基础　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#什么是HTML？"><span class="toc-number">1.</span> <span class="toc-text">什么是HTML？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Html和CSS、js的关系"><span class="toc-number">1.1.</span> <span class="toc-text">Html和CSS、js的关系</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#第一个HTML"><span class="toc-number">1.2.</span> <span class="toc-text">第一个HTML</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Doctype"><span class="toc-number">1.3.</span> <span class="toc-text">Doctype</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#head部分"><span class="toc-number">2.</span> <span class="toc-text">head部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Meta-metadata-information"><span class="toc-number">2.1.</span> <span class="toc-text">Meta(metadata information)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Title"><span class="toc-number">2.2.</span> <span class="toc-text">Title</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Link"><span class="toc-number">2.3.</span> <span class="toc-text">Link</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Style"><span class="toc-number">2.4.</span> <span class="toc-text">Style</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Script"><span class="toc-number">2.5.</span> <span class="toc-text">Script</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#body部分"><span class="toc-number">3.</span> <span class="toc-text">body部分</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#p标签和br标签"><span class="toc-number">3.1.</span> <span class="toc-text">p标签和br标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#a标签"><span class="toc-number">3.2.</span> <span class="toc-text">a标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#h标签"><span class="toc-number">3.3.</span> <span class="toc-text">h标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#img标签"><span class="toc-number">3.4.</span> <span class="toc-text">img标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Select标签"><span class="toc-number">3.5.</span> <span class="toc-text">Select标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#form表单"><span class="toc-number">3.6.</span> <span class="toc-text">form表单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序号标签"><span class="toc-number">3.7.</span> <span class="toc-text">序号标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#表格"><span class="toc-number">3.8.</span> <span class="toc-text">表格</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ifram标签"><span class="toc-number">3.9.</span> <span class="toc-text">ifram标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#fieldset标签"><span class="toc-number">3.10.</span> <span class="toc-text">fieldset标签</span></a></li></ol></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/09/29/css/" title="上一篇: CSS 基础">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2016/09/14/git_notes/" title="下一篇: Git 笔记">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">

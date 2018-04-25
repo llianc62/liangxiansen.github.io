@@ -353,243 +353,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="page-undefined" class="article article-type-page" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/tags/index.html" class="article-date">
-      <time datetime="2016-08-02T17:03:34.000Z" itemprop="datePublished">2016-08-03</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      分类 &amp; 标签
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-
-        
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-              <style>
-    .article-meta { display: none; }
-    #container .article .article-title { padding-right: 0; }
-    .article-header {
-        padding: 0;
-        padding-top: 26px;
-        border-left: none;
-        text-align: center;
-    }
-    .article-header:hover { border-left: none; }
-    .article-title { font-size: 1.6em }
-    .article-entry hr { margin: 0;}
-    .article-meta,
-    #container .article-info-post.article-info { display: none;}
-    #container .article .article-title { padding: 0; }
-</style>
-
-
-    <!-- Tag Cloud Page -->
-    <hr>
-<br>
-<ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/Git/">Git</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Hexo/">Hexo</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Linux笔记/">Linux笔记</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/Python之路/">Python之路</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/个人日记/">个人日记</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/前端/">前端</a><span class="category-list-count">5</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/工具/">工具</a><span class="category-list-count">1</span></li></ul>
-
-<p class="count"></p>
-
-<div class="tags">
-    <a href="/tags/Ajax/" style="font-size: 16px; color: #808080">Ajax</a> <a href="/tags/CSS/" style="font-size: 16px; color: #808080">CSS</a> <a href="/tags/Consul/" style="font-size: 16px; color: #808080">Consul</a> <a href="/tags/DOM/" style="font-size: 16px; color: #808080">DOM</a> <a href="/tags/Django/" style="font-size: 16px; color: #808080">Django</a> <a href="/tags/Git/" style="font-size: 16px; color: #808080">Git</a> <a href="/tags/Github/" style="font-size: 16px; color: #808080">Github</a> <a href="/tags/HAproxy/" style="font-size: 16px; color: #808080">HAproxy</a> <a href="/tags/HTML/" style="font-size: 16px; color: #808080">HTML</a> <a href="/tags/Hexo/" style="font-size: 16px; color: #808080">Hexo</a> <a href="/tags/JavaScript/" style="font-size: 16px; color: #808080">JavaScript</a> <a href="/tags/Jupyter/" style="font-size: 16px; color: #808080">Jupyter</a> <a href="/tags/Linux/" style="font-size: 16px; color: #808080">Linux</a> <a href="/tags/Mysql/" style="font-size: 16px; color: #808080">Mysql</a> <a href="/tags/Python/" style="font-size: 28.67px; color: #2b2b2b">Python</a> <a href="/tags/SCL/" style="font-size: 16px; color: #808080">SCL</a> <a href="/tags/Socket/" style="font-size: 22.33px; color: #555">Socket</a> <a href="/tags/Supervisor/" style="font-size: 16px; color: #808080">Supervisor</a> <a href="/tags/Tornado/" style="font-size: 16px; color: #808080">Tornado</a> <a href="/tags/Web/" style="font-size: 16px; color: #808080">Web</a> <a href="/tags/Zabbix/" style="font-size: 16px; color: #808080">Zabbix</a> <a href="/tags/协程/" style="font-size: 16px; color: #808080">协程</a> <a href="/tags/旅游/" style="font-size: 16px; color: #808080">旅游</a> <a href="/tags/监控/" style="font-size: 16px; color: #808080">监控</a> <a href="/tags/硬件/" style="font-size: 16px; color: #808080">硬件</a> <a href="/tags/笔记/" style="font-size: 16px; color: #808080">笔记</a> <a href="/tags/线程/" style="font-size: 16px; color: #808080">线程</a> <a href="/tags/编程/" style="font-size: 35px; color: #000">编程</a> <a href="/tags/进程/" style="font-size: 16px; color: #808080">进程</a> <a href="/tags/队列/" style="font-size: 16px; color: #808080">队列</a>
-</div>
-<style>
-    .category-list li{
-        display: inline-block;
-        margin: 0 1em .5em 0;
-        padding: 4px;
-        border: 1px solid lightgray;
-        font-size: 1.2rem;
-    }
-    .category-list a { color: gray; }
-    .category-list-item:hover a {
-        color: gray;
-        text-decoration: none;
-    }
-    .category-list-count {
-        margin-left: 2px;
-        font-size: .9rem;
-    }
-    .article-entry ul li:before{ display: none; }
-    .article-inner { text-align: center; }
-    .tags {
-        max-width: 42em;
-        margin: 2em auto;
-        margin-top: 0em;
-    }
-    .tags a {
-        margin-right: 1em;
-        line-height: 65px;
-        border-bottom: 1px solid gray;
-        white-space: nowrap;
-        transition: border-bottom .5s;
-    }
-    .tags a:hover {
-        border-bottom: 3px dotted gray;
-        text-decoration: none;
-    }
-    #count > span {
-        margin: auto .2em;
-        font-weight: bold;
-    }
-</style>
-
-<!-- Count tags and categories -->
-<p id="count">
-    已有
-    <span>
-        <script>document.write($(".category-list-item").length)</script>
-    </span>
-    个分类，
-    共计
-    <span>
-        <script>document.write($(".tags > a").length)</script>
-    </span>
-    个标签
-</p>
-<script>
-    $('#count').appendTo('.count');
-</script>
-
-          
-        
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"分类 & 标签　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
-    
-        <section class="youyan" id="comments">
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
