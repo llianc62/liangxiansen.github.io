@@ -556,7 +556,7 @@ if __name__ == &quot;__main__&quot;:
 <li>你会发现nonblocking会一直在转圈，处于一个堵塞状态。</li>
 <li>你再访问index页面，你发现index页面能够访问不受影响。</li>
 </ul>
-<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。</p>
+<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。<code>@gen.coroutine</code> 可以让你的函数以异步协程的形式运行，但是依赖第三方的异步库，要求你的函数本身不是Booking的。例如上面的<code>os.sleep()</code> 方法是blocking 的，没办法实现异步非阻塞。</p>
 <h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="external"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -713,7 +713,8 @@ if __name__ == &quot;__main__&quot;:
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
 <p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><pre><code class="python">#!/usr/bin/env python
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p><code>coroutine</code> 是给Non-blocking 函数提供异步协程的方式运行， <code>ThreadPoolExecutor</code> 则可以给blocking 的函数提供异步的方式运行，但是由于是多线程的，Python 使用多线程对新能来说是需要谨慎的，大量的计算量的情况可能会造成性能的下降。</p>
+<pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
 # Python 3.5
@@ -728,6 +729,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
+        self.write(&#39;index&#39;)
         self.write(&#39;index&#39;)
         print(&#39;index&#39;)
 
@@ -748,6 +750,59 @@ class NonBlockingHandler(tornado.web.RequestHandler):
         # yield gen.sleep(10)
         os.system(&quot;ping -c 20 www.baidu.com&quot;)  # 模拟I/O 任务
         return &#39;Non-Blocking&#39;
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="设置超时时间"><a href="#设置超时时间" class="headerlink" title="设置超时时间"></a>设置超时时间</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import time
+import datetime
+import os
+import tornado.web
+from tornado import gen
+from tornado.concurrent import run_on_executor
+from concurrent.futures import ThreadPoolExecutor
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+        print(&#39;index&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    executor = ThreadPoolExecutor(4)
+
+    @gen.coroutine
+    def get(self):
+        try:
+            start = time.time()
+            # 并行执行
+            result1, result2 = yield gen.with_timeout(datetime.timedelta(seconds=5), [self.doing(1), self.doing(2)], quiet_exceptions=tornado.gen.TimeoutError)
+            self.write(&quot;NO Timeout&quot;)
+            print(result1, result2)
+            print(time.time() - start)
+        except gen.TimeoutError:
+            self.write(&quot;Timeout&quot;)
+            print(&quot;Timeout&quot;)
+            print(time.time() - start)
+
+    # 使用tornado 线程池需要加上下面的装饰器到I/O函数
+    @run_on_executor
+    def doing(self, num):
+        time.sleep(10)
+        return &#39;Non-Blocking%d&#39; % num
 
 
 application = tornado.web.Application([

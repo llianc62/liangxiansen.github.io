@@ -37,14 +37,14 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/JavaScript/</loc>
+        <loc>http://www.liangxiansen.cn/tags/DOM/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/HAproxy/</loc>
+        <loc>http://www.liangxiansen.cn/tags/JavaScript/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -65,6 +65,13 @@
     </url>
 
     <url>
+        <loc>http://www.liangxiansen.cn/tags/HAproxy/</loc>
+        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.2</priority>
+    </url>
+
+    <url>
         <loc>http://www.liangxiansen.cn/tags/Supervisor/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
@@ -73,13 +80,6 @@
 
     <url>
         <loc>http://www.liangxiansen.cn/tags/%E6%97%85%E6%B8%B8/</loc>
-        <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-        <changefreq>weekly</changefreq>
-        <priority>0.2</priority>
-    </url>
-
-    <url>
-        <loc>http://www.liangxiansen.cn/tags/DOM/</loc>
         <lastmod>2017-08-02T06:15:20.000Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
@@ -191,22 +191,22 @@
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/Python/</loc>
-        <lastmod>2018-04-25T03:09:24.848Z</lastmod>
+        <loc>http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/</loc>
+        <lastmod>2018-05-03T04:13:25.400Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
-        <loc>http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/</loc>
-        <lastmod>2018-04-25T03:09:24.848Z</lastmod>
+        <loc>http://www.liangxiansen.cn/tags/Python/</loc>
+        <lastmod>2018-05-03T04:13:25.400Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>
 
     <url>
         <loc>http://www.liangxiansen.cn/tags/Tornado/</loc>
-        <lastmod>2018-04-25T03:09:24.848Z</lastmod>
+        <lastmod>2018-05-03T04:13:25.400Z</lastmod>
         <changefreq>weekly</changefreq>
         <priority>0.2</priority>
     </url>

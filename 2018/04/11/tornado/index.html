@@ -27,7 +27,7 @@ Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框�
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/母版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/子版.png">
 <meta property="og:image" content="http://www.liangxiansen.cn/images/tornado/UIMethod.png">
-<meta property="og:updated_time" content="2018-04-25T03:09:24.848Z">
+<meta property="og:updated_time" content="2018-05-03T04:13:25.400Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python Web框架之Tornado">
 <meta name="twitter:description" content="Tornado 介绍Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。
@@ -955,7 +955,7 @@ if __name__ == &quot;__main__&quot;:
 <li>你会发现nonblocking会一直在转圈，处于一个堵塞状态。</li>
 <li>你再访问index页面，你发现index页面能够访问不受影响。</li>
 </ul>
-<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。</p>
+<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。<code>@gen.coroutine</code> 可以让你的函数以异步协程的形式运行，但是依赖第三方的异步库，要求你的函数本身不是Booking的。例如上面的<code>os.sleep()</code> 方法是blocking 的，没办法实现异步非阻塞。</p>
 <h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="external"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -1112,7 +1112,8 @@ if __name__ == &quot;__main__&quot;:
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
 <p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><pre><code class="python">#!/usr/bin/env python
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p><code>coroutine</code> 是给Non-blocking 函数提供异步协程的方式运行， <code>ThreadPoolExecutor</code> 则可以给blocking 的函数提供异步的方式运行，但是由于是多线程的，Python 使用多线程对新能来说是需要谨慎的，大量的计算量的情况可能会造成性能的下降。</p>
+<pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
 # Python 3.5
@@ -1127,6 +1128,7 @@ from concurrent.futures import ThreadPoolExecutor
 
 class IndexHandler(tornado.web.RequestHandler):
     def get(self):
+        self.write(&#39;index&#39;)
         self.write(&#39;index&#39;)
         print(&#39;index&#39;)
 
@@ -1147,6 +1149,59 @@ class NonBlockingHandler(tornado.web.RequestHandler):
         # yield gen.sleep(10)
         os.system(&quot;ping -c 20 www.baidu.com&quot;)  # 模拟I/O 任务
         return &#39;Non-Blocking&#39;
+
+
+application = tornado.web.Application([
+    (r&quot;/index&quot;, IndexHandler),
+    (r&quot;/nonblocking&quot;, NonBlockingHandler),
+])
+
+if __name__ == &quot;__main__&quot;:
+    application.listen(8888)
+    tornado.ioloop.IOLoop.instance().start()
+</code></pre>
+<h3 id="设置超时时间"><a href="#设置超时时间" class="headerlink" title="设置超时时间"></a>设置超时时间</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Xian Sen
+# Python 3.5
+
+import time
+import datetime
+import os
+import tornado.web
+from tornado import gen
+from tornado.concurrent import run_on_executor
+from concurrent.futures import ThreadPoolExecutor
+
+
+class IndexHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write(&#39;index&#39;)
+        print(&#39;index&#39;)
+
+
+class NonBlockingHandler(tornado.web.RequestHandler):
+    executor = ThreadPoolExecutor(4)
+
+    @gen.coroutine
+    def get(self):
+        try:
+            start = time.time()
+            # 并行执行
+            result1, result2 = yield gen.with_timeout(datetime.timedelta(seconds=5), [self.doing(1), self.doing(2)], quiet_exceptions=tornado.gen.TimeoutError)
+            self.write(&quot;NO Timeout&quot;)
+            print(result1, result2)
+            print(time.time() - start)
+        except gen.TimeoutError:
+            self.write(&quot;Timeout&quot;)
+            print(&quot;Timeout&quot;)
+            print(time.time() - start)
+
+    # 使用tornado 线程池需要加上下面的装饰器到I/O函数
+    @run_on_executor
+    def doing(self, num):
+        time.sleep(10)
+        return &#39;Non-Blocking%d&#39; % num
 
 
 application = tornado.web.Application([
@@ -1215,7 +1270,7 @@ if __name__ == &quot;__main__&quot;:
         <p><span>本文标题:</span><a href="/2018/04/11/tornado/">Python Web框架之Tornado</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
         <p><span>发布时间:</span>2018-04-11, 14:02:02</p>
-        <p><span>最后更新:</span>2018-04-25, 11:09:24</p>
+        <p><span>最后更新:</span>2018-05-03, 12:13:25</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/04/11/tornado/" title="Python Web框架之Tornado">http://www.liangxiansen.cn/2018/04/11/tornado/</a>
             <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2018/04/11/tornado/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
@@ -1300,7 +1355,7 @@ if __name__ == &quot;__main__&quot;:
     <div id="toc" class="toc-article">
         <strong class="toc-title">文章目录</strong>
         
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tornado-介绍"><span class="toc-number">1.</span> <span class="toc-text">Tornado 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载安装"><span class="toc-number">1.1.</span> <span class="toc-text">下载安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速使用"><span class="toc-number">1.2.</span> <span class="toc-text">快速使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tronado-原生支持Resutful"><span class="toc-number">1.3.</span> <span class="toc-text">Tronado 原生支持Resutful</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理表单请求"><span class="toc-number">1.4.</span> <span class="toc-text">处理表单请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST-application-json"><span class="toc-number">1.5.</span> <span class="toc-text">POST application/json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flush-mothed"><span class="toc-number">1.6.</span> <span class="toc-text">Flush mothed</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由系统"><span class="toc-number">2.</span> <span class="toc-text">路由系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例代码"><span class="toc-number">2.1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级域名"><span class="toc-number">2.2.</span> <span class="toc-text">二级域名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板语言"><span class="toc-number">3.</span> <span class="toc-text">模板语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模板渲染"><span class="toc-number">3.1.</span> <span class="toc-text">模板渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模版继承"><span class="toc-number">3.2.</span> <span class="toc-text">模版继承</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#母版（main-html）"><span class="toc-number">3.2.1.</span> <span class="toc-text">母版（main.html）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子版"><span class="toc-number">3.2.2.</span> <span class="toc-text">子版</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模板导入"><span class="toc-number">3.3.</span> <span class="toc-text">模板导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UIMethod和UIModule"><span class="toc-number">3.4.</span> <span class="toc-text">UIMethod和UIModule</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协程"><span class="toc-number">4.</span> <span class="toc-text">协程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步阻塞（Blocking）"><span class="toc-number">4.1.</span> <span class="toc-text">同步阻塞（Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步非阻塞（Non-Blocking）"><span class="toc-number">4.2.</span> <span class="toc-text">异步非阻塞（Non Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">4.3.</span> <span class="toc-text">Future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-3-5-async-and-await"><span class="toc-number">4.4.</span> <span class="toc-text">Python 3.5: async and await</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行执行"><span class="toc-number">4.5.</span> <span class="toc-text">并行执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池"><span class="toc-number">4.6.</span> <span class="toc-text">线程池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程运行"><span class="toc-number">5.</span> <span class="toc-text">多进程运行</span></a></li></ol>
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Tornado-介绍"><span class="toc-number">1.</span> <span class="toc-text">Tornado 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载安装"><span class="toc-number">1.1.</span> <span class="toc-text">下载安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#快速使用"><span class="toc-number">1.2.</span> <span class="toc-text">快速使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tronado-原生支持Resutful"><span class="toc-number">1.3.</span> <span class="toc-text">Tronado 原生支持Resutful</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#处理表单请求"><span class="toc-number">1.4.</span> <span class="toc-text">处理表单请求</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#POST-application-json"><span class="toc-number">1.5.</span> <span class="toc-text">POST application/json</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Flush-mothed"><span class="toc-number">1.6.</span> <span class="toc-text">Flush mothed</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#路由系统"><span class="toc-number">2.</span> <span class="toc-text">路由系统</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例代码"><span class="toc-number">2.1.</span> <span class="toc-text">示例代码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#二级域名"><span class="toc-number">2.2.</span> <span class="toc-text">二级域名</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#模板语言"><span class="toc-number">3.</span> <span class="toc-text">模板语言</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#模板渲染"><span class="toc-number">3.1.</span> <span class="toc-text">模板渲染</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模版继承"><span class="toc-number">3.2.</span> <span class="toc-text">模版继承</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#母版（main-html）"><span class="toc-number">3.2.1.</span> <span class="toc-text">母版（main.html）</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#子版"><span class="toc-number">3.2.2.</span> <span class="toc-text">子版</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#模板导入"><span class="toc-number">3.3.</span> <span class="toc-text">模板导入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#UIMethod和UIModule"><span class="toc-number">3.4.</span> <span class="toc-text">UIMethod和UIModule</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#协程"><span class="toc-number">4.</span> <span class="toc-text">协程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#同步阻塞（Blocking）"><span class="toc-number">4.1.</span> <span class="toc-text">同步阻塞（Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#异步非阻塞（Non-Blocking）"><span class="toc-number">4.2.</span> <span class="toc-text">异步非阻塞（Non Blocking）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Future"><span class="toc-number">4.3.</span> <span class="toc-text">Future</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Python-3-5-async-and-await"><span class="toc-number">4.4.</span> <span class="toc-text">Python 3.5: async and await</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#并行执行"><span class="toc-number">4.5.</span> <span class="toc-text">并行执行</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池"><span class="toc-number">4.6.</span> <span class="toc-text">线程池</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#设置超时时间"><span class="toc-number">4.7.</span> <span class="toc-text">设置超时时间</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程运行"><span class="toc-number">5.</span> <span class="toc-text">多进程运行</span></a></li></ol>
         
     </div>
     <style>
