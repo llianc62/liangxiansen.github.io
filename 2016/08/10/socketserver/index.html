@@ -358,99 +358,419 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
+      <div class="body-wrap"><article id="post-socketserver" class="article article-type-post" itemscope itemprop="blogPost">
+  
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2016/08/10/socketserver/" class="article-date">
+      <time datetime="2016-08-10T12:47:28.000Z" itemprop="datePublished">2016-08-10</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python之路：(十六）socketserver模块
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
+      
       <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socket/">Socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <p>回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以<code>读写分离得形式</code>实现了接受处理多个请求.</p>
+<p>然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请求.还好python给我们提供了一个并发处理socket得功能,那就是socketserver模块.</p>
+<blockquote>
+<p>socketserver内部使用 IO多路复用 以及 <code>多线程</code> 和 <code>多进程</code> ，从而实现并发处理多个客户端请求的socket服务端。即：每个客户端请求连接到服务器时socket服务端都会在服务器是创建一个<code>线程</code>或者<code>进程</code> 专门负责处理当前客户端的所有请求。　　</p>
+</blockquote>
+<a id="more"></a>
+<p>如下图：</p>
+<p>第一次连接后，数据通讯就通过线程或进程进行数据交换（红色箭头）</p>
+<p><img src="/images/socket编程/socketserver拓扑.png" alt="socketserver拓扑图"></p>
+<h2 id="ThreadingTCPServer"><a href="#ThreadingTCPServer" class="headerlink" title="ThreadingTCPServer"></a>ThreadingTCPServer</h2><blockquote>
+<p><code>ThreadingTCPServer</code>实现的soket服务器内部会为每个client创建一个 <code>线程</code>，该线程用来和客户端进行交互。</p>
+</blockquote>
+<h3 id="ThreadingTCPServer基础"><a href="#ThreadingTCPServer基础" class="headerlink" title="ThreadingTCPServer基础"></a>ThreadingTCPServer基础</h3><p><strong>使用ThreadingTCPServer:</strong></p>
+<ul>
+<li>创建一个继承自 socketserver.BaseRequestHandler 的类</li>
+<li>类中必须定义一个名称为 handle 的方法</li>
+<li>启动ThreadingTCPServer</li>
+</ul>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><pre><code class="python">import socketserver
+
+
+class MyServer(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        conn = self.request  # 接受连接请求,获取客户端socket对象
+        conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)  # 回一条消息给客户端
+        while True:
+            data = str(conn.recv(1024), encoding=&#39;utf-8&#39;)
+            # 如果客户端没有输入内容则跳出本次循环什么都不执行
+            if data == len(data):
+                break
+            # 根据用户输入的内容执行相应的操作
+            elif data == &#39;0&#39;:
+                conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+            else:
+                conn.sendall(&#39;请重新输入.&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    # 实例话对象,传递一个元祖设置启动的IP/PORT,第二个参数把自己定义的类写上作为SocketServer.ThreadingTCPServer的构造函数
+    server = socketserver.ThreadingTCPServer((&#39;127.0.0.1&#39;,8000), MyServer)
+    # 对象调用父类的启动方法
+    server.serve_forever()
+</code></pre>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><pre><code class="python">import socket
+
+
+ip_port = (&#39;127.0.0.1&#39;,8000)
+sk = socket.socket()
+sk.connect(ip_port)
+sk.settimeout(5)
+
+while True:
+    data = sk.recv(1024)
+    print(&#39;receive: %s&#39;,data)
+    inp = input(&#39;please input:&#39;)
+    sk.sendall(bytes(inp), encoding=&#39;utf-8&#39;)
+    if inp == &#39;exit&#39;:
+        break
+
+sk.close()
+</code></pre>
+<h3 id="ThreadingTCPServer源码剖析"><a href="#ThreadingTCPServer源码剖析" class="headerlink" title="ThreadingTCPServer源码剖析"></a>ThreadingTCPServer源码剖析</h3><p>ThreadingTCPServer的类图关系如下：</p>
+<p><img src="/images/socket编程/ThreadingTCPServer类.png" alt="ThreadingTCPServer类结构"></p>
+<p>学会看源码非常重要！不能仅仅光会用！大赞~ 知道他的过程和实现~ 怎么学会看源码呢？多看然后画类图，如上图！！！</p>
+<p>在理解的时候可以把他们想象为，把所有需要用的方法，都在ThreadingTCPServer中</p>
+<p>内部调用流程为：</p>
+<ol>
+<li>运行服务端程序</li>
+<li>执行 TCPServer.<strong>init</strong>方法，创建服务端Socket对象并绑定 IP 和 端口</li>
+<li>执行 BaseServer.<strong>init</strong>方法，将自定义的继承自SocketServer.BaseRequestHandler 的类 MyRequestHandle,赋值给 self.RequestHandlerClass</li>
+<li>执行 BaseServer.server_forever 方法，While 循环一直监听是否有客户端请求到达 …</li>
+<li>当客户端连接到达服务器执行 ThreadingMixIn.process_request 方法，创建一个 “线程” 用来处理请求<br>执行 ThreadingMixIn.process_request_thread 方法<br>执行 BaseServer.finish_request 方法，执行 self.RequestHandlerClass()  即：执行 自定义 MyRequestHandler 的构造方法（自动调用基类BaseRequestHandler的构造方法，在该构造方法中又会调用 MyRequestHandler的handle方法）</li>
+</ol>
+<h3 id="源码精简版"><a href="#源码精简版" class="headerlink" title="源码精简版"></a>源码精简版</h3><pre><code class="python">import socket
+import threading
+import select
+
+
+def process(request, client_address):  # 模拟定义的handle()方法，这个方法内的代码是socket server与Client端交互代码
+    print(request,client_address)
+    conn = request
+    conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)
+    flag = True
+    while flag:
+        data = conn.recv(1024)
+        if data == &#39;exit&#39;:
+            flag = False
+        elif data == &#39;0&#39;:
+            conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+        else:
+            conn.sendall(&#39;请重新输入.&#39;)
+
+
+sk = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+sk.bind((&#39;127.0.0.1&#39;, 8002))
+sk.listen(5)
+
+while True:  # 监控sk文件句柄,循环接受连接请求
+    r, w, e = select.select([sk, ], [], [], 1)
+    print(&#39;looping&#39;)
+    if sk in r:  # 当sk文件句柄发生变化的时候说明是新的客户端连接过来了
+        print(&#39;get request&#39;)
+        request, client_address = sk.accept()
+        t = threading.Thread(target=process, args=(request, client_address))  # 创建一个线程，并调用自己定义的process方法执行~然后样客户端与之交互
+        t.daemon = False
+        t.start()
+
+sk.close()
+</code></pre>
+<blockquote>
+<p>如精简代码可以看出，SocketServer的ThreadingTCPServer之所以可以同时处理请求得益于 <code>select</code> 和 <code>Threading</code> 两个东西，其实本质上就是在服务器端为每一个客户端创建一个线程，当前线程用来处理对应客户端的请求，所以，可以支持同时n个客户端链接（长连接）。</p>
+</blockquote>
+<h2 id="ForkingTCPServer"><a href="#ForkingTCPServer" class="headerlink" title="ForkingTCPServer"></a>ForkingTCPServer</h2><p>ForkingTCPServer和ThreadingTCPServer的使用和执行流程基本一致，只不过在内部分别为请求者建立 “线程”  和 “进程”。</p>
+<h3 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h3><h4 id="服务端-1"><a href="#服务端-1" class="headerlink" title="服务端"></a>服务端</h4><pre><code class="python">import socketserver
+
+class MyServer(socketserver.BaseRequestHandler):
+
+    def handle(self):
+        # print self.request,self.client_address,self.server
+        conn = self.request
+        conn.sendall(&#39;欢迎致电 10086，请输入1xxx,0转人工服务.&#39;)
+        Flag = True
+        while Flag:
+            data = conn.recv(1024)
+            if data == &#39;exit&#39;:
+                Flag = False
+            elif data == &#39;0&#39;:
+                conn.sendall(&#39;通过可能会被录音.balabala一大推&#39;)
+            else:
+                conn.sendall(&#39;请重新输入.&#39;)
+
+
+if __name__ == &#39;__main__&#39;:
+    # 这里使用socketserver ForkingTCPServer类创建对象
+    server = socketserver.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyServer)
+    server.serve_forever()
+</code></pre>
+<h4 id="客户端-1"><a href="#客户端-1" class="headerlink" title="客户端"></a>客户端</h4><pre><code class="python">import socket
+
+
+ip_port = (&#39;127.0.0.1&#39;,8000)
+sk = socket.socket()
+sk.connect(ip_port)
+sk.settimeout(5)
+
+while True:
+    data = sk.recv(1024)
+    print(&#39;receive:&#39;,data)
+    inp = input(&#39;please input:&#39;)
+    sk.sendall(inp)
+    if inp == &#39;exit&#39;:
+        break
+
+sk.close()
+</code></pre>
+<p>以上<code>ForkingTCPServer</code>只是将 <code>ThreadingTCPServer</code> 实例中的代码：</p>
+<pre><code>server = SocketServer.ThreadingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandler)
+变更为：
+server = SocketServer.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandler)
+</code></pre><p>SocketServer的ThreadingTCPServer之所以可以同时处理请求得益于 <code>select</code> 和 <code>os.fork</code> 两个东西，其实本质上就是在服务器端为每一个客户端创建一个<code>进程</code>，当前新创建的进程用来处理对应客户端的请求，所以，可以支持同时n个客户端链接（长连接）。</p>
+<blockquote>
+<p>源码剖析参考: ThreadingTCPServer</p>
+</blockquote>
+<h2 id="socketserver-模块练习"><a href="#socketserver-模块练习" class="headerlink" title="socketserver 模块练习"></a>socketserver 模块练习</h2><blockquote>
+<p>开发一个支持多用户在线的FTP程序</p>
+</blockquote>
+<p><strong>要求：</strong></p>
+<ol>
+<li>用户加密认证</li>
+<li>允许同时多用户登录</li>
+<li>每个用户有自己的家目录 ，且只能访问自己的家目录</li>
+<li>对用户进行磁盘配额，每个用户的可用空间不同</li>
+<li>允许用户在ftp server上随意切换目录</li>
+<li>允许用户查看当前目录下文件</li>
+<li>允许上传和下载文件，保证文件一致性</li>
+<li>文件传输过程中显示进度条</li>
+<li>附加功能：支持文件的断点续传</li>
+</ol>
+<p>可参考: <a href="https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP" target="_blank" rel="noopener">https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP</a></p>
+<div class="github-widget" data-repo="LiangXianSen/python_-study/tree/master/day9/FTP"></div>
+      
     </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2016-08-10, 20:47:28</p>
+        <p><span>最后更新:</span>2017-08-10, 14:16:28</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/10/socketserver/" title="Python之路：(十六）socketserver模块">http://www.liangxiansen.cn/2016/08/10/socketserver/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/10/socketserver/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/08/11/Python-MySQL/">
+                    Python对MySQL进行操作
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/08/python-thread-process-gevent/">
+                    Python之路：(十五）进程、线程和协程
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Python之路：(十六）socketserver模块　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#ThreadingTCPServer"><span class="toc-number">1.</span> <span class="toc-text">ThreadingTCPServer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadingTCPServer基础"><span class="toc-number">1.1.</span> <span class="toc-text">ThreadingTCPServer基础</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#服务端"><span class="toc-number">1.2.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端"><span class="toc-number">1.3.</span> <span class="toc-text">客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ThreadingTCPServer源码剖析"><span class="toc-number">1.4.</span> <span class="toc-text">ThreadingTCPServer源码剖析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#源码精简版"><span class="toc-number">1.5.</span> <span class="toc-text">源码精简版</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ForkingTCPServer"><span class="toc-number">2.</span> <span class="toc-text">ForkingTCPServer</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基本使用"><span class="toc-number">2.1.</span> <span class="toc-text">基本使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#服务端-1"><span class="toc-number">2.1.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#客户端-1"><span class="toc-number">2.1.2.</span> <span class="toc-text">客户端</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socketserver-模块练习"><span class="toc-number">3.</span> <span class="toc-text">socketserver 模块练习</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
     <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
-<% } %></div>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/08/11/Python-MySQL/" title="上一篇: Python对MySQL进行操作">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/08/python-thread-process-gevent/" title="下一篇: Python之路：(十五）进程、线程和协程">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
