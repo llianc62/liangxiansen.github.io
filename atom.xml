@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://www.liangxiansen.cn/"/>
-  <updated>2018-05-03T04:13:25.400Z</updated>
+  <updated>2018-05-25T04:04:16.000Z</updated>
   <id>http://www.liangxiansen.cn/</id>
   
   <author>
@@ -20,10 +20,10 @@
     <link href="http://www.liangxiansen.cn/2018/04/11/tornado/"/>
     <id>http://www.liangxiansen.cn/2018/04/11/tornado/</id>
     <published>2018-04-11T06:02:02.000Z</published>
-    <updated>2018-05-03T04:13:25.400Z</updated>
+    <updated>2018-05-25T04:04:16.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Tornado-介绍"><a href="#Tornado-介绍" class="headerlink" title="Tornado 介绍"></a>Tornado 介绍</h2><p>Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。</p>
-<p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="external">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="external">C10K problem</a>。）</p>
+<p>Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 <a href="http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html" target="_blank" rel="noopener">epoll</a> 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 <a href="http://www.www.kegel.com/c10k.html" target="_blank" rel="noopener">C10K problem</a>。）</p>
 <h3 id="下载安装"><a href="#下载安装" class="headerlink" title="下载安装"></a>下载安装</h3><pre><code>pip install tornado
 
 源码安装
@@ -57,7 +57,7 @@ if __name__ == &quot;__main__&quot;:
 <p>执行过程：</p>
 <ul>
 <li>第一步：运行程序，启动 8888 端口侦听</li>
-<li>第二步：浏览器客户端访问 /index  –&gt;  <a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>第二步：浏览器客户端访问 /index  –&gt;  <a href="http://127.0.0.1:8888/index" target="_blank" rel="noopener">http://127.0.0.1:8888/index</a></li>
 <li>第三步：服务器接受请求，并交由对应的类处理该请求</li>
 <li>第四步：类接受到请求之后，根据请求方式（post / get / delete …）的不同调用并执行相应的方法（Resutful方式）</li>
 <li>第五步：方法返回值的字符串内容发送到用户浏览器</li>
@@ -250,7 +250,7 @@ if __name__ == &quot;__main__&quot;:
 <blockquote>
 <p>Note： 本地测试先配置好系统hosts文件域名指向</p>
 </blockquote>
-<p>路由表是 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 对象(或元组)的列表, 其中每个都包含(至少)一个正则 表达式和一个处理类. 顺序问题; 第一个匹配的规则会被使用. 如果正则表达 式包含捕获组, 这些组会被作为 <em>路径参数</em> 传递给处理函数的HTTP方法. 如果一个字典作为 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 的第三个参数被传递, 它会作为 <em>初始参数</em> 传递给 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.initialize" target="_blank" rel="external"><code>RequestHandler.initialize</code></a>. 最后 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="external"><code>URLSpec</code></a> 可能有一个名字 , 这将允许它被 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.reverse_url" target="_blank" rel="external"><code>RequestHandler.reverse_url</code></a> 使用.</p>
+<p>路由表是 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="noopener"><code>URLSpec</code></a> 对象(或元组)的列表, 其中每个都包含(至少)一个正则 表达式和一个处理类. 顺序问题; 第一个匹配的规则会被使用. 如果正则表达 式包含捕获组, 这些组会被作为 <em>路径参数</em> 传递给处理函数的HTTP方法. 如果一个字典作为 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="noopener"><code>URLSpec</code></a> 的第三个参数被传递, 它会作为 <em>初始参数</em> 传递给 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.initialize" target="_blank" rel="noopener"><code>RequestHandler.initialize</code></a>. 最后 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.URLSpec" target="_blank" rel="noopener"><code>URLSpec</code></a> 可能有一个名字 , 这将允许它被 <a href="http://tornado-zh.readthedocs.io/zh/latest/web.html#tornado.web.RequestHandler.reverse_url" target="_blank" rel="noopener"><code>RequestHandler.reverse_url</code></a> 使用.</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
@@ -332,7 +332,7 @@ if __name__ == &quot;__main__&quot;:
 Tornado 的模板支持“控制语句”和“表达语句”，控制语句是使用{% 和 %}包起来的 例如 {% if len(items) > 2 %}。表达语句是使用 {{ 和 }} 包起来的，例如 {{ items[0] }}。
 </p>
 <p>
-控制语句和对应的 Python 语句的格式基本完全相同。我们支持 if、for、while 和 try，这些语句逻辑结束的位置需要用 {% end %} 做标记。还通过 "extends" 和 "block" 语句实现了模板继承。这些在 <a href="http://www.github.com/facebook/tornado/blob/master/tornado/template.py" target="_blank" rel="external">template 模块</a> 的代码文档中有着详细的描述。</p>
+控制语句和对应的 Python 语句的格式基本完全相同。我们支持 if、for、while 和 try，这些语句逻辑结束的位置需要用 {% end %} 做标记。还通过 "extends" 和 "block" 语句实现了模板继承。这些在 <a href="http://www.github.com/facebook/tornado/blob/master/tornado/template.py" target="_blank" rel="noopener">template 模块</a> 的代码文档中有着详细的描述。</p>
 <blockquote>
 <p>注：在使用模板前需要在setting中设置模板路径：”template_path” : “Templates”</p>
 </blockquote>
@@ -472,8 +472,8 @@ if __name__ == &quot;__main__&quot;:
 <p><img src="http://www.liangxiansen.cn/images/tornado/UIMethod.png" alt="子版"></p>
 <h2 id="协程"><a href="#协程" class="headerlink" title="协程"></a>协程</h2><p>Tornado默认是单进程单线程。实时的web特性通常需要为每个用户一个大部分时间都处于空闲的长连接. 在传统的同步web服务器中,这意味着需要给每个用户分配一个专用的线程,这样的开销是十分巨大的.</p>
 <p>为了减小对于并发连接需要的开销,Tornado使用了一种单线程事件循环的方式. 这意味着所有应用程序代码都应该是异步和非阻塞的,因为在同一时刻只有一个操作是有效的.</p>
-<p>Tornado 中推荐用 <strong>协程</strong> 来编写异步代码. 协程使用 Python 中的关键字 <code>yield</code> 来替代链式回调来实现挂起和继续程序的执行(像在 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 中使用的轻量级线程合作的方法有时也称作协程, 但是在 Tornado 中所有协程使用异步函数来实现的明确的上下文切换).</p>
-<h3 id="同步阻塞（Blocking）"><a href="#同步阻塞（Blocking）" class="headerlink" title="同步阻塞（Blocking）"></a>同步阻塞（Blocking）</h3><p>一个函数通常在它等待返回值的时候被 <strong>阻塞</strong> .一个函数被阻塞可能由于很多原因: 网络I/O,磁盘I/O,互斥锁等等.事实上, <em>每一个</em> 函数都会被阻塞,只是时间会比较短而已, 当一个函数运行时并且占用CPU(举一个极端的例子来说明为什么CPU阻塞的时间必须考虑在内, 考虑以下密码散列函数像<a href="http://bcrypt.sourceforge.net/" target="_blank" rel="external">bcrypt</a>, 这个函数需要占据几百毫秒的CPU时间, 远远超过了通常对于网络和磁盘请求的时间). 一个函数可以在某些方面阻塞而在其他方面不阻塞.举例来说, <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/httpclient.html#module-tornado.httpclient" target="_blank" rel="external"><code>tornado.httpclient</code></a> 在默认设置下将阻塞与DNS解析,但是在其它网络请求时不会阻塞 (为了减轻这种影响,可以用 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/netutil.html#tornado.netutil.ThreadedResolver" target="_blank" rel="external"><code>ThreadedResolver</code></a> 或通过正确配置 <code>libcurl</code> 使用 <code>tornado.curl_httpclient</code> ). 在Tornado的上下文中我们通常讨论网络I/O上下文阻塞, 虽然各种阻塞已经被最小化了.</p>
+<p>Tornado 中推荐用 <strong>协程</strong> 来编写异步代码. 协程使用 Python 中的关键字 <code>yield</code> 来替代链式回调来实现挂起和继续程序的执行(像在 <a href="http://www.gevent.org/" target="_blank" rel="noopener">gevent</a> 中使用的轻量级线程合作的方法有时也称作协程, 但是在 Tornado 中所有协程使用异步函数来实现的明确的上下文切换).</p>
+<h3 id="同步阻塞（Blocking）"><a href="#同步阻塞（Blocking）" class="headerlink" title="同步阻塞（Blocking）"></a>同步阻塞（Blocking）</h3><p>一个函数通常在它等待返回值的时候被 <strong>阻塞</strong> .一个函数被阻塞可能由于很多原因: 网络I/O,磁盘I/O,互斥锁等等.事实上, <em>每一个</em> 函数都会被阻塞,只是时间会比较短而已, 当一个函数运行时并且占用CPU(举一个极端的例子来说明为什么CPU阻塞的时间必须考虑在内, 考虑以下密码散列函数像<a href="http://bcrypt.sourceforge.net/" target="_blank" rel="noopener">bcrypt</a>, 这个函数需要占据几百毫秒的CPU时间, 远远超过了通常对于网络和磁盘请求的时间). 一个函数可以在某些方面阻塞而在其他方面不阻塞.举例来说, <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/httpclient.html#module-tornado.httpclient" target="_blank" rel="noopener"><code>tornado.httpclient</code></a> 在默认设置下将阻塞与DNS解析,但是在其它网络请求时不会阻塞 (为了减轻这种影响,可以用 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/netutil.html#tornado.netutil.ThreadedResolver" target="_blank" rel="noopener"><code>ThreadedResolver</code></a> 或通过正确配置 <code>libcurl</code> 使用 <code>tornado.curl_httpclient</code> ). 在Tornado的上下文中我们通常讨论网络I/O上下文阻塞, 虽然各种阻塞已经被最小化了.</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Lian
@@ -510,19 +510,19 @@ if __name__ == &quot;__main__&quot;:
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
 <ul>
-<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
-<li>浏览器访问：<a href="http://127.0.0.1:8888/blocking" target="_blank" rel="external">http://127.0.0.1:8888/blocking</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="noopener">http://127.0.0.1:8888/index</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/blocking" target="_blank" rel="noopener">http://127.0.0.1:8888/blocking</a></li>
 <li>你会发现blocking会一直在转圈，处于一个堵塞状态。</li>
 <li>你再访问index页面，你发现index页面也会堵塞住。</li>
 </ul>
 <h3 id="异步非阻塞（Non-Blocking）"><a href="#异步非阻塞（Non-Blocking）" class="headerlink" title="异步非阻塞（Non Blocking）"></a>异步非阻塞（Non Blocking）</h3><p>一个 <strong>异步</strong> 函数在它结束前就已经返回了,而且通常会在程序中触发一些动作然后在后台执行一些任务. (和正常的 <strong>同步</strong> 函数相比, 同步函数在返回之前做完了所有的事). 这里有几种类型的异步接口:</p>
 <ul>
 <li>回调函数</li>
-<li>返回一个占位符 (<a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a>, <code>Promise</code>, <code>Deferred</code>)</li>
+<li>返回一个占位符 (<a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="noopener"><code>Future</code></a>, <code>Promise</code>, <code>Deferred</code>)</li>
 <li>传送一个队列</li>
 <li>回调注册 (例如. POSIX 信号)</li>
 </ul>
-<p>不论使用哪一种类型的接口, <em>依据定义</em> 异步函数与他们的调用者有不同的交互方式; 但没有一种对调用者透明的方式可以将同步函数变成异步函数 (像 <a href="http://www.gevent.org/" target="_blank" rel="external">gevent</a> 通过一种轻量的线程库来提供异步系统,但是实际上它并不能让事情变得异步)</p>
+<p>不论使用哪一种类型的接口, <em>依据定义</em> 异步函数与他们的调用者有不同的交互方式; 但没有一种对调用者透明的方式可以将同步函数变成异步函数 (像 <a href="http://www.gevent.org/" target="_blank" rel="noopener">gevent</a> 通过一种轻量的线程库来提供异步系统,但是实际上它并不能让事情变得异步)</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
@@ -567,13 +567,13 @@ if __name__ == &quot;__main__&quot;:
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
 <ul>
-<li>浏览器访问：<a href="http://127.0.0.1:8888/nonblocking" target="_blank" rel="external">http://127.0.0.1:8888/nonblocking</a></li>
-<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="external">http://127.0.0.1:8888/index</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/nonblocking" target="_blank" rel="noopener">http://127.0.0.1:8888/nonblocking</a></li>
+<li>浏览器访问：<a href="http://127.0.0.1:8888/index" target="_blank" rel="noopener">http://127.0.0.1:8888/index</a></li>
 <li>你会发现nonblocking会一直在转圈，处于一个堵塞状态。</li>
 <li>你再访问index页面，你发现index页面能够访问不受影响。</li>
 </ul>
-<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <code>@gen.coroutine</code> 装饰器通过 <code>yield</code> 表达式和生成器进行交流, 而且通过返回一个 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 <a href="http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。<code>@gen.coroutine</code> 可以让你的函数以异步协程的形式运行，但是依赖第三方的异步库，要求你的函数本身不是Booking的。例如上面的<code>os.sleep()</code> 方法是blocking 的，没办法实现异步非阻塞。</p>
-<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="external"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="external"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
+<p>包含了 <code>yield</code> 关键字的函数是一个 <strong>生成器(generator)</strong>. 所有的生成器都是异步的; 当调用它们的时候,会返回一个生成器对象,而不是一个执行完的结果. <a href="mailto:`@gen.coroutine" target="_blank" rel="noopener">`@gen.coroutine</a><code>装饰器通过</code>yield<code>表达式和生成器进行交流, 而且通过返回一个 [</code>Future<code>](http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future) 与协程的调用方进行交互. 协程一般不会抛出异常: 它们抛出的任何异常将被 [</code>Future<code>](http://tornado-zh.readthedocs.io/zh/latest/concurrent.html#tornado.concurrent.Future) 捕获 直到它被得到. 这意味着用正确的方式调用协程是重要的, 否则你可能有被 忽略的错误。</code>@gen.coroutine<code>可以让你的函数以异步协程的形式运行，但是依赖第三方的异步库，要求你的函数本身不是Booking的。例如上面的</code>os.sleep()` 方法是blocking 的，没办法实现异步非阻塞。</p>
+<h3 id="Future"><a href="#Future" class="headerlink" title="Future"></a>Future</h3><p>上面提到Future 到底是什么呢，原始的 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future" target="_blank" rel="noopener"><code>Future</code></a> 版本十分复杂, 但是 <code>Futures</code> 是 Tornado 中推荐使用的一种做法, 因为它有两个主要的优势. 错误处理时通过 <a href="http://tornado-zh-cn.readthedocs.io/zh_CN/latest/concurrent.html#tornado.concurrent.Future.result" target="_blank" rel="noopener"><code>Future.result</code></a> 函数可以简单的抛出一个异常 (不同于某些传统的基于回调方式接口的 一对一的错误处理方式), 而且 <code>Futures</code> 对于携程兼容的很好.  我们这里简单使用一下future 写一个异步函数。</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
@@ -614,7 +614,7 @@ if __name__ == &quot;__main__&quot;:
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
-<h3 id="Python-3-5-async-and-await"><a href="#Python-3-5-async-and-await" class="headerlink" title="Python 3.5: async and await"></a>Python 3.5: <code>async</code> and <code>await</code></h3><p>官方还介绍了在另一种写法， Python 3.5 引入了 <code>async</code> 和 <code>await</code> 关键字(使用这些关键字的 函数也被称为”原生协程”). 从Tornado 4.3, 你可以用它们代替 <code>yield</code> 为基础的协程. 只需要简单的使用 <code>async def foo()</code> 在函数定义的时候代替 <code>@gen.coroutine</code> 装饰器, 用 <code>await</code> 代替yield. 本文档的其他部分会继续使用 <code>yield</code>的风格来和旧版本的Python兼容, 但是如果 <code>async</code> 和 <code>await</code> 可用的话，它们运行起来会更快</p>
+<h3 id="Python-3-5-async-and-await"><a href="#Python-3-5-async-and-await" class="headerlink" title="Python 3.5: async and await"></a>Python 3.5: <code>async</code> and <code>await</code></h3><p>官方还介绍了在另一种写法， Python 3.5 引入了 <code>async</code> 和 <code>await</code> 关键字(使用这些关键字的 函数也被称为”原生协程”). 从Tornado 4.3, 你可以用它们代替 <code>yield</code> 为基础的协程. 只需要简单的使用 <code>async def foo()</code> 在函数定义的时候代替 <a href="mailto:`@gen.coroutine" target="_blank" rel="noopener">`@gen.coroutine</a><code>装饰器, 用</code>await<code>代替yield. 本文档的其他部分会继续使用</code>yield<code>的风格来和旧版本的Python兼容, 但是如果</code>async<code>和</code>await` 可用的话，它们运行起来会更快</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
@@ -728,8 +728,8 @@ if __name__ == &quot;__main__&quot;:
     application.listen(8888)
     tornado.ioloop.IOLoop.instance().start()
 </code></pre>
-<p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="external"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="external"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
-<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><p><code>coroutine</code> 是给Non-blocking 函数提供异步协程的方式运行， <code>ThreadPoolExecutor</code> 则可以给blocking 的函数提供异步的方式运行，但是由于是多线程的，Python 使用多线程对新能来说是需要谨慎的，大量的计算量的情况可能会造成性能的下降。</p>
+<p><code>await</code> 关键字比 <code>yield</code> 关键字功能要少一些. 例如,在一个使用 <code>yield</code> 的协程中， 你可以得到<code>Futures</code> 列表, 但是在原生协程中,你必须把列表用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.multi" target="_blank" rel="noopener"><code>tornado.gen.multi</code></a> 包起来. 你也可以使用 <a href="http://tornado-zh.readthedocs.io/zh/latest/gen.html#tornado.gen.convert_yielded" target="_blank" rel="noopener"><code>tornado.gen.convert_yielded</code></a> 来把任何使用 <code>yield</code> 工作的代码转换成使用 <code>await</code> 的形式.</p>
+<h3 id="进程池"><a href="#进程池" class="headerlink" title="进程池"></a>进程池</h3><p><code>coroutine</code> 是给Non-blocking 函数提供异步协程的方式运行， <code>ThreadPoolExecutor</code> 则是通过多进程给blocking 的函数提供非阻塞的方式运行，但是由于是多线程的，Python 使用多线程对新能来说是需要谨慎的，大量的计算量的情况可能会造成性能的下降。</p>
 <pre><code class="python">#!/usr/bin/env python
 # -*- coding:utf-8 -*-
 # Author: Liang Xian Sen
@@ -881,7 +881,7 @@ if __name__ == &quot;__main__&quot;:
     <summary type="html">
     
       &lt;h2 id=&quot;Tornado-介绍&quot;&gt;&lt;a href=&quot;#Tornado-介绍&quot; class=&quot;headerlink&quot; title=&quot;Tornado 介绍&quot;&gt;&lt;/a&gt;Tornado 介绍&lt;/h2&gt;&lt;p&gt;Tornado 是 FriendFeed 使用的可扩展的非阻塞式 web 服务器及其相关工具的开源版本。这个 Web 框架看起来有些像web.py 或者 Google 的 webapp，不过为了能有效利用非阻塞式服务器环境，这个 Web 框架还包含了一些相关的有用工具 和优化。&lt;/p&gt;
-&lt;p&gt;Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 &lt;a href=&quot;http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html&quot;&gt;epoll&lt;/a&gt; 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 &lt;a href=&quot;http://www.www.kegel.com/c10k.html&quot;&gt;C10K problem&lt;/a&gt;。）&lt;/p&gt;
+&lt;p&gt;Tornado 和现在的主流 Web 服务器框架（包括大多数 Python 的框架）有着明显的区别：它是非阻塞式服务器，而且速度相当快。得利于其 非阻塞的方式和对 &lt;a href=&quot;http://www.www.kernel.org/doc/man-pages/online/pages/man4/epoll.4.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;epoll&lt;/a&gt; 的运用，Tornado 每秒可以处理数以千计的连接，这意味着对于实时 Web 服务来说，Tornado 是一个理想的 Web 框架。我们开发这个 Web 服务器的主要目的就是为了处理 FriendFeed 的实时功能 ——在 FriendFeed 的应用里每一个活动用户都会保持着一个服务器连接。（关于如何扩容 服务器，以处理数以千计的客户端的连接的问题，请参阅 &lt;a href=&quot;http://www.www.kegel.com/c10k.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;C10K problem&lt;/a&gt;。）&lt;/p&gt;
 &lt;h3 id=&quot;下载安装&quot;&gt;&lt;a href=&quot;#下载安装&quot; class=&quot;headerlink&quot; title=&quot;下载安装&quot;&gt;&lt;/a&gt;下载安装&lt;/h3&gt;&lt;pre&gt;&lt;code&gt;pip install tornado
 
 源码安装
@@ -893,9 +893,9 @@ https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="Tornado" scheme="http://www.liangxiansen.cn/tags/Tornado/"/>
     
@@ -906,11 +906,11 @@ https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
     <link href="http://www.liangxiansen.cn/2017/07/28/jupyter/"/>
     <id>http://www.liangxiansen.cn/2017/07/28/jupyter/</id>
     <published>2017-07-28T02:51:29.000Z</published>
-    <updated>2017-08-02T11:09:55.000Z</updated>
+    <updated>2017-08-02T11:09:54.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="安装Jupyter"><a href="#安装Jupyter" class="headerlink" title="安装Jupyter"></a>安装Jupyter</h2><pre><code>pip3 install --upgrade pip
 pip3 install jupyter
-</code></pre><p><a href="http://www.jupyter.org/" target="_blank" rel="external">官网</a>  |  <a href="http://www.jupyter-notebook.readthedocs.io/en/latest/index.html" target="_blank" rel="external">文档</a></p>
+</code></pre><p><a href="http://www.jupyter.org/" target="_blank" rel="noopener">官网</a>  |  <a href="http://www.jupyter-notebook.readthedocs.io/en/latest/index.html" target="_blank" rel="noopener">文档</a></p>
 <h2 id="配置Jupyter"><a href="#配置Jupyter" class="headerlink" title="配置Jupyter"></a>配置Jupyter</h2><h3 id="生成配置文件"><a href="#生成配置文件" class="headerlink" title="生成配置文件"></a>生成配置文件</h3><pre><code>jupyter notebook --generate-config
 </code></pre><h3 id="设置访问密码"><a href="#设置访问密码" class="headerlink" title="设置访问密码"></a>设置访问密码</h3><pre><code>jupyter notebook password
 </code></pre><h3 id="关闭启动浏览器"><a href="#关闭启动浏览器" class="headerlink" title="关闭启动浏览器"></a>关闭启动浏览器</h3><ul>
@@ -918,10 +918,10 @@ pip3 install jupyter
 </ul>
 <pre><code>c.NotebookApp.open_browser = False
 </code></pre><h3 id="启动Jupyter"><a href="#启动Jupyter" class="headerlink" title="启动Jupyter"></a>启动Jupyter</h3><pre><code>jupyter notebook
-</code></pre><h2 id="制作幻灯片"><a href="#制作幻灯片" class="headerlink" title="制作幻灯片"></a>制作幻灯片</h2><h3 id="安装生产幻灯片插件"><a href="#安装生产幻灯片插件" class="headerlink" title="安装生产幻灯片插件"></a>安装生产幻灯片插件</h3><p>这部分实现主要依靠<a href="https://github.com/damianavila/RISE" target="_blank" rel="external"> RISE </a>这个jupyter notebook插件，关于它的使用可以参考它的文档</p>
-<h3 id="生成静态幻灯片"><a href="#生成静态幻灯片" class="headerlink" title="生成静态幻灯片"></a>生成静态幻灯片</h3><p>可以参考这个<a href="https://www.youtube.com/watch?v=EOpcxy0RA1A" target="_blank" rel="external">视频</a>，简述步骤如下：</p>
+</code></pre><h2 id="制作幻灯片"><a href="#制作幻灯片" class="headerlink" title="制作幻灯片"></a>制作幻灯片</h2><h3 id="安装生产幻灯片插件"><a href="#安装生产幻灯片插件" class="headerlink" title="安装生产幻灯片插件"></a>安装生产幻灯片插件</h3><p>这部分实现主要依靠<a href="https://github.com/damianavila/RISE" target="_blank" rel="noopener"> RISE </a>这个jupyter notebook插件，关于它的使用可以参考它的文档</p>
+<h3 id="生成静态幻灯片"><a href="#生成静态幻灯片" class="headerlink" title="生成静态幻灯片"></a>生成静态幻灯片</h3><p>可以参考这个<a href="https://www.youtube.com/watch?v=EOpcxy0RA1A" target="_blank" rel="noopener">视频</a>，简述步骤如下：</p>
 <p>在notebook中设置cell 的slide属性，确认好，然后保存</p>
-<p>在自己的notebook文件目录（包含.ipynb的目录），制作幻灯片网页，需要 <a href="https://github.com/hakimel/reveal.js" target="_blank" rel="external">reveal.js</a> </p>
+<p>在自己的notebook文件目录（包含.ipynb的目录），制作幻灯片网页，需要 <a href="https://github.com/hakimel/reveal.js" target="_blank" rel="noopener">reveal.js</a> </p>
 <pre><code>jupyter-nbconvert --to slides test.ipynb --reveal-prefix=&quot;http://liangxiansen.cn/files/reveal.js&quot;
 </code></pre>]]></content>
     
@@ -946,7 +946,7 @@ pip3 in
     <link href="http://www.liangxiansen.cn/2017/07/14/scl/"/>
     <id>http://www.liangxiansen.cn/2017/07/14/scl/</id>
     <published>2017-07-14T08:59:17.000Z</published>
-    <updated>2017-08-02T11:09:55.000Z</updated>
+    <updated>2017-08-02T11:09:54.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>SCL(Software Collections)可以让你在同一个操作系统上安装和使用多个版本的软件，而不会影响整个系统的安装包。SCL为社区的以下需求而设计：创建和使用软件集合生产系统、概念验证系统、开发测试平台。SCL目前已经支持Fedora和RHEL(衍生版本如CentOS也包含在内)。</p>
 <p>SCL的创建就是为了给RHEL/CentOS用户提供一种以方便、安全地安装和使用应用程序和运行时环境的多个(而且可能是更新的)版本的方式，同时避免把系统搞乱。与之相对的是第三方源，它们可能会在已安装的包之间引起冲突。</p>
@@ -962,8 +962,8 @@ Perl 5.16.3 (perl516)
 Node.js 0.10 (nodejs010)
 MariaDB 5.5 (mariadb55)
 PostgreSQL 9.2 (postgresql92)
-</code></pre><p><a href="https://www.softwarecollections.org/en/scls/" target="_blank" rel="external">更多的软件集</a></p>
-<h2 id="SCL安装Python-开发环境"><a href="#SCL安装Python-开发环境" class="headerlink" title="SCL安装Python 开发环境"></a>SCL安装Python 开发环境</h2><p>关于 Software Collections 官方有一个<a href="https://www.softwarecollections.org/en/docs/" target="_blank" rel="external">指导</a>。</p>
+</code></pre><p><a href="https://www.softwarecollections.org/en/scls/" target="_blank" rel="noopener">更多的软件集</a></p>
+<h2 id="SCL安装Python-开发环境"><a href="#SCL安装Python-开发环境" class="headerlink" title="SCL安装Python 开发环境"></a>SCL安装Python 开发环境</h2><p>关于 Software Collections 官方有一个<a href="https://www.softwarecollections.org/en/docs/" target="_blank" rel="noopener">指导</a>。</p>
 <ol>
 <li><p>安装 Software Collections yum源</p>
 <pre><code>yum install centos-release-scl
@@ -974,7 +974,7 @@ PostgreSQL 9.2 (postgresql92)
 <li><p>安装 scl-utils</p>
 <pre><code>yum install scl-utils
 </code></pre></li>
-<li><p>安装 <a href="https://www.softwarecollections.org/en/scls/rhscl/python27/" target="_blank" rel="external">Python 开发环境</a></p>
+<li><p>安装 <a href="https://www.softwarecollections.org/en/scls/rhscl/python27/" target="_blank" rel="noopener">Python 开发环境</a></p>
 <pre><code>yum install python27
 </code></pre></li>
 <li><p>激活 Python 开发环境</p>
@@ -1024,7 +1024,7 @@ bin  boot  dev  etc  home  lib  lib64  media  mnt  opt  proc  root  sbin  selinu
     <link href="http://www.liangxiansen.cn/2017/05/17/%E5%8C%BA%E9%97%B4%E6%95%B0%E5%80%BC%E7%BB%9F%E8%AE%A1/"/>
     <id>http://www.liangxiansen.cn/2017/05/17/区间数值统计/</id>
     <published>2017-05-17T02:54:39.000Z</published>
-    <updated>2017-08-02T11:09:55.000Z</updated>
+    <updated>2017-08-02T11:09:54.000Z</updated>
     
     <content type="html"><![CDATA[<pre><code>#!/usr/bin/env python
 # -*- coding:utf-8 -*-
@@ -1096,8 +1096,8 @@ f = open(&amp;#39;/Users/lianl
 <p>Agent与一个和多个Consul Server 进行交互.Consul Server 用于存放和复制数据.server自行选举一个领袖.虽然Consul可以运行在一台server , 但是建议使用3到5台来避免失败情况下数据的丢失.每个数据中心建议配置一个server集群.</p>
 <p>你基础设施中需要发现其他服务的组件可以查询任何一个Consul 的server或者 agent.Agent会自动转发请求到server .</p>
 <p>每个数据中运行了一个Consul server集群.当一个跨数据中心的服务发现和配置请求创建时.本地Consul Server转发请求到远程的数据中心并返回结果.</p>
-<p>更多介绍查看官网<a href="https://www.consul.io" target="_blank" rel="external">点击前往</a></p>
-<h3 id="安装Consul"><a href="#安装Consul" class="headerlink" title="安装Consul"></a>安装Consul</h3><p>安装Consul,找到适合你系统的包下载他.Consul打包为一个’Zip’文件.<a href="https://www.consul.io/downloads.html" target="_blank" rel="external">前往下载</a></p>
+<p>更多介绍查看官网<a href="https://www.consul.io" target="_blank" rel="noopener">点击前往</a></p>
+<h3 id="安装Consul"><a href="#安装Consul" class="headerlink" title="安装Consul"></a>安装Consul</h3><p>安装Consul,找到适合你系统的包下载他.Consul打包为一个’Zip’文件.<a href="https://www.consul.io/downloads.html" target="_blank" rel="noopener">前往下载</a></p>
 <p>下载后解开压缩包.拷贝Consul到你的PATH路径中,在Unix系统中<code>~/bin</code>和<code>/usr/local/bin</code>是通常的安装目录.根据你是想为单个用户安装还是给整个系统安装来选择.在Windows系统中有可以安装到<code>%PATH%</code>的路径中.</p>
 <h3 id="验证安装"><a href="#验证安装" class="headerlink" title="验证安装"></a>验证安装</h3><p>完成安装后,通过打开一个新终端窗口检查<code>consul</code>安装是否成功.通过执行 <code>consul</code>你应该看到类似下面的输出</p>
 <pre><code>[root@dhcp-10-201-102-248 ~]# consul
@@ -1128,7 +1128,7 @@ Available commands are:
 </code></pre><p>如果你得到一个<code>consul not be found</code>的错误,你的<code>PATH</code>可能没有正确设置.请返回检查你的<code>consul</code>的安装路径是否包含在<code>PATH</code>中.</p>
 <h3 id="运行Agent"><a href="#运行Agent" class="headerlink" title="运行Agent"></a>运行Agent</h3><p>完成Consul的安装后,必须运行agent. agent可以运行为<code>server</code>或<code>client</code>模式.每个数据中心至少必须拥有一台server . 建议在一个集群中有3或者5个server.部署单一的server,在出现失败时会不可避免的造成数据丢失.</p>
 <p>其他的agent运行为client模式.一个client是一个非常轻量级的进程.用于注册服务,运行健康检查和转发对server的查询.agent必须在集群中的每个主机上运行.</p>
-<p>查看启动数据中心的细节请查看<a href="https://www.consul.io/docs/guides/bootstrapping.html" target="_blank" rel="external">这里</a>.</p>
+<p>查看启动数据中心的细节请查看<a href="https://www.consul.io/docs/guides/bootstrapping.html" target="_blank" rel="noopener">这里</a>.</p>
 <h3 id="启动-Consul-Server"><a href="#启动-Consul-Server" class="headerlink" title="启动 Consul Server"></a>启动 Consul Server</h3><pre><code>consul agent -server -bootstrap-expect 3 -data-dir /tmp/consul -node=s1 -bind=10.201.102.198 -ui-dir ./consul_ui/ -rejoin -config-dir=/etc/consul.d/ -client 0.0.0.0
 </code></pre><p>运行cosnul agent以<code>server</code>模式，</p>
 <ul>
@@ -1241,8 +1241,8 @@ s2    10.201.102.199:8301  alive   server  0.7.4  2         dc1
 s3    10.201.102.200:8301  alive   server  0.7.4  2         dc1
 </code></pre><h3 id="停止Agent"><a href="#停止Agent" class="headerlink" title="停止Agent"></a>停止Agent</h3><p>你可以使用<code>Ctrl-C</code> 优雅的关闭Agent. 中断Agent之后你可以看到他离开了集群并关闭.</p>
 <p>在退出中,Consul提醒其他集群成员,这个节点离开了.如果你强行杀掉进程.集群的其他成员应该能检测到这个节点失效了.当一个成员离开,他的服务和检测也会从目录中移除.当一个成员失效了,他的健康状况被简单的标记为危险,但是不会从目录中移除.Consul会自动尝试对失效的节点进行重连.允许他从某些网络条件下恢复过来.离开的节点则不会再继续联系.</p>
-<p>此外,如果一个agent作为一个服务器,一个优雅的离开是很重要的,可以避免引起潜在的可用性故障影响达成<a href="https://www.consul.io/docs/internals/consensus.html" target="_blank" rel="external">一致性协议</a>.</p>
-<p>查看<a href="https://www.consul.io/docs/internals/consensus.html" target="_blank" rel="external">这里</a>了解添加和移除server.</p>
+<p>此外,如果一个agent作为一个服务器,一个优雅的离开是很重要的,可以避免引起潜在的可用性故障影响达成<a href="https://www.consul.io/docs/internals/consensus.html" target="_blank" rel="noopener">一致性协议</a>.</p>
+<p>查看<a href="https://www.consul.io/docs/internals/consensus.html" target="_blank" rel="noopener">这里</a>了解添加和移除server.</p>
 <h3 id="更新服务"><a href="#更新服务" class="headerlink" title="更新服务"></a>更新服务</h3><p>服务定义可以通过配置文件并发送<code>SIGHUP</code>给agent来进行更新.这样你可以让你在不关闭服务或者保持服务请求可用的情况下进行更新.</p>
 <pre><code>consul reload
 </code></pre><p>另外 HTTP API可以用来动态的添加,移除和修改服务.</p>
@@ -1262,7 +1262,7 @@ s3    10.201.102.200:8301  alive   server  0.7.4  2         dc1
 </ul>
 <p>你可能注意到了输出了 “synced” 了 web这个服务.意思是这个agent从配置文件中载入了服务定义,并且成功注册到服务目录.</p>
 <p>如果你想注册多个服务,你应该在Consul配置目录创建多个服务定义文件.</p>
-<p>HTTP API注册服务,curl命令或者postman 以<code>PUT</code>方式请求consul HTTP API更多细节<a href="https://www.consul.io/docs/agent/http/catalog.html#catalog_register" target="_blank" rel="external">点击查看</a></p>
+<p>HTTP API注册服务,curl命令或者postman 以<code>PUT</code>方式请求consul HTTP API更多细节<a href="https://www.consul.io/docs/agent/http/catalog.html#catalog_register" target="_blank" rel="noopener">点击查看</a></p>
 <pre><code>curl -X PUT -d &#39;{&quot;Datacenter&quot;: &quot;dc1&quot;, &quot;Node&quot;: &quot;c2&quot;, &quot;Address&quot;: &quot;10.155.0.106&quot;, &quot;Service&quot;: {&quot;Service&quot;: &quot;MAC&quot;, &quot;tags&quot;: [&quot;lianglian&quot;, &quot;Mac&quot;], &quot;Port&quot;: 22}}&#39; http://127.0.0.1:8500/v1/catalog/register
 </code></pre><h3 id="查询服务"><a href="#查询服务" class="headerlink" title="查询服务"></a>查询服务</h3><p>一旦agent启动并且服务同步了.我们可以通过DNS或者HTTP的API来查询服务.</p>
 <ul>
@@ -1292,7 +1292,7 @@ web.service.consul.     0       IN      A       10.201.102.198
 ;; MSG SIZE  rcvd: 52
 
 [root@dhcp-10-201-102-198 ~]#
-</code></pre><p>如你所见,一个<code>A</code>记录返回了一个可用的服务所在的节点的IP地址.<code>`A</code>记录只能设置为IP地址. 有也可用使用 DNS API 来接收包含 地址和端口的 SRV记录:</p>
+</code></pre><p>如你所见,一个<code>A</code>记录返回了一个可用的服务所在的节点的IP地址.<code></code>A`记录只能设置为IP地址. 有也可用使用 DNS API 来接收包含 地址和端口的 SRV记录:</p>
 <pre><code>[root@dhcp-10-201-102-198 ~]# dig @127.0.0.1 -p 8600 web.service.consul SRV
 
 ; &lt;&lt;&gt;&gt; DiG 9.8.2rc1-RedHat-9.8.2-0.17.rc1.el6 &lt;&lt;&gt;&gt; @127.0.0.1 -p 8600 web.service.consul SRV
@@ -1396,7 +1396,7 @@ s1.node.dc1.consul.     0       IN      A       10.201.102.198
         }
     }
 ]
-</code></pre><h3 id="WEB管理界面"><a href="#WEB管理界面" class="headerlink" title="WEB管理界面"></a>WEB管理界面</h3><p>Consul同时提供了一个漂亮的功能齐全的WEB界面,开箱即用.界面可以用来查看所有的节点,可以查看健康检查和他们的当前状态.可以读取和设置K/V 存储的数据.UI自动支持多数据中心.<a href="https://www.consul.io/downloads.html" target="_blank" rel="external">点击前往下载</a></p>
+</code></pre><h3 id="WEB管理界面"><a href="#WEB管理界面" class="headerlink" title="WEB管理界面"></a>WEB管理界面</h3><p>Consul同时提供了一个漂亮的功能齐全的WEB界面,开箱即用.界面可以用来查看所有的节点,可以查看健康检查和他们的当前状态.可以读取和设置K/V 存储的数据.UI自动支持多数据中心.<a href="https://www.consul.io/downloads.html" target="_blank" rel="noopener">点击前往下载</a></p>
 <p><img src="http://www.liangxiansen.cn/images/consul/ui_download.png" alt="UI_Download"></p>
 <p>下载完后上传至服务器，建议所有server角色都使用WebUI，。</p>
 <pre><code>consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -node=s1 -bind=10.201.102.198 -ui-dir ./consul_ui/ -rejoin -config-dir=/etc/consul.d/ -client 0.0.0.0
@@ -1404,7 +1404,7 @@ s1.node.dc1.consul.     0       IN      A       10.201.102.198
 <li><code>-ui-dir</code>： 提供存放web ui资源的路径，指向该目录必须是可读的</li>
 <li><code>-client</code>：consul服务侦听地址，这个地址提供HTTP、DNS、RPC等服务，默认是127.0.0.1所以不对外提供服务，如果你要对外提供服务改成0.0.0.0</li>
 </ul>
-<p>可通过<a href="http://10.201.102.198:8500访问WEB管理界面。" target="_blank" rel="external">http://10.201.102.198:8500访问WEB管理界面。</a></p>
+<p>可通过<a href="http://10.201.102.198:8500访问WEB管理界面。" target="_blank" rel="noopener">http://10.201.102.198:8500访问WEB管理界面。</a></p>
 <p><img src="http://www.liangxiansen.cn/images/consul/ui.png" alt="UI_Download"></p>
 <h3 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h3><p>我们现在看到Consul运行时如此简单.添加节点和服务,查询节点和服务.在这一节.我们将继续添加健康检查到节点和服务.健康检查是服务发现的关键组件.预防使用到不健康的服务.</p>
 <p>这一步建立在前一节的Consul集群创建之上.目前你应该有一个包含多个节点的Consul集群.</p>
@@ -1443,7 +1443,7 @@ s1.node.dc1.consul.     0       IN      A       10.201.102.198
         }
    }
 }
-</code></pre><p><a href="https://www.consul.io/docs/agent/checks.html" target="_blank" rel="external">more</a></p>
+</code></pre><p><a href="https://www.consul.io/docs/agent/checks.html" target="_blank" rel="noopener">more</a></p>
 <h3 id="检查健康状态"><a href="#检查健康状态" class="headerlink" title="检查健康状态"></a>检查健康状态</h3><p>我们能适应HTTP API来检查他们.首先我们检查有哪些失败的检查.使用这个命令(注意:这个命令可以运行在任何节点)</p>
 <pre><code>[root@dhcp-10-201-102-198 ~]# curl -s http://localhost:8500/v1/health/state/critical | python -m json.tool
 [
@@ -1510,7 +1510,7 @@ s2.node.dc1.consul.     0       IN      A       10.201.102.199
 &lt;
 * Connection #0 to host localhost left intact
 * Closing connection #0
-</code></pre><p>因为没有key所以我们得到了一个404响应.现在我们<code>`PUT</code>一些示例的Key:</p>
+</code></pre><p>因为没有key所以我们得到了一个404响应.现在我们<code></code>PUT`一些示例的Key:</p>
 <pre><code>[root@dhcp-10-201-102-198 ~]# curl -X PUT -d &#39;test&#39; http://localhost:8500/v1/kv/web/key1
 [root@dhcp-10-201-102-198 ~]# curl -X PUT -d &#39;test&#39; http://localhost:8500/v1/kv/web/key2?flags=42
 [root@dhcp-10-201-102-198 ~]# curl -X PUT -d &#39;test&#39;  http://localhost:8500/v1/kv/web/sub/key3
@@ -1596,7 +1596,8 @@ Available commands are:
     snapshot       Saves, restores and inspects snapshots of Consul server state
     version        Prints the Consul version    打印consul的版本信息
     watch          Watch for changes in Consul   监控consul的改变
-</code></pre><p>更详细见<a href="https://www.consul.io/docs/commands/index.html" target="_blank" rel="external">官网</a></p>
+
+</code></pre><p>更详细见<a href="https://www.consul.io/docs/commands/index.html" target="_blank" rel="noopener">官网</a></p>
 <h3 id="Agent"><a href="#Agent" class="headerlink" title="Agent"></a>Agent</h3><p><code>agent</code>指令是consul的核心，它运行agent来维护成员的重要信息、运行检查、服务宣布、查询处理等等。 </p>
 <pre><code>==&gt; Usage: consul agent [options]
 
@@ -1882,7 +1883,7 @@ status - Consul系统状态
     dry mode：不确定当前架构的状态？担心模板的变化会破坏子系统？无须担心，因为consul template还有-dry模式。在dry模式，consul template会将结果呈现在STDOUT，所以操作员可以检查输出是否正常，以决定更换模板是否安全
     CLI and Config：如果你喜欢在命令行上指定一切，consul template都可以hold住。随着内置HCL的支持，consul template接收一个配置文件，命令行参数，或者两者的混合。通过这种方式你可以继续使用你现在已有的配置管理工具和consul template来配合。
     verbose debugging：即使每件事你都做的近乎完美，但是有时候还是会有失败发生。consul template可以提供更详细的debug日志信息。
-</code></pre><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>你可以在<a href="https://releases.hashicorp.com/consul-template/" target="_blank" rel="external">发布页</a>下载发布包.如果你希望自己编译请查看<a href="https://github.com/hashicorp/consul-template#contributing" target="_blank" rel="external">说明文档</a>.</p>
+</code></pre><h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>你可以在<a href="https://releases.hashicorp.com/consul-template/" target="_blank" rel="noopener">发布页</a>下载发布包.如果你希望自己编译请查看<a href="https://github.com/hashicorp/consul-template#contributing" target="_blank" rel="noopener">说明文档</a>.</p>
 <h3 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h3><pre><code>  -auth=&lt;user[:pass]&gt;      设置基本的认证用户名和密码
   -consul-addr=&lt;address&gt;   设置Consul实例的地址
   -max-stale=&lt;duration&gt;    查询过期的最大频率，默认是1s
@@ -2156,41 +2157,55 @@ template {
 <p>在Go 提供的模板函数之外,Consul Template暴露了以下的函数:</p>
 <h3 id="API-函数"><a href="#API-函数" class="headerlink" title="API 函数"></a>API 函数</h3><h5 id="datacenters"><a href="#datacenters" class="headerlink" title="datacenters"></a>datacenters</h5><p>查询目录中的所有数据中心.使用以下语法:</p>
 <pre><code>{{datacenters}}
+
 </code></pre><h5 id="file"><a href="#file" class="headerlink" title="file"></a>file</h5><p>读取并输出磁盘上的本地文件,如果无法读取产生一个错误.使用如下语法</p>
 <pre><code>{{file "/path/to/local/file"}}
+
 </code></pre><p>这个例子将输出 <code>/path/to/local/file</code> 文件内容到模板. <strong>注意:这不会在嵌套模板中被处理</strong></p>
 <h5 id="key"><a href="#key" class="headerlink" title="key"></a>key</h5><p>查询Consul指定key的值,如果key的值不能转换为字符串,将产生错误.使用如下语法:</p>
 <pre><code>{{key "service/redis/maxconns@east-aws"}}
+
 </code></pre><p>上面的例子查询了在<code>east-aws</code>数据中心的 <code>service/redis/maxconns</code>的值.如果忽略数据中心参数,将会查询本地数据中心的值:</p>
 <pre><code>{{key "service/redis/maxconns"}}
+
 </code></pre><p>Consul键值结构的美妙在于,这完全取决于你!</p>
 <h5 id="key-or-default"><a href="#key-or-default" class="headerlink" title="key_or_default"></a>key_or_default</h5><p>查询Consul中指定的key的值,如果key不存在,则返回默认值.使用方式如下</p>
 <pre><code>{{key_or_default "service/redis/maxconns@east-aws" "5"}}
+
 </code></pre><p>注意Consul Template使用了多个阶段的运算.在第一阶段的运算如果Consul没有返回值,则会一直使用默认值.后续模板解析中如果值存在了则会读取真实的值.这很重要,运维Consul Templae不会因为<code>key_or_default</code>没找到key而阻塞模板的的渲染.即使key存在如果Consul没有按时返回这个数据,也会使用默认值来进行替代.</p>
 <h5 id="ls"><a href="#ls" class="headerlink" title="ls"></a>ls</h5><p>查看Consul的所有以指定前缀开头的key-value对.如果有值无法转换成字符串则会产生一个错误:</p>
 <pre><code>{{range ls "service/redis@east-aws"}}
 {{.Key}} {{.Value}}{{end}}
+
 </code></pre><p>如果Consul实例在<code>east-aws</code>数据中心存在这个结构<code>service/redis</code>,渲染后的模板应该类似这样:</p>
 <pre><code>minconns 2
 maxconns 12
+
 </code></pre><p>如果你忽略数据中心属性,则会返回本地数据中心的查询结果.</p>
 <h5 id="node"><a href="#node" class="headerlink" title="node"></a>node</h5><p>查询目录中的一个节点信息</p>
 <pre><code>{{node "node1"}}
+
 </code></pre><p>如果未指定任何参数,则当前agent所在节点将会被返回:</p>
 <pre><code>{{node}}
+
 </code></pre><p>你可以指定一个可选的参数来指定数据中心:</p>
 <pre><code>{{node "node1" "@east-aws"}}
+
 </code></pre><p>如果指定的节点没有找到则会返回<code>nil</code>.如果节点存在就会列出节点的信息和节点提供的服务.</p>
 <pre><code>{{with node}}{{.Node.Node}} ({{.Node.Address}}){{range .Services}}
   {{.Service}} {{.Port}} ({{.Tags | join ","}}){{end}}
 {{end}}
+
 </code></pre><h5 id="nodes"><a href="#nodes" class="headerlink" title="nodes"></a>nodes</h5><p>查询目录中的全部节点,使用如下语法</p>
 <pre><code>{{nodes}}
+
 </code></pre><p>这个例子会查询Consul的默认数据中心.你可以使用可选参数指定一个可选参数来指定数据中心:</p>
 <pre><code>{{nodes "@east-aws"}}
+
 </code></pre><p>这个例子会查询<code>east-aws</code>数据中心的所有几点.</p>
-<h5 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h5><p>查询<code>Vault</code>中指定路径的密匙.如果指定的路径不存在或者<code>Vault</code>的Token没有足够权限去读取指定的路径,将会产生一个错误.如果路径存在但是key不存在则返回``.</p>
+<h5 id="secret"><a href="#secret" class="headerlink" title="secret"></a>secret</h5><p>查询<code>Vault</code>中指定路径的密匙.如果指定的路径不存在或者<code>Vault</code>的Token没有足够权限去读取指定的路径,将会产生一个错误.如果路径存在但是key不存在则返回<code></code>.</p>
 <pre><code>{{with secret "secret/passwords"}}{{.Data.password}}{{end}}
+
 </code></pre><p>可以使用如下字段:</p>
 <pre><code>LeaseID - the unique lease identifier
 LeaseDuration - the number of seconds the lease is valid
@@ -2208,9 +2223,11 @@ The parameters must be key=value pairs, and each pair must be its own argument t
 
 {{ secret "path/" "a=b" "c=d" "e=f" }}
 Please always consider the security implications of having the contents of a secret in plain-text on disk. If an attacker is able to get access to the file, they will have access to plain-text secrets.
+
 </code></pre><p>Please note that Vault does not support blocking queries. As a result, Consul Template will not immediately reload in the event a secret is changed as it does with Consul’s key-value store. Consul Template will fetch a new secret at half the lease duration of the original secret. For example, most items in Vault’s generic secret backend have a default 30 day lease. This means Consul Template will renew the secret every 15 days. As such, it is recommended that a smaller lease duration be used when generating the initial secret to force Consul Template to renew more often.</p>
 <h5 id="secrets"><a href="#secrets" class="headerlink" title="secrets"></a>secrets</h5><p>Query Vault to list the secrets at the given path. Please note this requires Vault 0.5+ and the endpoint you want to list secrets must support listing. Not all endpoints support listing. The result is the list of secret names as strings.</p>
 <pre><code>{{range secrets "secret/"}}{{.}}{{end}}
+
 </code></pre><p>The trailing slash is optional in the template, but the generated secret dependency will always have a trailing slash in log output.</p>
 <p>To iterate and list over every secret in the generic secret backend in Vault, for example, you would need to do something like this:</p>
 <pre><code>{{range secrets "secret/"}}
@@ -2220,67 +2237,84 @@ Please always consider the security implications of having the contents of a sec
 {{end}}
 {{end}}
 {{end}}
+
 </code></pre><p>You should probably never do this. Please also note that Vault does not support blocking queries. To understand the implications, please read the note at the end of the secret function.</p>
 <h5 id="service"><a href="#service" class="headerlink" title="service"></a>service</h5><p>查询Consul中匹配表达式的服务.语法如下:</p>
 <pre><code>{{service "release.web@east-aws"}}
+
 </code></pre><p>上面的例子查询Consul中,在<code>east-aws</code>数据中心存在的健康的 <code>web</code>服务.tag和数据中心参数是可选的.从当前数据中心查询所有节点的<code>web</code>服务而不管tag,查询语法如下:</p>
 <pre><code>{{service "web"}}
+
 </code></pre><p>这个函数返回<code>[]*HealthService</code>结构.可按照如下方式应用到模板:</p>
 <pre><code>{{range service "web@data center"}}
 server {{.Name}} {{.Address}}:{{.Port}}{{end}}
+
 </code></pre><p>产生如下输出:</p>
 <pre><code>server nyc_web_01 123.456.789.10:8080
 server nyc_web_02 456.789.101.213:8080
+
 </code></pre><p>默认值会返回健康的服务,如果你想获取所有服务,可以增加<code>any</code>选项,如下:</p>
 <pre><code>{{service "web" "any"}}
+
 </code></pre><p>这样就会返回注册过的所有服务,而不论他的状态如何.</p>
 <p>如果你想过滤指定的一个或者多个健康状态,你可以通过逗号隔开多个健康状态:</p>
 <pre><code>{{service "web" "passing, warning"}}
+
 </code></pre><p>这样将会返回被他们的节点和服务级别的检查定义标记为 “passing” 或者 “warning”的服务. 请注意逗号是 <code>OR</code>而不是<code>AND</code>的意思.</p>
 <p>指定了超过一个状态过滤,并包含<code>any</code>将会返回一个错误.因为<code>any</code>是比所有状态更高级的过滤.</p>
 <p>后面这2种方式有些架构上的不同:</p>
 <pre><code>{{service "web"}}
 {{service "web" "passing"}}
+
 </code></pre><p>前者会返回Consul认为<code>healthy</code>和<code>passing</code>的所有服务.后者将返回所有已经在Consul注册的服务.然后会执行一个客户端的过滤.通常如果你想获取健康的服务,你应该不要使用<code>passing</code>参数,直接忽略第三个参数即可.然而第三个参数在你想查询 <code>passing</code>或者<code>warning</code>的服务会比较有用,如下:</p>
 <pre><code>{{service "web" "passing, warning"}}
+
 </code></pre><p>服务的状态也是可见的,如果你想自己做一些额外的过滤,语法如下:</p>
 <pre><code>{{range service "web" "any"}}
 {{if eq .Status "critical"}}
 // Critical state!{{end}}
 {{if eq .Status "passing"}}
 // Ok{{end}}
+
 </code></pre><p>执行命令时,在Consul将服务设置为维护模式,只需要在你的命令上包上Consul的 <code>maint</code> 调用:</p>
 <pre><code>#!/bin/sh
 set -e
 consul maint -enable -service web -reason &quot;Consul Template updated&quot;
 service nginx reload
 consul maint -disable -service web
+
 </code></pre><p>另外如果你没有安装Consul agent,你可以直接调用API请求:</p>
 <pre><code>#!/bin/sh
 set -e
 curl -X PUT &quot;http://$CONSUL_HTTP_ADDR/v1/agent/service/maintenance/web?enable=true&amp;reason=Consul+Template+Updated&quot;
 service nginx reload
 curl -X PUT &quot;http://$CONSUL_HTTP_ADDR/v1/agent/service/maintenance/web?enable=false&quot;
+
 </code></pre><h5 id="services"><a href="#services" class="headerlink" title="services"></a>services</h5><p>查询Consul目录中的所有服务,使用如下语法:</p>
 <pre><code>{{services}}
+
 </code></pre><p>这个例子将查询Consul的默认数据中心,你可以指定一个可选参数来指定数据中心:</p>
 <pre><code>{{services "@east-aws"}}
+
 </code></pre><p>请注意: <code>services</code>函数与<code>service</code>是不同的,<code>service</code>接受更多参数并且查询监控的服务列表.这个查询Consul目录并返回一个服务的tag的Map,如下:</p>
 <pre><code>{{range services}}
 {{.Name}}
 {{range .Tags}}
   {{.}}{{end}}
 {{end}}
+
 </code></pre><h5 id="tree"><a href="#tree" class="headerlink" title="tree"></a>tree</h5><p>查询所有指定前缀的key-value值对,如果其中的值有无法转换为字符串的则引发错误:</p>
 <pre><code>{{range tree "service/redis@east-aws"}}
 {{.Key}} {{.Value}}{{end}}
+
 </code></pre><p>如果Consul实例在<code>east-aws</code>数据中心有一个<code>service/redis</code>结构,模板的渲染结果类似下面:</p>
 <pre><code>minconns 2
 maxconns 12
 nested/config/value &quot;value&quot;
+
 </code></pre><p>和<code>ls</code>不同,<code>tree</code>返回前缀下的所有key.和Unix的tree命令比较像.如果忽略数据中心参数,则会使用本地数据中心</p>
-<p><a href="https://book-consul-guide.vnzmi.com/11_consul_template.html" target="_blank" rel="external">查看更多</a></p>
-<p><a href="https://book-consul-guide.vnzmi.com/11_consul_template.html" target="_blank" rel="external">项目Github地址</a></p>
+<p><a href="https://book-consul-guide.vnzmi.com/11_consul_template.html" target="_blank" rel="noopener">查看更多</a></p>
+<p><a href="https://book-consul-guide.vnzmi.com/11_consul_template.html" target="_blank" rel="noopener">项目Github地址</a></p>
 <h3 id="Haproxy-实例"><a href="#Haproxy-实例" class="headerlink" title="Haproxy 实例"></a>Haproxy 实例</h3><p>根据haproxy服务的配置文件创建一个consul-template模版渲染文件：<code>haproxy.ctmpl</code></p>
 <pre><code># Consul Haproxy configured
 
@@ -2404,9 +2438,9 @@ backend consul-cluster
 <li>实现了中心服务注册查询</li>
 <li>平台中其他节点的查询服务和配置文件自动更新</li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://my.oschina.net/guol/blog/675281" target="_blank" rel="external">https://my.oschina.net/guol/blog/675281</a></p>
-<p><a href="https://www.consul.io/docs/guides/index.html" target="_blank" rel="external">https://www.consul.io/docs/guides/index.html</a></p>
-<p><a href="https://www.gitbook.com/book/vincentmi/consul-guide/details" target="_blank" rel="external">https://www.gitbook.com/book/vincentmi/consul-guide/details</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://my.oschina.net/guol/blog/675281" target="_blank" rel="noopener">https://my.oschina.net/guol/blog/675281</a></p>
+<p><a href="https://www.consul.io/docs/guides/index.html" target="_blank" rel="noopener">https://www.consul.io/docs/guides/index.html</a></p>
+<p><a href="https://www.gitbook.com/book/vincentmi/consul-guide/details" target="_blank" rel="noopener">https://www.gitbook.com/book/vincentmi/consul-guide/details</a></p>
 <h2 id="Service-RPM-Download"><a href="#Service-RPM-Download" class="headerlink" title="Service RPM Download"></a>Service RPM Download</h2><h3 id="Consul-0-7-5"><a href="#Consul-0-7-5" class="headerlink" title="Consul 0.7.5"></a>Consul 0.7.5</h3><ul>
 <li><a href="http://www.liangxiansen.cn/files/consul-megvii-0.7.5-1.el6.x86_64.rpm">consul-megvii-0.7.5-1.el6.x86_64.rpm</a></li>
 <li><a href="http://www.liangxiansen.cn/files/consul-megvii-0.7.5-1.el6.src.rpm">consul-megvii-0.7.5-1.el6.src.rpm</a></li>
@@ -2483,7 +2517,7 @@ backend consul-cluster
 <ul>
 <li>更多的负载均衡算法 : 现在，动态加权轮循(Dynamic Round Robin)，加权源地址哈希(Weighted Source Hash)，加权URL哈希和加权参数哈希(Weighted Parameter Hash)已经实现。其他算法比如Weighted Measured Response Time也很快会实现。 </li>
 </ul>
-<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>下载haproxy源码，目前国内无法访问haproxy官网（www.haproxy.org），<strong>Fuck GFW</strong>。 可以通过直接访问<a href="http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令" target="_blank" rel="external">http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令</a></p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><p>下载haproxy源码，目前国内无法访问haproxy官网（<a href="http://www.haproxy.org），**Fuck" target="_blank" rel="noopener">www.haproxy.org），**Fuck</a> GFW**。 可以通过直接访问<a href="http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令" target="_blank" rel="noopener">http://www.haproxy.org/download/1.7/src/地址，选择相应的版本下载。或者使用wget命令</a></p>
 <pre><code> wget http://www.haproxy.org/download/1.7/src/haproxy-1.7.3.tar.gz
 </code></pre><p>下载，下载完成后，将其解压。</p>
 <pre><code>cd haproxy-1.7.3
@@ -2494,7 +2528,7 @@ make install PREFIX=/usr/local/haproxy
 <h3 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h3><ul>
 <li>修改配置</li>
 </ul>
-<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到<a href="http://www.cbonte.github.io/haproxy-dconv/index.html" target="_blank" rel="external">haproxy-dconv</a>查看。</p>
+<p>配置文件可以参考源码里面examples下面的haproxy.cfg文件，haproxy里的配置参数可到<a href="http://www.cbonte.github.io/haproxy-dconv/index.html" target="_blank" rel="noopener">haproxy-dconv</a>查看。</p>
 <pre><code>mkdir /usr/local/haproxy/logs
 vim /etc/haproxy.cfg
 </code></pre><ul>
@@ -2734,9 +2768,9 @@ backend consul-cluster
 <pre><code>cp haproxy-1.7.3/examples/haproxy.init /etc/init.d/haproxy
 chmod +x /etc/init.d/haproxy
 </code></pre><h3 id="web-Haproxy"><a href="#web-Haproxy" class="headerlink" title="web-Haproxy"></a>web-Haproxy</h3><p>我Haproxy服务器IP地址是10.201.102.185</p>
-<p><a href="http://10.201.102.185:8080/admin" target="_blank" rel="external">http://10.201.102.185:8080/admin</a></p>
+<p><a href="http://10.201.102.185:8080/admin" target="_blank" rel="noopener">http://10.201.102.185:8080/admin</a></p>
 <p><img src="http://www.liangxiansen.cn/images/haproxy/web-haproxy.png" alt="web-haproxy"></p>
-<h3 id="Bakend-server"><a href="#Bakend-server" class="headerlink" title="Bakend_server"></a>Bakend_server</h3><p><a href="http://10.201.102.185:8500" target="_blank" rel="external">http://10.201.102.185:8500</a></p>
+<h3 id="Bakend-server"><a href="#Bakend-server" class="headerlink" title="Bakend_server"></a>Bakend_server</h3><p><a href="http://10.201.102.185:8500" target="_blank" rel="noopener">http://10.201.102.185:8500</a></p>
 ]]></content>
     
     <summary type="html">
@@ -2832,9 +2866,9 @@ func(3)
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -2901,7 +2935,7 @@ python -u ./new_whitelist_mb.py
     <link href="http://www.liangxiansen.cn/2016/10/08/%E9%9A%8F%E6%89%8B%E7%AC%94%E8%AE%B0/"/>
     <id>http://www.liangxiansen.cn/2016/10/08/随手笔记/</id>
     <published>2016-10-08T12:53:17.000Z</published>
-    <updated>2017-03-27T09:59:21.000Z</updated>
+    <updated>2017-03-27T09:59:20.000Z</updated>
     
     <content type="html"><![CDATA[<p>windows 默认结束符<code>\n\r</code> 类unix下是<code>\r</code> 所以需要转换,<br>tr -d ‘\r’ &lt; testsource.sh &gt; ./testsource.shbak</p>
 <p>source 需要有<code>/</code>不然它找不到它得话就从系统环境变量PATH中找,</p>
@@ -2927,7 +2961,7 @@ python -u ./new_whitelist_mb.py
 命令模式下输入 
 
 :set fileformat=unix 
-:w
+:w 
 </code></pre>]]></content>
     
     <summary type="html">
@@ -4016,7 +4050,7 @@ q:lang(no)
     <link href="http://www.liangxiansen.cn/2016/09/14/git_notes/"/>
     <id>http://www.liangxiansen.cn/2016/09/14/git_notes/</id>
     <published>2016-09-14T11:46:25.000Z</published>
-    <updated>2017-08-02T02:52:15.000Z</updated>
+    <updated>2017-08-02T02:52:14.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h2><h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><pre><code>git init
 </code></pre><h3 id="添加变更"><a href="#添加变更" class="headerlink" title="添加变更"></a>添加变更</h3><pre><code>git add
@@ -4154,7 +4188,7 @@ python manage.py createsuperuser            # 创建admin后台用户
 # 如下设置放置的与project同名的配置的 __init__.py文件中
 
 import pymysql
-pymysql.install_as_MySQLdb()
+pymysql.install_as_MySQLdb()　
 </code></pre><p>2、模板</p>
 <pre><code>TEMPLATE_DIRS = (
     os.path.join(BASE_DIR,&#39;templates&#39;),
@@ -4509,6 +4543,7 @@ models.Tb1.objects.all().values_list(&#39;user&#39;)
 from django.db.models import Count, Min, Max, Sum
 models.Tb1.objects.filter(c1=1).values(&#39;id&#39;).annotate(c=Count(&#39;num&#39;))
 # SELECT &quot;app01_tb1&quot;.&quot;id&quot;, COUNT(&quot;app01_tb1&quot;.&quot;num&quot;) AS &quot;c&quot; FROM &quot;app01_tb1&quot; WHERE &quot;app01_tb1&quot;.&quot;c1&quot; = 1 GROUP BY &quot;app01_tb1&quot;.&quot;id&quot;
+
 </code></pre>
 <p>3) 连表操作（了不起的双下划线）</p>
 <pre><code class="python">class UserProfile(models.Model):
@@ -4645,12 +4680,15 @@ querset = UserInfo.objects.filter(user_type__caption=&#39;普通用户&#39;)
 querset = UserInfo.objects.filter(user_type__s__name=&#39;xx&#39;)
 
 querset = UserInfo.objects.filter(user_type__caption=&#39;普通用户&#39;).values(&#39;user&#39;, &#39;user_type_caption&#39;)
+
 </code></pre>
 <blockquote>
 <ul>
 <li>1、搜索条件使用 __ 连接</li>
 <li>2、获取值时使用 .    连接</li>
 </ul>
+</blockquote>
+<blockquote>
 <p><strong>Note:</strong> 创建外键数据的时候, <code>UserInfo.objects.create(user=&#39;alex&#39;, pwd=&#39;123&#39;, user_type=UserType.objects.get(id=2))</code> ,这样插一条数据相当于要做两次数据库查询,这样不好对吧, 在Django数据库表中<code>ForignKey</code>字段其实<code>user_type_id</code>带指的就是<code>UserType</code>表的id字段,所以我们直接<code>UserInfo.objects.create(user=&#39;alex&#39;, pwd=&#39;123&#39;, user_type_id=2)</code>就可以了.</p>
 </blockquote>
 <p><code>其他操作</code></p>
@@ -4885,6 +4923,7 @@ def login(request):
         # 用户Get页面的时候,这个没参数,LoginForm默认只是给我生成了html标签
         objGet = LoginForm()
         return render(request, &#39;login.html&#39;, {&#39;obj&#39;: objGet})
+
 </code></pre>
 <p><code>templates:</code></p>
 <p><img src="http://www.liangxiansen.cn/images/django/form_templates.png" alt="templates"></p>
@@ -4978,7 +5017,7 @@ def login(request):
 &lt;/html&gt;
 </code></pre>
 <blockquote>
-<p>更多：<a href="https://docs.djangoproject.com/en/dev/ref/csrf/#ajax" target="_blank" rel="external">https://docs.djangoproject.com/en/dev/ref/csrf/#ajax</a></p>
+<p>更多：<a href="https://docs.djangoproject.com/en/dev/ref/csrf/#ajax" target="_blank" rel="noopener">https://docs.djangoproject.com/en/dev/ref/csrf/#ajax</a></p>
 </blockquote>
 <h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><p>网站为了辨别用户身份而储存在用户本地终端上的数据,用户通过浏览器请求网站,网站返回用户信息之后,还会偷偷给用户塞给用户网站生成的一个身份证明,上面记录了用户的信息,下次用户来的时候带着这个网站就知道你是谁,就会”智能”得在页面上显示你是谁.登录了关闭浏览器再打开不用再重新登录.</p>
 <p><strong>1、获取Cookie：</strong></p>
@@ -5016,6 +5055,8 @@ rep.set_signed_cookie(key,value,salt=&#39;加密盐&#39;,...)
 <li>缓存 + 数据库</li>
 <li>加密cookie</li>
 </ul>
+</blockquote>
+<blockquote>
 <p>Django的Sessio保存在数据库中,使用之前要记得初始化数据库<br><strong>1、数据库Session:</strong></p>
 </blockquote>
 <p>Django默认支持Session，并且默认是将Session数据存储在数据库中，即：django_session 表中。</p>
@@ -5107,7 +5148,7 @@ SESSION_SAVE_EVERY_REQUEST = False                          # 是否每次请求
 <pre><code>SESSION_ENGINE = &#39;django.contrib.sessions.backends.signed_cookies&#39;   # 引擎
 </code></pre><p>b. 使用</p>
 <pre><code>同上
-</code></pre><p>更多参考：<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#settings-sessions" target="_blank" rel="external">猛击这里</a> <a href="https://docs.djangoproject.com/en/1.9/topics/http/sessions/" target="_blank" rel="external">设置session</a></p>
+</code></pre><p>更多参考：<a href="https://docs.djangoproject.com/en/1.9/ref/settings/#settings-sessions" target="_blank" rel="noopener">猛击这里</a> <a href="https://docs.djangoproject.com/en/1.9/topics/http/sessions/" target="_blank" rel="noopener">设置session</a></p>
 <p><strong>扩展：Session用户验证</strong></p>
 <pre><code class="python">def login(func):
     def wrap(request, *args, **kwargs):
@@ -5150,9 +5191,9 @@ SESSION_SAVE_EVERY_REQUEST = False                          # 是否每次请求
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="Django" scheme="http://www.liangxiansen.cn/tags/Django/"/>
     
@@ -5163,7 +5204,7 @@ SESSION_SAVE_EVERY_REQUEST = False                          # 是否每次请求
     <link href="http://www.liangxiansen.cn/2016/09/04/Ajax/"/>
     <id>http://www.liangxiansen.cn/2016/09/04/Ajax/</id>
     <published>2016-09-04T14:52:15.000Z</published>
-    <updated>2017-03-06T08:05:15.000Z</updated>
+    <updated>2017-03-06T08:05:14.000Z</updated>
     
     <content type="html"><![CDATA[<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>对于WEB应用程序：用户浏览器发送请求，服务器接收并处理请求，然后返回结果，往往返回就是字符串（HTML），浏览器将字符串（HTML）<code>渲染</code>并显示浏览器上。</p>
 <a id="more"></a>
@@ -5174,14 +5215,24 @@ SESSION_SAVE_EVERY_REQUEST = False                          # 是否每次请求
 <p>2、 AJAX</p>
 <blockquote>
 <p>AJAX，Asynchronous JavaScript and XML (异步的JavaScript和XML)，一种创建交互式网页应用的网页开发技术方案。</p>
+</blockquote>
+<blockquote>
 <ul>
 <li><code>异步的JavaScript：</code></li>
 </ul>
+</blockquote>
+<blockquote>
 <p>使用 【JavaScript语言】 以及 相关【浏览器提供类库】 的功能向服务端发送请求，当服务端处理完请求之后，【自动执行某个JavaScript的回调函数】。<br>PS：以上请求和响应的整个过程是【偷偷】进行的，页面上无任何感知(页面不会刷新)。</p>
+</blockquote>
+<blockquote>
 <ul>
 <li><code>XML:</code></li>
 </ul>
+</blockquote>
+<blockquote>
 <p>XML是一种标记语言，是Ajax在和后台交互时传输数据的格式之一</p>
+</blockquote>
+<blockquote>
 <p>利用AJAX可以做：</p>
 <ul>
 <li>1、注册时，输入用户名自动检测用户是否已经存在。</li>
@@ -5493,7 +5544,7 @@ f. String statesText
 <li>制约： XmlHttpRequest</li>
 <li>不叼： img、iframe、script等具有src属性的标签</li>
 </ul>
-<p><em>跨域，跨域名访问，如：<a href="http://www.c1.com" target="_blank" rel="external">http://www.c1.com</a> 域名向 <a href="http://www.c2.com域名发送请求。" target="_blank" rel="external">http://www.c2.com域名发送请求。</a></em></p>
+<p><em>跨域，跨域名访问，如：<a href="http://www.c1.com" target="_blank" rel="noopener">http://www.c1.com</a> 域名向 <a href="http://www.c2.com域名发送请求。" target="_blank" rel="noopener">http://www.c2.com域名发送请求。</a></em></p>
 ]]></content>
     
     <summary type="html">
@@ -5505,9 +5556,9 @@ f. String statesText
       <category term="前端" scheme="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
-      <category term="Ajax" scheme="http://www.liangxiansen.cn/tags/Ajax/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Ajax" scheme="http://www.liangxiansen.cn/tags/Ajax/"/>
     
   </entry>
   
@@ -5746,9 +5797,9 @@ if __name__ == &#39;__main__&#39;:
     print(&quot;Serving HTTP on port 8000...&quot;)
     httpd.serve_forever()
 </code></pre>
-<p>遵循jinja2的语法规则，其内部会对指定的语法进行相应的替换，从而达到动态的返回内容，对于模板引擎的本质，参考另外一篇博客：<a href="http://www.www.cnblogs.com/wupeiqi/p/4592637.html" target="_blank" rel="external">白话tornado源码之褪去模板外衣的前戏</a></p>
+<p>遵循jinja2的语法规则，其内部会对指定的语法进行相应的替换，从而达到动态的返回内容，对于模板引擎的本质，参考另外一篇博客：<a href="http://www.www.cnblogs.com/wupeiqi/p/4592637.html" target="_blank" rel="noopener">白话tornado源码之褪去模板外衣的前戏</a></p>
 <h3 id="参考资源"><a href="#参考资源" class="headerlink" title="参考资源"></a>参考资源</h3><blockquote>
-<p>武沛齐 : <a href="http://www.cnblogs.com/wupeiqi/articles/5237672.html" target="_blank" rel="external">http://www.cnblogs.com/wupeiqi/articles/5237672.html</a></p>
+<p>武沛齐 : <a href="http://www.cnblogs.com/wupeiqi/articles/5237672.html" target="_blank" rel="noopener">http://www.cnblogs.com/wupeiqi/articles/5237672.html</a></p>
 </blockquote>
 ]]></content>
     
@@ -5781,9 +5832,9 @@ if __name__ == &amp;#39;__main__&amp;#39;:
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="Web" scheme="http://www.liangxiansen.cn/tags/Web/"/>
     
@@ -6335,7 +6386,7 @@ clearTimeout                清除单次定时器
 <p>前端开发三要素，HTML（描述网页内容），CSS（描述样式），JavaScript（控制网页行为）。</p>
 </blockquote>
 <p>JavaScript是一门编程语言，浏览器内置了JavaScript语言的解释器，所以在浏览器上按照JavaScript语言的规则编写相应代码，浏览器可以解释并做出相应的处理。</p>
-<p>在学习<code>JavaScript</code>之前,首先对要排除一些误解, 推荐一篇文章,简单看一下即可:<a href="http://www.javascript.crockford.com/zh/javascript.html" target="_blank" rel="external">JavaScript–世界上误解最深的语言</a></p>
+<p>在学习<code>JavaScript</code>之前,首先对要排除一些误解, 推荐一篇文章,简单看一下即可:<a href="http://www.javascript.crockford.com/zh/javascript.html" target="_blank" rel="noopener">JavaScript–世界上误解最深的语言</a></p>
 <a id="more"></a>
 <h2 id="JavaScript-初识"><a href="#JavaScript-初识" class="headerlink" title="JavaScript 初识"></a>JavaScript 初识</h2><h3 id="如何编写"><a href="#如何编写" class="headerlink" title="如何编写"></a>如何编写</h3><pre><code class="javascript">&lt;!-- HTML中JS文件的引用 --&gt;
 &lt;script type&quot;text/javascript&quot; src=&quot;JS文件路径&quot;&gt;&lt;/script&gt;
@@ -6396,6 +6447,8 @@ clearTimeout                清除单次定时器
 <li>字符串</li>
 <li>布尔值</li>
 </ul>
+</blockquote>
+<blockquote>
 <p><code>对象类型</code></p>
 <ul>
 <li>数组</li>
@@ -6612,7 +6665,7 @@ obj.replace(regexp, replacement)     替换匹配替换，正则中有g则替换
 <li>时间统一时间</li>
 <li>本地时间（东8区）</li>
 </ul>
-<p>更多操作参见：<a href="http://www.shouce.ren/api/javascript/main.html" target="_blank" rel="external">http://www.shouce.ren/api/javascript/main.html</a></p>
+<p>更多操作参见：<a href="http://www.shouce.ren/api/javascript/main.html" target="_blank" rel="noopener">http://www.shouce.ren/api/javascript/main.html</a></p>
 <h3 id="语句和异常"><a href="#语句和异常" class="headerlink" title="语句和异常"></a>语句和异常</h3><p>1、条件语句<br>JavaScript中支持两个中条件语句，分别是：if 和 switch</p>
 <p><code>if</code></p>
 <pre><code>if(条件){
@@ -6699,7 +6752,7 @@ finally {
 ret = f2();
 ret();
 </code></pre><p>注：声明提前，在JavaScript引擎“预编译”时进行。</p>
-<p>更多：<a href="http://www.cnblogs.com/wupeiqi/p/5649402.html" target="_blank" rel="external">http://www.cnblogs.com/wupeiqi/p/5649402.html</a></p>
+<p>更多：<a href="http://www.cnblogs.com/wupeiqi/p/5649402.html" target="_blank" rel="noopener">http://www.cnblogs.com/wupeiqi/p/5649402.html</a></p>
 <h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><blockquote>
 <p>「闭包」，是指拥有多个变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。<br>闭包是个函数，而它「记住了周围发生了什么」。表现为由「一个函数」体中定义了「另个函数」<br>由于作用域链只能从内向外找，默认外部无法获取函数内部变量。闭包，在外部获取函数内部的变量。</p>
 </blockquote>
@@ -6746,7 +6799,7 @@ Foo.prototype = {
 &lt;p&gt;前端开发三要素，HTML（描述网页内容），CSS（描述样式），JavaScript（控制网页行为）。&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;JavaScript是一门编程语言，浏览器内置了JavaScript语言的解释器，所以在浏览器上按照JavaScript语言的规则编写相应代码，浏览器可以解释并做出相应的处理。&lt;/p&gt;
-&lt;p&gt;在学习&lt;code&gt;JavaScript&lt;/code&gt;之前,首先对要排除一些误解, 推荐一篇文章,简单看一下即可:&lt;a href=&quot;http://www.javascript.crockford.com/zh/javascript.html&quot;&gt;JavaScript–世界上误解最深的语言&lt;/a&gt;&lt;/p&gt;
+&lt;p&gt;在学习&lt;code&gt;JavaScript&lt;/code&gt;之前,首先对要排除一些误解, 推荐一篇文章,简单看一下即可:&lt;a href=&quot;http://www.javascript.crockford.com/zh/javascript.html&quot; target=&quot;_blank&quot; rel=&quot;noopener&quot;&gt;JavaScript–世界上误解最深的语言&lt;/a&gt;&lt;/p&gt;
     
     </summary>
     
@@ -6943,7 +6996,7 @@ truncate table 表名
 删除默认值：
     ALTER TABLE testalter_tbl ALTER i DROP DEFAULT;
 </code></pre><p>基本数据类型</p>
-<p>MySQL的数据类型大致分为：数值、时间和字符串<br><a href="http://www.runoob.com/mysql/mysql-data-types.html" target="_blank" rel="external">http://www.runoob.com/mysql/mysql-data-types.html</a></p>
+<p>MySQL的数据类型大致分为：数值、时间和字符串<br><a href="http://www.runoob.com/mysql/mysql-data-types.html" target="_blank" rel="noopener">http://www.runoob.com/mysql/mysql-data-types.html</a></p>
 <h3 id="增删改查"><a href="#增删改查" class="headerlink" title="增删改查"></a>增删改查</h3><h4 id="增"><a href="#增" class="headerlink" title="增"></a>增</h4><pre><code>insert into 表 (列名,列名...) values (值,值,值...)
 insert into 表 (列名,列名...) values (值,值,值...),(值,值,值...)
 insert into 表 (列名,列名...) select (列名,列名...) from 表
@@ -7188,7 +7241,7 @@ cx_Oracle
 </code></pre><blockquote>
 <p>2.7版本使用mysqldb<br>3.5版本使用pymysql</p>
 </blockquote>
-<p>更多详见：<a href="http://docs.sqlalchemy.org/en/latest/dialects/index.html" target="_blank" rel="external">http://docs.sqlalchemy.org/en/latest/dialects/index.html</a></p>
+<p>更多详见：<a href="http://docs.sqlalchemy.org/en/latest/dialects/index.html" target="_blank" rel="noopener">http://docs.sqlalchemy.org/en/latest/dialects/index.html</a></p>
 <p>在sqlalchemy.schema包里有数据库关系的描述，列举几个最常用的：</p>
 <blockquote>
 <ul>
@@ -7810,10 +7863,10 @@ for item in host_obj.h:
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><blockquote>
 <p>本人理解能力有限,可以对照官方API文档中内容理解:</p>
 <ul>
-<li><code>relationship_api</code>: <a href="http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" target="_blank" rel="external">http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html#sqlalchemy.orm.relationship.params.back_populates</a></li>
-<li>更多关联: <a href="http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#many-to-many" target="_blank" rel="external">http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#many-to-many</a></li>
-<li>刘耀: <a href="http://www.cnblogs.com/liu-yao/p/5342656.html" target="_blank" rel="external">http://www.cnblogs.com/liu-yao/p/5342656.html</a></li>
-<li>简书: <a href="http://www.jianshu.com/p/e6bba189fcbd" target="_blank" rel="external">http://www.jianshu.com/p/e6bba189fcbd</a></li>
+<li><code>relationship_api</code>: <a href="http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html#sqlalchemy.orm.relationship.params.back_populates" target="_blank" rel="noopener">http://docs.sqlalchemy.org/en/latest/orm/relationship_api.html#sqlalchemy.orm.relationship.params.back_populates</a></li>
+<li>更多关联: <a href="http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#many-to-many" target="_blank" rel="noopener">http://docs.sqlalchemy.org/en/latest/orm/basic_relationships.html#many-to-many</a></li>
+<li>刘耀: <a href="http://www.cnblogs.com/liu-yao/p/5342656.html" target="_blank" rel="noopener">http://www.cnblogs.com/liu-yao/p/5342656.html</a></li>
+<li>简书: <a href="http://www.jianshu.com/p/e6bba189fcbd" target="_blank" rel="noopener">http://www.jianshu.com/p/e6bba189fcbd</a></li>
 </ul>
 </blockquote>
 ]]></content>
@@ -7835,9 +7888,9 @@ for item in host_obj.h:
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="Mysql" scheme="http://www.liangxiansen.cn/tags/Mysql/"/>
     
@@ -7848,7 +7901,7 @@ for item in host_obj.h:
     <link href="http://www.liangxiansen.cn/2016/08/10/socketserver/"/>
     <id>http://www.liangxiansen.cn/2016/08/10/socketserver/</id>
     <published>2016-08-10T12:47:28.000Z</published>
-    <updated>2017-08-10T06:16:29.000Z</updated>
+    <updated>2017-08-10T06:16:28.000Z</updated>
     
     <content type="html"><![CDATA[<p>回顾原生socket模块,一次只能处理一个客户端请求,当这个客户端请求全部完成断开连接了,再去处理另外一个客户端得请求.这样服务端得资源其实还有很多是处于空闲状态的.然后我们又通过IO多路复用的方式解决了因为网络IO繁忙而造成浪费服务端资源得问题,通过select侦听网路IO,并以<code>读写分离得形式</code>实现了接受处理多个请求.</p>
 <p>然而这样并不完善,如果同时来多个请求,还是会挂起堵塞.无法并发得处理客户端得请求.还好python给我们提供了一个并发处理socket得功能,那就是socketserver模块.</p>
@@ -8029,7 +8082,7 @@ server = SocketServer.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandl
 <li>文件传输过程中显示进度条</li>
 <li>附加功能：支持文件的断点续传</li>
 </ol>
-<p>可参考: <a href="https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP" target="_blank" rel="external">https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP</a></p>
+<p>可参考: <a href="https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP" target="_blank" rel="noopener">https://github.com/LiangXianSen/python_-study/tree/master/day9/FTP</a></p>
 <div class="github-widget" data-repo="LiangXianSen/python_-study/tree/master/day9/FTP"></div>]]></content>
     
     <summary type="html">
@@ -8045,9 +8098,9 @@ server = SocketServer.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandl
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="Socket" scheme="http://www.liangxiansen.cn/tags/Socket/"/>
     
@@ -8318,7 +8371,7 @@ t.start()  # after 1 seconds, &quot;hello, world&quot; will be printed
 <h4 id="线程池需求"><a href="#线程池需求" class="headerlink" title="线程池需求"></a>线程池需求</h4><ol>
 <li>能够调整线程池大小<br>比如：<br>任务数是3，进程池20  ，那么咱们只需要开启3个线程就行了。<br>任务数是500，进程池是20，那么咱们只开20个线程就可以了。</li>
 </ol>
-<ol>
+<ol start="2">
 <li><p>实现线程池正在运行，有一个查看的功能，查看一下现在线程里面活跃的线程是多少等待的是多少？<br>线程总共是多少，等待中多少，正在运行中多少<br>作用：<br>方便查看当前线程池状态<br>能获取到这个之后就可以当线程一直处于空闲状态<br>查看状态用：上下文管理来做，非常nice的一点</p>
 </li>
 <li><p>关闭线程</p>
@@ -8692,9 +8745,9 @@ print(&amp;#39;main thread stop&amp;#39;)
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
       <category term="进程" scheme="http://www.liangxiansen.cn/tags/%E8%BF%9B%E7%A8%8B/"/>
     

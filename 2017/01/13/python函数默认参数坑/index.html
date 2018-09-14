@@ -15,40 +15,18 @@
 
 
 
-<meta name="description" content="示例1def func(a,b=[]):
-    b.append(a)
-    print(b)
-
-func(1)
-func(2)
-func(3)
-
-有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
+<meta name="description" content="示例1def func(a,b=[]):     b.append(a)     print(b)  func(1) func(2) func(3)  有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
+<meta name="keywords" content="Python,编程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="python函数默认参数的一个坑">
 <meta property="og:url" content="http://www.liangxiansen.cn/2017/01/13/python函数默认参数坑/index.html">
 <meta property="og:site_name" content="一个梦">
-<meta property="og:description" content="示例1def func(a,b=[]):
-    b.append(a)
-    print(b)
-
-func(1)
-func(2)
-func(3)
-
-有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
+<meta property="og:description" content="示例1def func(a,b=[]):     b.append(a)     print(b)  func(1) func(2) func(3)  有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
+<meta property="og:locale" content="zh-Hans">
 <meta property="og:updated_time" content="2017-08-02T11:10:20.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="python函数默认参数的一个坑">
-<meta name="twitter:description" content="示例1def func(a,b=[]):
-    b.append(a)
-    print(b)
-
-func(1)
-func(2)
-func(3)
-
-有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
+<meta name="twitter:description" content="示例1def func(a,b=[]):     b.append(a)     print(b)  func(1) func(2) func(3)  有个考python特性的面试题，func（3）的时候，b 这个list是啥。">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
@@ -377,289 +355,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-python函数默认参数坑" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2017/01/13/python函数默认参数坑/" class="article-date">
-      <time datetime="2017-01-13T10:01:46.000Z" itemprop="datePublished">2017-01-13</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      python函数默认参数的一个坑
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h3 id="示例1"><a href="#示例1" class="headerlink" title="示例1"></a>示例1</h3><pre><code class="python">def func(a,b=[]):
-    b.append(a)
-    print(b)
-
-func(1)
-func(2)
-func(3)
-</code></pre>
-<p>有个考python特性的面试题，func（3）的时候，b 这个list是啥。</p>
-<a id="more"></a>
-<p>输出结果：</p>
-<pre><code>[1]
-[1, 2]
-[1, 2, 3]
-</code></pre><h3 id="示例2"><a href="#示例2" class="headerlink" title="示例2"></a>示例2</h3><pre><code class="python">def func(a,b=1):
-    b += a
-    print(b)
-
-func(1)
-func(2)
-func(3)
-</code></pre>
-<p>输出结果：</p>
-<pre><code>2
-3
-4
-</code></pre><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>这里引用一段<code>栈</code>和<code>堆</code>的概率</p>
-<blockquote>
-<ul>
-<li>栈（操作系统）：<br>由操作系统自动分配释放 ，存放函数的参数值，局部变量的值等。其操作方式类似于数据结构中的栈。</li>
-<li>堆（操作系统）：<br>一般由程序员分配释放， 若程序员不释放，程序结束时可能由OS回收，分配方式倒是类似于链表。</li>
-</ul>
-</blockquote>
-<p>根据上面的概率但是正常输出应该是<code>[3]</code>呀，很多其他语言都是这样。这里很明显<code>‘b’</code>没有被回收，<code>‘a’</code>是正常的回收了。根据第二个例子，发现不是一般情况，“数组”和普通数值型不一样的效果。据此分析：</p>
-<h4 id="引用传递"><a href="#引用传递" class="headerlink" title="引用传递"></a>引用传递</h4><pre><code>def func(a b=[])   ---&gt;  代码进行到这里定义一个函数（1）
-
-b = []   ---&gt; 设置默认参数，在堆中创建一个b = [] （2）
-              创建一个&quot;栈&quot;，在栈中创建 a, b = (2)的地址指针位置, （3）
-func(1)   ---&gt;  执行函数func(1),修改栈中a = 1
-b.append(a)---&gt; 调用栈中的b 指针（引用传递），将a到列表--&gt;b
-print(b)
-                函数func(1)执行完，栈系统自动回收，b指针消失。但是b的值已经修改。
-</code></pre><h4 id="值传递"><a href="#值传递" class="headerlink" title="值传递"></a>值传递</h4><pre><code>def func(a b=1)   ---&gt;  代码进行到这里定义一个函数（1）
-                         创建一个&quot;栈&quot;，在栈中创建 a, b = 1, （2）
-func(1)   ---&gt;  执行函数func(1),修改栈中a = 1，
-b += a      ---&gt;   修改过栈中 b = 1 + a
-print(b)                       
-                函数func(1)执行完，栈系统自动回收，a,b消失。
-</code></pre><p>Python的数组类型是用的引用传递，普通数字是值传递，这就是python和其他语言处理默认参数方式不一样吧，其他语言再执行函数之前，初始化一个栈，所有的参数都重新初始化到新的栈中。</p>
-<p>如上就是我的分析，但是本人技术有限怕理解不对，希望大神不吝赐教！记下来只是提醒自己python有这样一个<code>特性</code>在这，需要注意。</p>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2017-01-13, 18:01:46</p>
-        <p><span>最后更新:</span>2017-08-02, 19:10:20</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/01/13/python函数默认参数坑/" title="python函数默认参数的一个坑">http://www.liangxiansen.cn/2017/01/13/python函数默认参数坑/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2017/01/13/python函数默认参数坑/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/03/06/haproxy/">
-                    HAproxy
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/01/06/supervisor-shell/">
-                    使用supervisor管理python脚本守护进程踩的一个坑
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"python函数默认参数的一个坑　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#示例1"><span class="toc-number">1.</span> <span class="toc-text">示例1</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#示例2"><span class="toc-number">2.</span> <span class="toc-text">示例2</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#分析"><span class="toc-number">3.</span> <span class="toc-text">分析</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#引用传递"><span class="toc-number">3.1.</span> <span class="toc-text">引用传递</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#值传递"><span class="toc-number">3.2.</span> <span class="toc-text">值传递</span></a></li></ol></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2017/03/06/haproxy/" title="上一篇: HAproxy">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2017/01/06/supervisor-shell/" title="下一篇: 使用supervisor管理python脚本守护进程踩的一个坑">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
