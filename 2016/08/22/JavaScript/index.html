@@ -358,99 +358,648 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
+      <div class="body-wrap"><article id="post-JavaScript" class="article article-type-post" itemscope itemprop="blogPost">
+  
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2016/08/22/JavaScript/" class="article-date">
+      <time datetime="2016-08-22T03:01:29.000Z" itemprop="datePublished">2016-08-22</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JavaScript 学习
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
+      
       <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/前端/">前端</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JavaScript/">JavaScript</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <blockquote>
+<p>前端开发三要素，HTML（描述网页内容），CSS（描述样式），JavaScript（控制网页行为）。</p>
+</blockquote>
+<p>JavaScript是一门编程语言，浏览器内置了JavaScript语言的解释器，所以在浏览器上按照JavaScript语言的规则编写相应代码，浏览器可以解释并做出相应的处理。</p>
+<p>在学习<code>JavaScript</code>之前,首先对要排除一些误解, 推荐一篇文章,简单看一下即可:<a href="http://www.javascript.crockford.com/zh/javascript.html" target="_blank" rel="noopener">JavaScript–世界上误解最深的语言</a></p>
+<a id="more"></a>
+<h2 id="JavaScript-初识"><a href="#JavaScript-初识" class="headerlink" title="JavaScript 初识"></a>JavaScript 初识</h2><h3 id="如何编写"><a href="#如何编写" class="headerlink" title="如何编写"></a>如何编写</h3><pre><code class="javascript">&lt;!-- HTML中JS文件的引用 --&gt;
+&lt;script type&quot;text/javascript&quot; src=&quot;JS文件路径&quot;&gt;&lt;/script&gt;
+
+&lt;!-- HTML中JS代码块 --&gt;
+&lt;script type&quot;text/javascript&quot;&gt;
+    Js代码内容
+&lt;/script&gt;
+</code></pre>
+<p>放在<body>标签内的代码底部，为什么不能放在上面呢？为什么css的就可以放在上面呢？<br>html代码是从上往下解释的，上面的html使用css样式，如果css代码块放在下面上面的html就没有办法显示样式了<br>如果把js文件或者js代码放在上面,那么当js文件或者js代码耗时比较久的时候，下面的html代码就无法执行了。</body></p>
+<h3 id="如何引用"><a href="#如何引用" class="headerlink" title="如何引用"></a>如何引用</h3><p><strong>JavaScript的引入方法如下：</strong></p>
+<pre><code class="html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;head&gt;
+  &lt;title&gt;Demo Page&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;!-- 以上代码忽略 --&gt;
+
+  &lt;!-- 为性能优化需将 javascript 代码放置在 body 标签的最末端 --&gt;
+  &lt;!-- 外联文件 --&gt;
+  &lt;script src=&quot;/javascripts/application.js&quot; type=&quot;text/javascript&quot; charset=&quot;utf-8&quot; async defer&gt;&lt;/script&gt;
+  &lt;!-- 内嵌代码 --&gt;
+  &lt;script&gt;
+    document.write(&#39;&gt;&gt;&gt; Hello, world!&#39;);
+  &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>JavaScript中代码注释：</p>
+<ul>
+<li>单行注释: <code>//</code></li>
+<li>多行注释: <code>/*  */</code></li>
+</ul>
+<blockquote>
+<p>注意：此注释仅在<code>&lt;script&gt;</code>块中有效。</p>
+</blockquote>
+<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><p>JavaScript中变量的声明是一个非常容易出错的点，<code>局部变量</code>必须一个 var 开头，如果未使用var，则默认表示声明的是<code>全局变量</code>。建议一般情况下都使用局部变量,在必要的时候再用全局变量,因为全局变量想象范围大,容易影起代码执行错误.</p>
+<pre><code class="javascript">&lt;script type=&quot;text/javascript&quot;&gt;
+
+    // 全局变量
+    name = &#39;seven&#39;;
+
+    function func() {
+        // 局部变量
+        var age = 18;
+
+        // 全局变量
+        gender = &quot;男&quot;
+    }
+&lt;/script&gt;
+</code></pre>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><p>JavaScript 中的数据类型分为原始类型和对象类型：</p>
+<blockquote>
+<p><code>原始类型</code></p>
+<ul>
+<li>数字</li>
+<li>字符串</li>
+<li>布尔值</li>
+</ul>
+</blockquote>
+<blockquote>
+<p><code>对象类型</code></p>
+<ul>
+<li>数组</li>
+<li>“字典”<br>…</li>
+<li>特别的，数字、布尔值、null、undefined、字符串是不可变。</li>
+</ul>
+</blockquote>
+<pre><code>// null、undefined
+null是JavaScript语言的关键字，它表示一个特殊值，常用来描述“空值”。
+undefined是一个特殊值，表示变量未定义。
+</code></pre><h3 id="数字"><a href="#数字" class="headerlink" title="数字"></a>数字</h3><p>JavaScript中不区分整数值和浮点数值，JavaScript中所有数字均用浮点数值表示。</p>
+<p>转换：</p>
+<pre><code>parseInt(..)    将某值转换成数字，不成功则NaN
+parseFloat(..) 将某值转换成浮点数，不成功则NaN
+</code></pre><p>特殊值：</p>
+<pre><code>NaN，非数字。可使用 isNaN(num) 来判断。
+Infinity，无穷大。可使用 isFinite(num) 来判断。
+</code></pre><p>更多数值计算：</p>
+<pre><code>常量
+
+Math.E
+常量e，自然对数的底数。
+
+Math.LN10
+10的自然对数。
+
+Math.LN2
+2的自然对数。
+
+Math.LOG10E
+以10为底的e的对数。
+
+Math.LOG2E
+以2为底的e的对数。
+
+Math.PI
+常量figs/U03C0.gif。
+
+Math.SQRT1_2
+2的平方根除以1。
+
+Math.SQRT2
+2的平方根。
+
+静态函数
+
+Math.abs( )
+计算绝对值。
+
+Math.acos( )
+计算反余弦值。
+
+Math.asin( )
+计算反正弦值。
+
+Math.atan( )
+计算反正切值。
+
+Math.atan2( )
+计算从X轴到一个点的角度。
+
+Math.ceil( )
+对一个数上舍入。
+
+Math.cos( )
+计算余弦值。
+
+Math.exp( )
+计算e的指数。
+
+Math.floor( )
+对一个数下舍人。
+
+Math.log( )
+计算自然对数。
+
+Math.max( )
+返回两个数中较大的一个。
+
+Math.min( )
+返回两个数中较小的一个。
+
+Math.pow( )
+计算xy。
+
+Math.random( )
+计算一个随机数。
+
+Math.round( )
+舍入为最接近的整数。
+
+Math.sin( )
+计算正弦值。
+
+Math.sqrt( )
+计算平方根。
+
+Math.tan( )
+计算正切值。
+</code></pre><h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>字符串是由字符组成的数组，但在JavaScript中字符串是不可变的：可以访问字符串任意位置的文本，但是JavaScript并未提供修改已知字符串内容的方法。</p>
+<p>常见功能：</p>
+<pre><code>obj.length                           长度
+obj.trim()                           移除空白
+obj.trimLeft()
+obj.trimRight)
+obj.charAt(n)                        返回字符串中的第n个字符
+obj.concat(value, ...)               拼接
+obj.indexOf(substring,start)         子序列位置
+obj.lastIndexOf(substring,start)     子序列位置
+obj.substring(from, to)              根据索引获取子序列
+obj.slice(start, end)                切片
+obj.toLowerCase()                    小写
+obj.toUpperCase()                    大写
+obj.split(delimiter, limit)          分割
+obj.search(regexp)                   从头开始匹配，返回匹配成功的第一个位置(g无效)
+obj.match(regexp)                    全局搜索，如果正则中有g表示找到全部，否则只找到第一个。
+obj.replace(regexp, replacement)     替换，正则中有g则替换所有，否则只替换第一个匹配项，
+                                     $数字：匹配的第n个组内容；
+                                     $&amp;：当前匹配的内容；
+                                     $`：位于匹配子串左侧的文本；
+                                     $&#39;：位于匹配子串右侧的文本
+                                     $$：直接量$符号
+</code></pre><h3 id="布尔类型（Boolean）"><a href="#布尔类型（Boolean）" class="headerlink" title="布尔类型（Boolean）"></a>布尔类型（Boolean）</h3><p>布尔类型仅包含真假，与Python不同的是其首字母小写。</p>
+<ul>
+<li>==      比较值相等</li>
+<li>!=       不等于</li>
+<li>===   比较值和类型相等</li>
+<li>!===  不等于</li>
+<li>||        或</li>
+<li>&amp;&amp;      且</li>
+</ul>
+<h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>JavaScript中的数组类似于Python中的列表</p>
+<p>常见功能：</p>
+<pre><code>obj.length          数组的大小
+obj.push(ele)       尾部追加元素
+obj.pop()           尾部获取一个元素
+obj.unshift(ele)    头部插入元素
+obj.shift()         头部移除元素
+obj.splice(start, deleteCount, value, ...)  插入、删除或替换数组的元素
+                     obj.splice(n,0,val) 指定位置插入元素
+                     obj.splice(n,1,val) 指定位置替换元素
+                    obj.splice(n,1)     指定位置删除元素
+obj.slice( )        切片
+obj.reverse( )      反转
+obj.join(sep)       将数组元素连接起来以构建一个字符串
+obj.concat(val,..)  连接数组
+obj.sort( )         对数组元素进行排序
+</code></pre><h3 id="序列化"><a href="#序列化" class="headerlink" title="序列化"></a>序列化</h3><pre><code>JSON.stringify(obj)    序列化
+JSON.parse(str)        反序列化
+</code></pre><h3 id="URL编码"><a href="#URL编码" class="headerlink" title="URL编码"></a>URL编码</h3><pre><code>decodeURI( )                   URl中未转义的字符
+decodeURIComponent( )          URI组件中的未转义字符
+encodeURI( )                   URI中的转义字符
+encodeURIComponent( )          转义URI组件中的字符
+escape( )                      对字符串转义
+unescape( )                    给转义字符串解码
+URIError                       由URl的编码和解码方法抛出
+</code></pre><h3 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h3><p>JavaScript中的eval是Python中eval和exec的合集，既可以编译代码也可以获取返回值。</p>
+<pre><code>eval()
+EvalError   执行字符串中的JavaScript代码
+</code></pre><h2 id="实战应用"><a href="#实战应用" class="headerlink" title="实战应用"></a>实战应用</h2><h3 id="通知方式"><a href="#通知方式" class="headerlink" title="通知方式"></a>通知方式</h3><p><strong>1、消息弹窗:</strong></p>
+<pre><code class="javascript">alert(&#39;这是通知消息&#39;)
+</code></pre>
+<p>效果:</p>
+<p><img src="http://www.liangxiansen.cn/images/javascript/alert.png" alt="消息通知"></p>
+<p><strong>2、打印日志:</strong></p>
+<pre><code class="javascript">console.log(&#39;这是测试消息&#39;)
+</code></pre>
+<p>效果:<br>鼠标右击选择<code>审查页面元素</code><br><img src="http://www.liangxiansen.cn/images/javascript/console_log.png" alt="打印日志"></p>
+<h3 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h3><p>1、<code>定义正则表达式</code></p>
+<p>/…/       用于定义正则表达式<br>/…/g      表示全局匹配<br>/…/i      表示不区分大小写<br>/…/m      表示多行匹配</p>
+<p>JS正则匹配时本身就是支持多行，此处多行匹配只是影响正则表达式<code>^</code>和<code>$</code>，<code>m</code>模式也会使用<code>^</code>,<code>$</code>来匹配换行的内容)</p>
+<blockquote>
+<p>注：定义正则表达式也可以  <code>reg = new RegExp()</code></p>
+</blockquote>
+<p>2、<code>匹配</code></p>
+<p><strong> JavaScript中支持正则表达式，其主要提供了两个功能: </strong></p>
+<p>   1) test(string)     检查字符串中是否和正则匹配</p>
+<pre><code>n = &#39;uui99sdf&#39;
+reg = /\d+/
+reg.test(n)  ---&gt; true
+
+# 只要正则在字符串中存在就匹配，如果想要开头和结尾匹配的话，就需要在正则前后加 ^和$
+</code></pre><p>   2) exec(string)    获取正则表达式匹配的内容，如果未匹配，值为null，否则，获取匹配成功的数组。</p>
+<pre><code>非全局模式
+    获取匹配结果数组，注意：第一个元素是第一个匹配的结果，后面元素是正则子匹配（正则内容分组匹配）
+    var pattern = /\bJava\w*\b/;
+    var text = &quot;JavaScript is more fun than Java or JavaBeans!&quot;;
+    result = pattern.exec(text)
+
+    var pattern = /\b(Java)\w*\b/;
+    var text = &quot;JavaScript is more fun than Java or JavaBeans!&quot;;
+    result = pattern.exec(text)
+
+全局模式
+    需要反复调用exec方法，来一个一个获取结果，直到匹配获取结果为null表示获取完毕
+    var pattern = /\bJava\w*\b/g;
+    var text = &quot;JavaScript is more fun than Java or JavaBeans!&quot;;
+    result = pattern.exec(text)
+
+    var pattern = /\b(Java)\w*\b/g;
+    var text = &quot;JavaScript is more fun than Java or JavaBeans!&quot;;
+    result = pattern.exec(text)
+</code></pre><p>3、 <code>字符串中相关方法</code></p>
+<pre><code>obj.search(regexp)                   获取索引位置，搜索整个字符串，返回匹配成功的第一个位置(g模式无效)
+obj.match(regexp)                    获取匹配内容，搜索整个字符串，获取找到第一个匹配内容，如果正则是g模式找到全部
+obj.replace(regexp, replacement)     替换匹配替换，正则中有g则替换所有，否则只替换第一个匹配项，
+                                        $数字：匹配的第n个组内容；
+                                        $&amp;：当前匹配的内容；
+                                        $`：位于匹配子串左侧的文本；
+                                        $&#39;：位于匹配子串右侧的文本
+                                        $$：直接量$符号
+</code></pre><h3 id="时间处理"><a href="#时间处理" class="headerlink" title="时间处理"></a>时间处理</h3><p>JavaScript中提供了时间相关的操作，时间操作中分为两种时间：</p>
+<ul>
+<li>时间统一时间</li>
+<li>本地时间（东8区）</li>
+</ul>
+<p>更多操作参见：<a href="http://www.shouce.ren/api/javascript/main.html" target="_blank" rel="noopener">http://www.shouce.ren/api/javascript/main.html</a></p>
+<h3 id="语句和异常"><a href="#语句和异常" class="headerlink" title="语句和异常"></a>语句和异常</h3><p>1、条件语句<br>JavaScript中支持两个中条件语句，分别是：if 和 switch</p>
+<p><code>if</code></p>
+<pre><code>if(条件){
+
+}else if(条件){
+
+}else{
+
+}
+</code></pre><p><code>switch</code></p>
+<pre><code>switch(name){
+    case &#39;1&#39;:
+        age = 123;
+        break;
+    case &#39;2&#39;:
+        age = 456;
+        break;
+    default :
+        age = 777;
+}
+</code></pre><p>2、循环语句<br>JavaScript中支持三种循环语句，分别是：</p>
+<p>方式一:</p>
+<pre><code>var names = [&quot;alex&quot;, &quot;tony&quot;, &quot;rain&quot;];
+
+for(var i=0;i&lt;names.length;i++){
+    console.log(i);
+    console.log(names[i]);
+}
+</code></pre><p>方式二:</p>
+<pre><code>var names = [&quot;alex&quot;, &quot;tony&quot;, &quot;rain&quot;];
+
+for(var index in names){
+    console.log(index);
+    console.log(names[index]);
+}
+</code></pre><p>方式三:</p>
+<pre><code>while(条件){
+    // break;
+    // continue;
+}
+</code></pre><p>3、异常处理</p>
+<pre><code>try {
+    //这段代码从上往下运行，其中任何一个语句抛出异常该代码块就结束运行
+}
+catch (e) {
+    // 如果try代码块中抛出了异常，catch代码块中的代码就会被执行。
+    //e是一个局部变量，用来指向Error对象或者其他抛出的对象
+}
+finally {
+     //无论try中代码是否有异常抛出（甚至是try代码块中有return语句），finally代码块中始终会被执行。
+}
+</code></pre><h3 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h3><p>1、基本函数</p>
+<p>JavaScript中函数基本上可以分为一下三类：</p>
+<pre><code>// 普通函数
+    function func(arg){
+        return true;
+    }
+
+// 匿名函数
+    var func = function(arg){
+        return &quot;tony&quot;;
+    }
+
+// 自执行函数
+    (function(arg){
+        console.log(arg);
+    })(&#39;123&#39;)
+</code></pre><blockquote>
+<p>注意：对于JavaScript中函数参数，实际参数的个数可能小于形式参数的个数，函数内的特殊值arguments中封装了所有实际参数。</p>
+</blockquote>
+<p>2、作用域<br>JavaScript中每个函数都有自己的作用域，当出现函数嵌套时，就出现了作用域链。当内层函数使用变量时，会根据作用域链从内到外一层层的循环，如果不存在，则异常。</p>
+<blockquote>
+<p>注意：所有的作用域在创建函数且未执行时候就已经存在。</p>
+</blockquote>
+<pre><code>function f2(){
+    var arg= 111;
+    function f3(){
+        console.log(arg);
+    }
+
+    return f3;
+}
+
+ret = f2();
+ret();
+</code></pre><p>注：声明提前，在JavaScript引擎“预编译”时进行。</p>
+<p>更多：<a href="http://www.cnblogs.com/wupeiqi/p/5649402.html" target="_blank" rel="noopener">http://www.cnblogs.com/wupeiqi/p/5649402.html</a></p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><blockquote>
+<p>「闭包」，是指拥有多个变量和绑定了这些变量的环境的表达式（通常是一个函数），因而这些变量也是该表达式的一部分。<br>闭包是个函数，而它「记住了周围发生了什么」。表现为由「一个函数」体中定义了「另个函数」<br>由于作用域链只能从内向外找，默认外部无法获取函数内部变量。闭包，在外部获取函数内部的变量。</p>
+</blockquote>
+<pre><code>(function (s) {
+    s = &#39;显示消息:&#39; + s;
+    alert(s);
+})(str);
+</code></pre><h3 id="面向对象"><a href="#面向对象" class="headerlink" title="面向对象"></a>面向对象</h3><pre><code>function Foo(name,age) {
+    this.Name = name;
+    this.Age = age;
+    this.Func = function(arg){
+        return this.Name + arg;
+    }
+}
+
+var obj = new Foo(&#39;alex&#39;, 18);
+var ret = obj.Func(&quot;sb&quot;);
+console.log(ret);
+</code></pre><p>对于上述代码需要注意：</p>
+<ul>
+<li>Foo充当的构造函数</li>
+<li>this代指对象</li>
+<li>创建对象时需要使用 <code>new</code></li>
+</ul>
+<p>上述代码中每个对象中均保存了一个相同的Func函数，从而<code>浪费内存</code>。使用原型和可以解决该问题：</p>
+<pre><code>function Foo(name,age) {
+    this.Name = name;
+    this.Age = age;
+}
+
+Foo.prototype = {
+    GetInfo: function(){
+        return this.Name + this.Age
+    },
+    Func : function(arg){
+        return this.Name + arg;
+    }
+}
+</code></pre>
+      
     </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/22/JavaScript/">JavaScript 学习</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2016-08-22, 11:01:29</p>
+        <p><span>最后更新:</span>2017-08-02, 14:15:20</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/22/JavaScript/" title="JavaScript 学习">http://www.liangxiansen.cn/2016/08/22/JavaScript/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/22/JavaScript/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/09/02/DOM/">
+                    DOM 操作
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/11/Python-MySQL/">
+                    Python对MySQL进行操作
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"JavaScript 学习　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#JavaScript-初识"><span class="toc-number">1.</span> <span class="toc-text">JavaScript 初识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#如何编写"><span class="toc-number">1.1.</span> <span class="toc-text">如何编写</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#如何引用"><span class="toc-number">1.2.</span> <span class="toc-text">如何引用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量"><span class="toc-number">1.3.</span> <span class="toc-text">变量</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据类型"><span class="toc-number">2.</span> <span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数字"><span class="toc-number">2.1.</span> <span class="toc-text">数字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串"><span class="toc-number">2.2.</span> <span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布尔类型（Boolean）"><span class="toc-number">2.3.</span> <span class="toc-text">布尔类型（Boolean）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数组"><span class="toc-number">2.4.</span> <span class="toc-text">数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#序列化"><span class="toc-number">2.5.</span> <span class="toc-text">序列化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#URL编码"><span class="toc-number">2.6.</span> <span class="toc-text">URL编码</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#eval"><span class="toc-number">2.7.</span> <span class="toc-text">eval</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#实战应用"><span class="toc-number">3.</span> <span class="toc-text">实战应用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#通知方式"><span class="toc-number">3.1.</span> <span class="toc-text">通知方式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#正则表达式"><span class="toc-number">3.2.</span> <span class="toc-text">正则表达式</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间处理"><span class="toc-number">3.3.</span> <span class="toc-text">时间处理</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#语句和异常"><span class="toc-number">3.4.</span> <span class="toc-text">语句和异常</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数"><span class="toc-number">3.5.</span> <span class="toc-text">函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包"><span class="toc-number">3.6.</span> <span class="toc-text">闭包</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#面向对象"><span class="toc-number">3.7.</span> <span class="toc-text">面向对象</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
     <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
-<% } %></div>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/09/02/DOM/" title="上一篇: DOM 操作">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/11/Python-MySQL/" title="下一篇: Python对MySQL进行操作">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">

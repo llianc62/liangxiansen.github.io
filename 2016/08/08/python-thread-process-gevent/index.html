@@ -355,99 +355,841 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
+      <div class="body-wrap"><article id="post-python-thread-process-gevent" class="article article-type-post" itemscope itemprop="blogPost">
+  
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2016/08/08/python-thread-process-gevent/" class="article-date">
+      <time datetime="2016-08-08T03:54:06.000Z" itemprop="datePublished">2016-08-08</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python之路：(十五）进程、线程和协程
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
+      
       <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/协程/">协程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/线程/">线程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/进程/">进程</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <h2 id="Python线程"><a href="#Python线程" class="headerlink" title="Python线程"></a>Python线程</h2><blockquote>
+<p>python中<code>threading</code>模块用于提供线程相关的操作，线程是应用程序中工作的最小单元，擅长IO操作</p>
+</blockquote>
+<pre><code class="python">import threading
+import time
+
+# 创建一个任务
+def show(arg):
+    time.sleep(1)
+    print(&#39;thread&#39;+str(arg))
+
+# 循环创建10个线程去并发都去执行这个任务
+for i in range(10):
+    # 创建线程,target=函数,去执行这个函数 args=参数,给这个函数传的参数
+    t = threading.Thread(target=show, args=(i,))
+    # 运行线程
+    t.start()
+
+print(&#39;main thread stop&#39;)
+</code></pre>
+<a id="more"></a>
+<p>上述代码创建了10个“前台”线程，然后控制器就交给了CPU，CPU根据指定算法进行调度，分片执行指令。<br>更多方法：</p>
+<h3 id="start"><a href="#start" class="headerlink" title="start"></a>start</h3><p>   线程准备就绪，等待CPU调度</p>
+<h3 id="setName"><a href="#setName" class="headerlink" title="setName"></a>setName</h3><p>   为线程设置名称</p>
+<h3 id="getName"><a href="#getName" class="headerlink" title="getName"></a>getName</h3><p>   获取线程名称</p>
+<h3 id="setDaemon"><a href="#setDaemon" class="headerlink" title="setDaemon"></a>setDaemon</h3><p>   设置为后台线程或前台线程（默认）</p>
+<ul>
+<li>如果是后台线程，主线程执行过程中，后台线程也在进行，主线程执行完毕后，后台线程不论成功与否，均停止</li>
+<li>如果是前台线程，主线程执行过程中，前台线程也在进行，主线程执行完毕后，等待前台线程也执行完成后，程序停止</li>
+</ul>
+<h3 id="join"><a href="#join" class="headerlink" title="join"></a>join</h3><p>   逐个执行每个线程，执行完毕后继续往下执行，该方法使得多线程变得无意义</p>
+<h3 id="run"><a href="#run" class="headerlink" title="run"></a>run</h3><p>   线程被cpu调度后自动执行线程对象的run方法</p>
+<h4 id="自己创建一个线程类"><a href="#自己创建一个线程类" class="headerlink" title="自己创建一个线程类"></a>自己创建一个线程类</h4><pre><code class="python"># 自己创建一个线程类,继承threading.Thread类, 重写run方法,start()方法调用内部run()方法
+class MyThread(threading.Thread):
+
+    # 初始化接受两个参数
+    def __init__(self, func, args):
+        self.func = func
+        self.args = args
+
+        # super主动调用父类__init__()方法
+        super(MyThread, self).__init__()
+
+    # 执行start()方法,我继承类Thread类,它会调用自己的run方法,
+    # 我重写了run方法,根据类的继承关系,执行方法先找自己,如果自己有则我自己写的run方法
+    def run(self):
+        self.func(self.args)
+
+
+def f2(arg):
+    print(arg)
+
+
+for i in range(10):
+    obj = MyThread(f2, i)
+    obj.start()
+</code></pre>
+<blockquote>
+<p>从上面的例子可以更好的理解上面的<code>threading.Thread</code>类<code>run()</code>方法</p>
+</blockquote>
+<h3 id="线程锁（Lock、RLock）"><a href="#线程锁（Lock、RLock）" class="headerlink" title="线程锁（Lock、RLock）"></a>线程锁（Lock、RLock）</h3><p>由于线程之间是进行随机调度，并且每个线程可能只执行n条执行之后，当多个线程同时修改同一条数据时可能会出现脏数据，所以，出现了线程锁 - 同一时刻允许一个线程执行操作。</p>
+<h4 id="未加锁"><a href="#未加锁" class="headerlink" title="未加锁"></a>未加锁</h4><pre><code class="python">import threading
+import time
+
+NUM = 10
+
+def func(arg):
+    global NUM
+    NUM -= 1
+    time.sleep(1)
+    print(NUM)
+
+for i in range(10):
+    t = threading.Thread(target=func, args=(i, ))
+    t.start()
+</code></pre>
+<h4 id="加锁版本-一"><a href="#加锁版本-一" class="headerlink" title="加锁版本(一)"></a>加锁版本(一)</h4><pre><code class="python">import threading
+import time
+
+NUM = 10
+
+def func(lock):
+    global NUM
+    #上锁
+    lock.acquire()
+    NUM -= 1
+    time.sleep(2)
+    print(NUM)
+    # 开锁
+    lock.release()
+
+lock = threading.Lock()  # 创建锁对象(只能锁一次)
+# lock = threading.RLock()   # 创建锁对象(能迭代锁多次)
+
+for i in range(10):
+    # 把所对象当作参数传递到任务函数里面
+    t = threading.Thread(target=func, args=(lock, ))
+    t.start()
+</code></pre>
+<h4 id="加锁版本-二"><a href="#加锁版本-二" class="headerlink" title="加锁版本(二)"></a>加锁版本(二)</h4><pre><code class="python">import threading
+import time
+
+NUM = 10
+
+def func(lock):
+    global NUM
+    #上锁
+    lock.acquire()  # 锁1,锁住
+    NUM -= 1
+    lock.acquire()  # 锁2,锁住
+    time.sleep(2)
+    lock.release()  # 锁2,解锁
+    print(NUM)
+    # 开锁
+    lock.release()  # 锁1,解锁
+
+# lock = threading.Lock()  # 创建锁对象(只能锁一次)
+lock = threading.RLock()   # 创建锁对象(能迭代锁多次)
+
+for i in range(10):
+    # 把所对象当作参数传递到任务函数里面
+    t = threading.Thread(target=func, args=(lock, ))
+    t.start()
+</code></pre>
+<h3 id="信号量（Semaphore）"><a href="#信号量（Semaphore）" class="headerlink" title="信号量（Semaphore）"></a>信号量（Semaphore）</h3><blockquote>
+<p><code>互斥锁</code> 同时只允许一个线程更改数据，而Semaphore是同时允许一定数量的线程更改数据 ，比如厕所有3个坑，那最多只允许3个人上厕所，后面的人只能等里面有人出来了才能再进去。</p>
+</blockquote>
+<pre><code class="python">import threading
+import time
+
+NUM = 10
+
+def func(i,lock):
+    global NUM
+    # 上锁5
+    lock.acquire()
+    NUM -= 1
+    time.sleep(1)
+    print(NUM, i)
+    # 开锁5
+    lock.release()
+
+lock = threading.BoundedSemaphore(5)   # 一次锁多个,释放多个
+
+for i in range(10):
+    t = threading.Thread(target=func, args=(i, lock, ))
+    t.start()
+</code></pre>
+<h3 id="事件（event）"><a href="#事件（event）" class="headerlink" title="事件（event）"></a>事件（event）</h3><p>python线程的事件用于主线程控制其他线程的执行，事件主要提供了三个方法 <code>set</code>、<code>wait</code>、<code>clear</code>。</p>
+<p>事件处理的机制：全局定义了一个<code>“Flag”</code>，如果<code>“Flag”</code>值为 <code>False</code>，那么当程序执行到 <code>event.wait</code>（检查） 方法时就会阻塞，如果<code>“Flag”</code>值为<code>True</code>，那么<code>event.wait</code> 方法时便不再阻塞。</p>
+<ul>
+<li><code>clear</code>：将“Flag”设置为<code>False</code></li>
+<li><code>set</code>：将“Flag”设置为<code>True</code></li>
+</ul>
+<pre><code class="python">import threading
+
+
+def func(i, e):
+    print(i)
+    e.wait()   # 检测是什么灯,如果是红灯停;绿灯行
+    print(i+100)
+
+
+event = threading.Event()
+
+for i in range(10):
+    t = threading.Thread(target=func, args=(i, event, ))
+    t.start()
+
+event.clear()  # 设置成红灯
+inp = input(&quot;&gt;&gt;&gt;&quot;)
+if inp == &quot;1&quot;:
+    event.set()  # 设置成绿灯
+</code></pre>
+<h3 id="条件（Condition）"><a href="#条件（Condition）" class="headerlink" title="条件（Condition）"></a>条件（Condition）</h3><p>使得线程等待，只有满足某条件时，才释放n个线程</p>
+<pre><code class="python"># 输入多少放出多少
+import threading
+def func(i, con):
+    print(i)
+    con.acquire()
+    con.wait()    # 对应到notify的输入多少放出多少
+    print(i+100)
+    con.release()
+
+
+c = threading.Condition()
+
+for i in range(10):
+    t = threading.Thread(target=func, args=(i, c, ))
+    t.start()
+
+
+while True:
+    inp = input(&#39;&gt;&gt;&gt;&#39;)
+    if inp == &#39;q&#39;:
+        break
+    c.acquire()
+    c.notify(int(inp))
+    c.release()
+</code></pre>
+<pre><code class="python"># 当某个执行结果为真就放出一个
+import threading
+
+
+def condition():
+    ret = False
+    r = input(&#39;&gt;&gt;&gt;&#39;)
+    if r == &#39;1&#39;:
+        ret = True
+    else:
+        ret = False
+    return ret
+
+
+def func(i, con):
+    print(i)
+    con.acquire()
+    con.wait_for(condition)  # 检测condition函数执行结果,True放出一个
+    print(i+100)
+    con.release()
+
+con = threading.Condition()
+
+for i in range(10):
+    t = threading.Thread(target=func, args=(i, con, ))
+    t.start()
+</code></pre>
+<h3 id="Timer"><a href="#Timer" class="headerlink" title="Timer"></a>Timer</h3><pre><code class="python"># 设置这个线程执行一次要多久
+from threading import Timer
+
+
+def hello():
+    print(&quot;hello, world&quot;)
+
+t = Timer(10, hello)  # hello任务执行设置执行10秒
+t.start()  # after 1 seconds, &quot;hello, world&quot; will be printed
+</code></pre>
+<h3 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h3><blockquote>
+<p>什么是线程池？<br>诸如web服务器、数据库服务器、文件服务器和邮件服务器等许多服务器应用都面向处理来自某些远程来源的<code>大量短小的任务</code>。<br>构建服务器应用程序的一个过于简单的模型是：每当一个请求到达就创建一个新的服务对象，然后在新的服务对象中为请求服务。<br>但当有大量请求并发访问时，服务器不断的创建和销毁对象的开销很大。<br>所以提高服务器效率的一个手段就是尽可能减少创建和销毁对象的次数，特别是一些很耗资源的对象创建和销毁，这样就引入了“池”的概念，<br><code>“池”的概念使得人们可以定制一定量的资源，然后对这些资源进行复用，而不是频繁的创建和销毁。</code></p>
+</blockquote>
+<p><strong>线程池的注意事项:</strong><br>虽然线程池是构建多线程应用程序的强大机制，但使用它并不是没有风险的。在使用线程池时需注意线程池大小与性能的关系，注意并发风险、死锁、资源不足和线程泄漏等问题。</p>
+<ol>
+<li><blockquote>
+<p>线程池大小。多线程应用并非线程越多越好，需要根据系统运行的软硬件环境以及应用本身的特点决定线程池的大小。一般来说，如果代码结构合理的话，线程数目与CPU 数量相适合即可。<br>如果线程运行时可能出现阻塞现象，可相应增加池的大小；如有必要可采用自适应算法来动态调整线程池的大小，以提高CPU 的有效利用率和系统的整体性能。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>并发错误。多线程应用要特别注意并发错误，要从逻辑上保证程序的正确性，注意避免死锁现象的发生。</p>
+</blockquote>
+</li>
+<li><blockquote>
+<p>线程泄漏。这是线程池应用中一个严重的问题，当任务执行完毕而线程没能返回池中就会发生线程泄漏现象。</p>
+</blockquote>
+</li>
+</ol>
+<h4 id="线程池需求"><a href="#线程池需求" class="headerlink" title="线程池需求"></a>线程池需求</h4><ol>
+<li>能够调整线程池大小<br>比如：<br>任务数是3，进程池20  ，那么咱们只需要开启3个线程就行了。<br>任务数是500，进程池是20，那么咱们只开20个线程就可以了。</li>
+</ol>
+<ol start="2">
+<li><p>实现线程池正在运行，有一个查看的功能，查看一下现在线程里面活跃的线程是多少等待的是多少？<br>线程总共是多少，等待中多少，正在运行中多少<br>作用：<br>方便查看当前线程池状态<br>能获取到这个之后就可以当线程一直处于空闲状态<br>查看状态用：上下文管理来做，非常nice的一点</p>
+</li>
+<li><p>关闭线程</p>
+</li>
+</ol>
+<h4 id="自己实现线程池"><a href="#自己实现线程池" class="headerlink" title="自己实现线程池"></a>自己实现线程池</h4><pre><code class="python">import queue
+import threading
+import contextlib
+import time
+
+StopEvent = object()
+
+
+class ThreadPool(object):
+
+    def __init__(self, max_num):
+        # 创建任务队列
+        self.q = queue.Queue()
+        # 获取最大数设置
+        self.max_num = max_num
+
+        self.terminal = False
+        # 创建任务线程的list
+        self.generate_list = []
+        # 创建存放空闲进程的list
+        self.free_list = []
+
+    def run(self, func, args, callback=None):
+        &quot;&quot;&quot;
+        线程池执行一个任务
+        :param func: 任务函数
+        :param args: 任务函数所需参数
+        :param callback: 任务执行失败或成功后执行的回调函数，回调函数有两个参数1、任务函数执行状态；2、任务函数返回值（默认为None，即：不执行回调函数）
+        :return: 如果线程池已经终止，则返回True否则None
+        &quot;&quot;&quot;
+        # 空闲的线程等于0,并且已经生成的线程小于线程最大设置就生成一个线程
+        if len(self.free_list) == 0 and len(self.generate_list) &lt; self.max_num:
+            # 创建线程
+            self.generate_thread()
+        # 获取的任务
+        w = (func, args, callback,)
+        # 放进队列里面
+        self.q.put(w)
+
+    def generate_thread(self):
+        &quot;&quot;&quot;
+        创建一个线程
+        &quot;&quot;&quot;
+        # 创建一个线程去队列中取一个任务执行
+        t = threading.Thread(target=self.call)
+        # 运行线程
+        t.start()
+
+    def call(self):
+        &quot;&quot;&quot;
+        循环去获取任务函数并执行任务函数
+        &quot;&quot;&quot;
+        # 创建线程
+        current_thread = threading.currentThread
+        # 将线程加到任务线程列表中
+        self.generate_list.append(current_thread)
+        # 从队列中获取任务
+        event = self.q.get()
+        while event != StopEvent:
+            # 得到任务元祖(函数,参数,函数名)
+            func, arguments, callback = event
+            try:
+                # 执行函数得到返回值结果
+                result = func(*arguments)
+                success = True
+            except Exception as e:
+                success = False
+                result = None
+            # 如果有第二个函数
+            if callback is not None:
+                try:
+                    # 执行第二个函数
+                    callback(success, result)
+                except Exception as e:
+                    pass
+            # 线程执行完任务放到调用任务状态转换得方法,将执行完的线程放到空闲的list中
+            with self.worker_state(self.free_list, current_thread):
+                # 判断是否终止
+                if self.terminal:
+                    # 终止循环
+                    event = StopEvent
+                else:
+                    # 有则继续取任务,执行任务
+                    event = self.q.get()
+        else:
+            # 线程执行完从已经创建得线程列表中删除
+            self.generate_list.remove(current_thread)
+
+    def close(self):
+        &quot;&quot;&quot;
+        执行完所有的任务后，所有线程停止
+        &quot;&quot;&quot;
+        full_size = len(self.generate_list)
+        while full_size:
+            self.q.put(StopEvent)
+            full_size -= 1
+
+    def terminate(self):
+        &quot;&quot;&quot;
+        无论是否还有任务，终止线程
+        &quot;&quot;&quot;
+        self.terminal = True
+
+        while self.generate_list:
+            self.q.put(StopEvent)
+
+        self.q.empty()
+
+
+    @contextlib.contextmanager
+    def worker_state(self, state_list, worker_thread):
+        &quot;&quot;&quot;
+        用于记录线程中正在等待的线程数
+        &quot;&quot;&quot;
+        state_list.append(worker_thread)
+        try:
+            yield
+        finally:
+            state_list.remove(worker_thread)
+</code></pre>
+<h2 id="Python进程"><a href="#Python进程" class="headerlink" title="Python进程"></a>Python进程</h2><pre><code class="python"># 创建进程
+from multiprocessing import Process
+
+
+def foo(i):
+    print(&#39;say hi&#39;,i)
+
+for i in range(10):
+    p = Process(target=foo,args=(i,))
+    p.start()
+</code></pre>
+<blockquote>
+<p>注意：由于进程之间的数据需要各自持有一份，所以创建进程需要的非常大的开销。<code>并且python不能再Windows下创建进程！</code></p>
+<ul>
+<li>并且在使用多进程的时候，最好是创建多少个进程？：<code>和CPU核数相等</code></li>
+</ul>
+</blockquote>
+<h3 id="进程数据共享"><a href="#进程数据共享" class="headerlink" title="进程数据共享"></a>进程数据共享</h3><blockquote>
+<p>进程各自持有一份数据，默认无法共享数据,就得有个特殊的数据结构，这个数据结构就可以理解为他有<code>穿墙</code>的功能<br>如果你能穿墙的话两边就都可以使用了<br>使用了3种方法</p>
+</blockquote>
+<pre><code class="python"># 进程间默认无法数据共享
+from multiprocessing import Process
+
+li = []
+
+
+def foo(i):
+    li.append(i)
+    print(&#39;say hi&#39;, li)
+
+for i in range(10):
+    p = Process(target=foo, args=(i,))
+    p.start()
+
+# 进程中数据不共享,这里主进程的li列表中还是空
+print(&#39;ending&#39;, li)
+</code></pre>
+<h3 id="Array-数组"><a href="#Array-数组" class="headerlink" title="Array(数组)"></a>Array(数组)</h3><pre><code class="python">from multiprocessing import Process, Array
+#通过特殊的数据结构：数组（Array）
+temp = Array(&#39;i&#39;, [11, 22, 33, 44])   # 这里的i是C语言中的数据结构，通过他来定义你要共享的内容的类型！
+
+# 创建一个只包含数字类型的数组（python中叫列表）
+# 并且数组是不可变的，在C，或其他语言中，数组是不可变的，之后再python中数组（列表）是可以变得
+# 当然其他语言中也提供可变的数组
+# 在C语言中数组和字符串是一样的，如果定义一个列表，如果可以增加，那么我需要在你内存地址后面再开辟一块空间，那我给你预留多少呢？
+#在python中的list可能用链表来做的，我记录了你前面和后面是谁。   列表不是连续的，数组是连续的
+
+def Foo(i):
+    temp[i] = 100+i
+    for item in temp:
+        # 打印子进程中得value
+        print(i, &#39;-----&gt;&#39;, item)
+
+for i in range(2):
+    p = Process(target=Foo, args=(i,))
+    p.start()
+</code></pre>
+<h4 id="Array类型定义对应表"><a href="#Array类型定义对应表" class="headerlink" title="Array类型定义对应表"></a>Array类型定义对应表</h4><pre><code>&#39;c&#39;: ctypes.c_char,  &#39;u&#39;: ctypes.c_wchar,
+&#39;b&#39;: ctypes.c_byte,  &#39;B&#39;: ctypes.c_ubyte,
+&#39;h&#39;: ctypes.c_short, &#39;H&#39;: ctypes.c_ushort,
+&#39;i&#39;: ctypes.c_int,   &#39;I&#39;: ctypes.c_uint,
+&#39;l&#39;: ctypes.c_long,  &#39;L&#39;: ctypes.c_ulong,
+&#39;f&#39;: ctypes.c_float, &#39;d&#39;: ctypes.c_double
+</code></pre><h3 id="manage-dict-共享数据"><a href="#manage-dict-共享数据" class="headerlink" title="manage.dict()共享数据"></a>manage.dict()共享数据</h3><pre><code class="python">from multiprocessing import Process, Manager   # 这个特殊的数据类型Manager
+
+manage = Manager()
+dic = manage.dict()  # 这里调用的时候，使用字典，这个字典和咱们python使用方法是一样的！
+
+
+def Foo(i):
+    dic[i] = 100+i
+    print(dic.values())
+
+for i in range(10):
+    p = Process(target=Foo, args=(i,))
+    p.start()
+    p.join()
+</code></pre>
+<h3 id="Queue队列"><a href="#Queue队列" class="headerlink" title="Queue队列"></a>Queue队列</h3><pre><code class="python">from multiprocessing import Process, Queue
+
+
+def f(i,q):
+    print(i, q.get())
+
+if __name__ == &#39;__main__&#39;:
+    q = Queue()
+    q.put(&quot;h1&quot;)
+    q.put(&quot;h2&quot;)
+    q.put(&quot;h3&quot;)
+
+    for i in range(10):
+        p = Process(target=f, args=(i, q,))
+        p.start()
+</code></pre>
+<h3 id="进程锁"><a href="#进程锁" class="headerlink" title="进程锁"></a>进程锁</h3><p>当创建进程时（非使用时），共享数据会被拿到子进程中，当进程中执行完毕后，再赋值给原值。</p>
+<pre><code class="python"># 进程锁
+from multiprocessing import Process, Array, RLock
+
+
+def Foo(lock, temp, i):
+    &quot;&quot;&quot;
+    将第0个数加100
+    &quot;&quot;&quot;
+    lock.acquire()
+    temp[0] += 100
+    for item in temp:
+        print(i, &#39;-----&gt;&#39;, item)
+    lock.release()
+
+lock = RLock()
+temp = Array(&#39;i&#39;, [11, 22, 33, 44])
+
+for i in range(10):
+    p = Process(target=Foo,args=(lock, temp, i,))
+    p.start()
+</code></pre>
+<h3 id="进程池"><a href="#进程池" class="headerlink" title="进程池"></a>进程池</h3><p>进程池内部维护一个进程序列，当使用时，则去进程池中获取一个进程，如果进程池序列中没有可供使用的进进程，那么程序就会等待，直到进程池中有可用进程为止。</p>
+<p>进程池中有两个方法：</p>
+<ul>
+<li>apply</li>
+<li>apply_async</li>
+</ul>
+<pre><code class="python">from multiprocessing import Process, Pool
+import time
+
+
+def Foo(i):
+    time.sleep(2)
+    return i+100
+
+
+def Bar(arg):
+    print(arg)
+
+pool = Pool(5)  # 创建一个进程池
+# print(pool.apply(Foo,(1,)))  #去进程池里去申请一个进程去执行Foo方法
+# print(pool.apply_async(func=Foo, args=(1,)).get())  # 同上一个意思
+
+for i in range(10):
+    # print(pool.apply(Foo, (i,)))
+    pool.apply_async(func=Foo, args=(i,),callback=Bar)
+
+print(&#39;end&#39;)
+pool.close()
+# pool.terminate()  # 立即结束
+pool.join()  # 主进程等待进程池中子进程执行完毕后再关闭，如果注释，那么程序直接关闭。
+
+&#39;&#39;&#39;
+pool.apply 主动的去执行
+pool.apply_async(func=Foo, args=(i,),callback=Bar) 相当于异步，当申请一个线程之后，执行FOO方法就不管了，执行完之后就再执行callback ，当你执行完之后，再执行一个方法告诉我执行完了
+callback 有个函数，这个函数就是操作的Foo函数的返回值！
+&#39;&#39;&#39;
+</code></pre>
+<h2 id="Python协程"><a href="#Python协程" class="headerlink" title="Python协程"></a>Python协程</h2><p>首先要明确，线程和进程都是系统帮咱们开辟的，不管是thread还是process他内部都是调用的系统的API<br>而对于协程来说它和系统毫无关系！<br>他就和程序员有关系，对于线程和进程来说，调度是由CPU来决定调度的！<br>对于协程来说，程序员就是上帝，你想让谁执行到哪里他就执行到哪里</p>
+<blockquote>
+<p>协程存在的意义：对于多线程应用，CPU通过切片的方式来切换线程间的执行，线程切换时需要耗时（保存状态，下次继续）。协程，则只使用一个线程，在一个线程中规定某个代码块执行顺序。</p>
+</blockquote>
+<p><code>适用场景：</code>其实在其他语言中，协程的意义其实不大,多线程即可已解决I/O的问题，但是在python因为他有GIL（Global Interpreter Lock 全局解释器锁 ）在同一时间只有一个线程在工作，所以：<code>如果一个线程里面I/O操作特别多，协程就比较适用</code></p>
+<h3 id="greenlet"><a href="#greenlet" class="headerlink" title="greenlet"></a>greenlet</h3><pre><code class="python">from greenlet import greenlet
+
+
+def test1():
+    print(12)      # (1)
+    gr2.switch()   # 遇到这个跳到下一个
+    print(34)      # (3)
+    gr2.switch()
+
+
+def test2():
+    print(56)      # (2)
+    gr1.switch()
+    print(78)      # (4)
+
+# 创建两个协程,协程运行遇到IO操作需要等待得时候执行另一个协程
+gr1 = greenlet(test1)
+gr2 = greenlet(test2)
+gr1.switch()  # 执行第一个协程
+
+&#39;&#39;&#39;
+比I/O操作，如果10个I/O，我程序从上往下执行，如果同时发出去了10个I/O操作，那么返回的结果如果同时回来了2个
+，是不是就节省了很多时间？
+
+如果一个线程里面I/O操作特别多，使用协程是不是就非常适用了！
+
+如果一个线程访问URL通过协程来做，协程告诉它你去请求吧，然后继续执行，但是如果不用协程就得等待第一个请求完毕之后返回之后才
+继续下一个请求。
+
+协程：把一个线程分成了多个协程操作，每个协程做操作
+多线程：是把每一个操作，分为多个线程做操作，但是python中，在同一时刻只能有一个线程操作，并且有上下文切换。但是如果上下文切换非常频繁的话
+是非常耗时的，但对于协程切换就非常轻便了~
+&#39;&#39;&#39;
+</code></pre>
+<blockquote>
+<p>协程就是对线程的分片，上面的例子需要手动操作可能用处不是很大,助于了解原理，看下面的例子：</p>
+</blockquote>
+<h3 id="gevent"><a href="#gevent" class="headerlink" title="gevent"></a>gevent</h3><p>上面的greenlet是需要认为的制定调度顺序的，所以又出了一个<code>gevent</code>他是对<code>greenlet</code>功能进行封装,遇到I/O自动切换</p>
+<pre><code class="python">from gevent import monkey; monkey.patch_all()
+import gevent
+import requests
+
+
+def f(url):
+    print(&#39;GET: %s&#39; % url)
+    resp = requests.get(url)
+    data = resp.text
+    print(&#39;%d bytes received from %s.&#39; % (len(data), url))
+
+
+gevent.joinall([
+    gevent.spawn(f, &#39;https://www.python.org/&#39;),  # 这里的f是调用的任务,第二个是给这个任务传的参数
+    gevent.spawn(f, &#39;https://www.yahoo.com/&#39;),
+    gevent.spawn(f, &#39;https://www.github.com/&#39;),
+])
+
+&#39;&#39;&#39;
+当遇到I/O操作的时候就会调用协程操作，然后继续往下走，然后这个协程就卡在这里等待数据的返回
+&#39;&#39;&#39;
+</code></pre>
+
+      
     </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2016-08-08, 11:54:06</p>
+        <p><span>最后更新:</span>2017-08-10, 14:18:38</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/08/python-thread-process-gevent/" title="Python之路：(十五）进程、线程和协程">http://www.liangxiansen.cn/2016/08/08/python-thread-process-gevent/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/08/python-thread-process-gevent/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/08/10/socketserver/">
+                    Python之路：(十六）socketserver模块
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/05/python-queue/">
+                    Python之路：(十二）队列(queue)
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Python之路：(十五）进程、线程和协程　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Python线程"><span class="toc-number">1.</span> <span class="toc-text">Python线程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#start"><span class="toc-number">1.1.</span> <span class="toc-text">start</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setName"><span class="toc-number">1.2.</span> <span class="toc-text">setName</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#getName"><span class="toc-number">1.3.</span> <span class="toc-text">getName</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#setDaemon"><span class="toc-number">1.4.</span> <span class="toc-text">setDaemon</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#join"><span class="toc-number">1.5.</span> <span class="toc-text">join</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#run"><span class="toc-number">1.6.</span> <span class="toc-text">run</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#自己创建一个线程类"><span class="toc-number">1.6.1.</span> <span class="toc-text">自己创建一个线程类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程锁（Lock、RLock）"><span class="toc-number">1.7.</span> <span class="toc-text">线程锁（Lock、RLock）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#未加锁"><span class="toc-number">1.7.1.</span> <span class="toc-text">未加锁</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#加锁版本-一"><span class="toc-number">1.7.2.</span> <span class="toc-text">加锁版本(一)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#加锁版本-二"><span class="toc-number">1.7.3.</span> <span class="toc-text">加锁版本(二)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#信号量（Semaphore）"><span class="toc-number">1.8.</span> <span class="toc-text">信号量（Semaphore）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件（event）"><span class="toc-number">1.9.</span> <span class="toc-text">事件（event）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#条件（Condition）"><span class="toc-number">1.10.</span> <span class="toc-text">条件（Condition）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Timer"><span class="toc-number">1.11.</span> <span class="toc-text">Timer</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#线程池"><span class="toc-number">1.12.</span> <span class="toc-text">线程池</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#线程池需求"><span class="toc-number">1.12.1.</span> <span class="toc-text">线程池需求</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#自己实现线程池"><span class="toc-number">1.12.2.</span> <span class="toc-text">自己实现线程池</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python进程"><span class="toc-number">2.</span> <span class="toc-text">Python进程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#进程数据共享"><span class="toc-number">2.1.</span> <span class="toc-text">进程数据共享</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Array-数组"><span class="toc-number">2.2.</span> <span class="toc-text">Array(数组)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#Array类型定义对应表"><span class="toc-number">2.2.1.</span> <span class="toc-text">Array类型定义对应表</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#manage-dict-共享数据"><span class="toc-number">2.3.</span> <span class="toc-text">manage.dict()共享数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Queue队列"><span class="toc-number">2.4.</span> <span class="toc-text">Queue队列</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程锁"><span class="toc-number">2.5.</span> <span class="toc-text">进程锁</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进程池"><span class="toc-number">2.6.</span> <span class="toc-text">进程池</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Python协程"><span class="toc-number">3.</span> <span class="toc-text">Python协程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#greenlet"><span class="toc-number">3.1.</span> <span class="toc-text">greenlet</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gevent"><span class="toc-number">3.2.</span> <span class="toc-text">gevent</span></a></li></ol></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
     <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
-<% } %></div>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/08/10/socketserver/" title="上一篇: Python之路：(十六）socketserver模块">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/05/python-queue/" title="下一篇: Python之路：(十二）队列(queue)">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
