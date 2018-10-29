@@ -222,6 +222,30 @@
 
     
   <url>
+    <loc>http://www.liangxiansen.cn/2016/09/04/web/</loc>
+    <lastmod>2017-08-02T11:10:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>Python Web框架</title>
+        <pubTime>2016-09-04T14:49:01.000Z</pubTime>
+        
+        <tag>Python</tag>
+         
+        <tag>编程</tag>
+         
+        <tag>Web</tag>
+         
+         
+           
+             
+              <breadCrumb title="Python之路" url="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.liangxiansen.cn/2016/09/05/Django/</loc>
     <lastmod>2017-08-02T11:10:20.000Z</lastmod>
     <data>
@@ -290,50 +314,6 @@
 
     
   <url>
-    <loc>http://www.liangxiansen.cn/2016/09/04/web/</loc>
-    <lastmod>2017-08-02T11:10:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>Python Web框架</title>
-        <pubTime>2016-09-04T14:49:01.000Z</pubTime>
-        
-        <tag>Python</tag>
-         
-        <tag>编程</tag>
-         
-        <tag>Web</tag>
-         
-         
-           
-             
-              <breadCrumb title="Python之路" url="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.liangxiansen.cn/2017/07/14/scl/</loc>
-    <lastmod>2017-08-02T11:09:54.000Z</lastmod>
-    <data>
-        <display>
-        <title>Software Collections</title>
-        <pubTime>2017-07-14T08:59:17.000Z</pubTime>
-        
-        <tag>SCL</tag>
-         
-         
-           
-             
-              <breadCrumb title="Linux笔记" url="http://www.liangxiansen.cn/categories/Linux%E7%AC%94%E8%AE%B0/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://www.liangxiansen.cn/2017/05/17/%E5%8C%BA%E9%97%B4%E6%95%B0%E5%80%BC%E7%BB%9F%E8%AE%A1/</loc>
     <lastmod>2017-08-02T11:09:54.000Z</lastmod>
     <data>
@@ -366,6 +346,26 @@
            
              
               <breadCrumb title="工具" url="http://www.liangxiansen.cn/categories/%E5%B7%A5%E5%85%B7/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://www.liangxiansen.cn/2017/07/14/scl/</loc>
+    <lastmod>2017-08-02T11:09:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>Software Collections</title>
+        <pubTime>2017-07-14T08:59:17.000Z</pubTime>
+        
+        <tag>SCL</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux笔记" url="http://www.liangxiansen.cn/categories/Linux%E7%AC%94%E8%AE%B0/"/>
           
         </display>
     </data>
@@ -499,27 +499,6 @@
     </url>
 
     
-  <url>
-    <loc>http://www.liangxiansen.cn/2016/09/02/DOM/</loc>
-    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>DOM 操作</title>
-        <pubTime>2016-09-02T13:31:23.000Z</pubTime>
-        
-        <tag>编程</tag>
-         
-        <tag>DOM</tag>
-         
-         
-           
-             
-              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
     
   <url>
     <loc>http://www.liangxiansen.cn/2017/03/06/haproxy/</loc>
@@ -541,6 +520,27 @@
     </url>
 
     
+  <url>
+    <loc>http://www.liangxiansen.cn/2016/09/02/DOM/</loc>
+    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>DOM 操作</title>
+        <pubTime>2016-09-02T13:31:23.000Z</pubTime>
+        
+        <tag>编程</tag>
+         
+        <tag>DOM</tag>
+         
+         
+           
+             
+              <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
+          
+        </display>
+    </data>
+    </url>
+
     
   <url>
     <loc>http://www.liangxiansen.cn/2016/09/14/git_notes/</loc>
