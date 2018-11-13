@@ -357,750 +357,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-DOM" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/09/02/DOM/" class="article-date">
-      <time datetime="2016-09-02T13:31:23.000Z" itemprop="datePublished">2016-09-02</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      DOM 操作
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/DOM/">DOM</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <p><code>文档对象模型</code>（Document Object Model，DOM）是一种用于HTML和XML文档的编程接口。它给文档提供了一种结构化的表示方法，可以改变文档的内容和呈现方式。我们最为关心的是，DOM把网页和脚本以及其他的编程语言联系了起来。DOM属于浏览器，而不是JavaScript语言规范里的规定的核心内容。</p>
-<a id="more"></a>
-<h2 id="查找元素"><a href="#查找元素" class="headerlink" title="查找元素"></a>查找元素</h2><h3 id="直接查找"><a href="#直接查找" class="headerlink" title="直接查找"></a>直接查找</h3><pre><code>document.getElementById             根据ID获取一个标签
-document.getElementsByName          根据name属性获取标签集合
-document.getElementsByClassName     根据class属性获取标签集合
-document.getElementsByTagName       根据标签名获取标签集合
-</code></pre><h3 id="间接查找"><a href="#间接查找" class="headerlink" title="间接查找"></a>间接查找</h3><pre><code>parentNode                  父节点
-childNodes                  所有子节点
-firstChild                  第一个子节点
-lastChild                   最后一个子节点
-nextSibling                 下一个兄弟节点
-previousSibling             上一个兄弟节点
-
-parentElement               父节点标签元素
-children                    所有子标签
-firstElementChild           第一个子标签元素
-lastElementChild            最后一个子标签元素
-nextElementtSibling         下一个兄弟标签元素
-previousElementSibling      上一个兄弟标签元素
-</code></pre><h2 id="操作"><a href="#操作" class="headerlink" title="操作"></a>操作</h2><h3 id="内容"><a href="#内容" class="headerlink" title="内容"></a>内容</h3><pre><code>innerText   文本
-outerText
-innerHTML   HTML内容
-innerHTML
-value       值
-</code></pre><h3 id="属性"><a href="#属性" class="headerlink" title="属性"></a>属性</h3><pre><code>attributes                // 获取所有标签属性
-setAttribute(key,value)   // 设置标签属性
-getAttribute(key)         // 获取指定标签属性
-
-/*
-var atr = document.createAttribute(&quot;class&quot;);
-atr.nodeValue=&quot;democlass&quot;;
-document.getElementById(&#39;n1&#39;).setAttributeNode(atr);
-*/
-</code></pre><p><code>批量操作示例</code></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;input type=&quot;button&quot; value=&quot;全选&quot;  onclick=&quot;CheckAll();&quot;/&gt;
-    &lt;input type=&quot;button&quot; value=&quot;取消&quot; onclick=&quot;CancelAll();&quot;/&gt;
-    &lt;input type=&quot;button&quot; value=&quot;反选&quot; onclick=&quot;ReverseCheck();&quot;/&gt;
-
-    &lt;table border=&quot;1&quot; &gt;
-        &lt;thead&gt;
-
-        &lt;/thead&gt;
-        &lt;tbody id=&quot;tb&quot;&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;
-                &lt;td&gt;111&lt;/td&gt;
-                &lt;td&gt;222&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;
-                &lt;td&gt;111&lt;/td&gt;
-                &lt;td&gt;222&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;
-                &lt;td&gt;111&lt;/td&gt;
-                &lt;td&gt;222&lt;/td&gt;
-            &lt;/tr&gt;
-            &lt;tr&gt;
-                &lt;td&gt;&lt;input type=&quot;checkbox&quot; /&gt;&lt;/td&gt;
-                &lt;td&gt;111&lt;/td&gt;
-                &lt;td&gt;222&lt;/td&gt;
-            &lt;/tr&gt;
-        &lt;/tbody&gt;
-    &lt;/table&gt;
-    &lt;script&gt;
-        function CheckAll(ths){
-            var tb = document.getElementById(&#39;tb&#39;);
-            var trs = tb.childNodes;
-            for(var i =0; i&lt;trs.length; i++){
-
-                var current_tr = trs[i];
-                if(current_tr.nodeType==1){
-                    var inp = current_tr.firstElementChild.getElementsByTagName(&#39;input&#39;)[0];
-                    inp.checked = true;
-                }
-            }
-        }
-
-        function CancelAll(ths){
-            var tb = document.getElementById(&#39;tb&#39;);
-            var trs = tb.childNodes;
-            for(var i =0; i&lt;trs.length; i++){
-
-                var current_tr = trs[i];
-                if(current_tr.nodeType==1){
-                    var inp = current_tr.firstElementChild.getElementsByTagName(&#39;input&#39;)[0];
-                    inp.checked = false;
-                }
-            }
-        }
-
-        function ReverseCheck(ths){
-            var tb = document.getElementById(&#39;tb&#39;);
-            var trs = tb.childNodes;
-            for(var i =0; i&lt;trs.length; i++){
-                var current_tr = trs[i];
-                if(current_tr.nodeType==1){
-                    var inp = current_tr.firstElementChild.getElementsByTagName(&#39;input&#39;)[0];
-                    if(inp.checked){
-                        inp.checked = false;
-                    }else{
-                        inp.checked = true;
-                    }
-                }
-            }
-        }
-
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="class操作"><a href="#class操作" class="headerlink" title="class操作"></a>class操作</h3><pre><code>className                // 获取所有类名
-classList.remove(cls)    // 删除指定类
-classList.add(cls)       // 添加类
-</code></pre><h3 id="标签操作"><a href="#标签操作" class="headerlink" title="标签操作"></a>标签操作</h3><p>1) 创建标签</p>
-<pre><code>// 方式一
-var tag = document.createElement(&#39;a&#39;)
-tag.innerText = &quot;wupeiqi&quot;
-tag.className = &quot;c1&quot;
-tag.href = &quot;http://www.cnblogs.com/wupeiqi&quot;
-
-// 方式二
-var tag = &quot;&lt;a class=&#39;c1&#39; href=&#39;http://www.cnblogs.com/wupeiqi&#39;&gt;wupeiqi&lt;/a&gt;&quot;
-</code></pre><p>2) 操作标签</p>
-<pre><code>// 方式一
-var obj = &quot;&lt;input type=&#39;text&#39; /&gt;&quot;;
-xxx.insertAdjacentHTML(&quot;beforeEnd&quot;,obj);
-xxx.insertAdjacentElement(&#39;afterBegin&#39;,document.createElement(&#39;p&#39;))
-
-//注意：第一个参数只能是&#39;beforeBegin&#39;、 &#39;afterBegin&#39;、 &#39;beforeEnd&#39;、 &#39;afterEnd&#39;
-
-// 方式二
-var tag = document.createElement(&#39;a&#39;)
-xxx.appendChild(tag)
-xxx.insertBefore(tag,xxx[1])
-</code></pre><h3 id="样式操作"><a href="#样式操作" class="headerlink" title="样式操作"></a>样式操作</h3><pre><code>var obj = document.getElementById(&#39;i1&#39;)
-
-obj.style.fontSize = &quot;32px&quot;;
-obj.style.backgroundColor = &quot;red&quot;;
-</code></pre><p><code>输入框默认文字示例</code></p>
-<pre><code class="html">    &lt;input onfocus=&quot;Focus(this);&quot; onblur=&quot;Blur(this);&quot; id=&quot;search&quot; value=&quot;请输入关键字&quot; style=&quot;color: gray;&quot; /&gt;
-
-    &lt;script&gt;
-        function Focus(ths){
-            ths.style.color = &quot;black&quot;;
-            if(ths.value == &#39;请输入关键字&#39; || ths.value.trim() == &quot;&quot;){
-
-                ths.value = &quot;&quot;;
-            }
-        }
-
-        function Blur(ths){
-            if(ths.value.trim() == &quot;&quot;){
-                ths.value = &#39;请输入关键字&#39;;
-                ths.style.color = &#39;gray&#39;;
-            }else{
-                ths.style.color = &quot;black&quot;;
-            }
-        }
-    &lt;/script&gt;
-</code></pre>
-<h3 id="位置操作"><a href="#位置操作" class="headerlink" title="位置操作"></a>位置操作</h3><pre><code>总文档高度
-document.documentElement.offsetHeight
-
-当前文档占屏幕高度
-document.documentElement.clientHeight
-
-自身高度
-tag.offsetHeight
-
-距离上级定位高度
-tag.offsetTop
-
-父定位标签
-tag.offsetParent
-
-滚动高度
-tag.scrollTop
-
-/*
-    clientHeight -&gt; 可见区域：height + padding
-    clientTop    -&gt; border高度
-    offsetHeight -&gt; 可见区域：height + padding + border
-    offsetTop    -&gt; 上级定位标签的高度
-    scrollHeight -&gt; 全文高：height + padding
-    scrollTop    -&gt; 滚动高度
-    特别的：
-        document.documentElement代指文档根节点
-*/
-</code></pre><p><code>滚动菜单</code></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-&lt;head lang=&quot;en&quot;&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-    &lt;style&gt;
-
-        body{
-            margin: 0px;
-        }
-        img {
-            border: 0;
-        }
-        ul{
-            padding: 0;
-            margin: 0;
-            list-style: none;
-        }
-        .clearfix:after {
-            content: &quot;.&quot;;
-            display: block;
-            height: 0;
-            clear: both;
-            visibility: hidden;
-        }
-
-        .wrap{
-            width: 980px;
-            margin: 0 auto;
-        }
-
-        .pg-header{
-            background-color: #303a40;
-            -webkit-box-shadow: 0 2px 5px rgba(0,0,0,.2);
-            -moz-box-shadow: 0 2px 5px rgba(0,0,0,.2);
-            box-shadow: 0 2px 5px rgba(0,0,0,.2);
-        }
-        .pg-header .logo{
-            float: left;
-            padding:5px 10px 5px 0px;
-        }
-        .pg-header .logo img{
-            vertical-align: middle;
-            width: 110px;
-            height: 40px;
-
-        }
-        .pg-header .nav{
-            line-height: 50px;
-        }
-        .pg-header .nav ul li{
-            float: left;
-        }
-        .pg-header .nav ul li a{
-            display: block;
-            color: #ccc;
-            padding: 0 20px;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .pg-header .nav ul li a:hover{
-            color: #fff;
-            background-color: #425a66;
-        }
-        .pg-body{
-
-        }
-        .pg-body .catalog{
-            position: absolute;
-            top:60px;
-            width: 200px;
-            background-color: #fafafa;
-            bottom: 0px;
-        }
-        .pg-body .catalog.fixed{
-            position: fixed;
-            top:10px;
-        }
-
-        .pg-body .catalog .catalog-item.active{
-            color: #fff;
-            background-color: #425a66;
-        }
-
-        .pg-body .content{
-            position: absolute;
-            top:60px;
-            width: 700px;
-            margin-left: 210px;
-            background-color: #fafafa;
-            overflow: auto;
-        }
-        .pg-body .content .section{
-            height: 500px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-
-    &lt;div class=&quot;pg-header&quot;&gt;
-        &lt;div class=&quot;wrap clearfix&quot;&gt;
-            &lt;div class=&quot;logo&quot;&gt;
-                &lt;a href=&quot;#&quot;&gt;
-                    &lt;img src=&quot;&quot;&gt;
-                &lt;/a&gt;
-            &lt;/div&gt;
-            &lt;div class=&quot;nav&quot;&gt;
-                &lt;ul&gt;
-                    &lt;li&gt;
-                        &lt;a  href=&quot;#&quot;&gt;首页&lt;/a&gt;
-                    &lt;/li&gt;
-                    &lt;li&gt;
-                        &lt;a  href=&quot;#&quot;&gt;功能一&lt;/a&gt;
-                    &lt;/li&gt;
-                    &lt;li&gt;
-                        &lt;a  href=&quot;#&quot;&gt;功能二&lt;/a&gt;
-                    &lt;/li&gt;
-                &lt;/ul&gt;
-            &lt;/div&gt;
-
-        &lt;/div&gt;
-    &lt;/div&gt;
-
-    &lt;div class=&quot;pg-body&quot;&gt;
-        &lt;div class=&quot;wrap&quot;&gt;
-            &lt;div class=&quot;catalog&quot;&gt;
-                &lt;div class=&quot;catalog-item&quot; auto-to=&quot;function1&quot;&gt;&lt;a&gt;第1张&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;catalog-item&quot; auto-to=&quot;function2&quot;&gt;&lt;a&gt;第2张&lt;/a&gt;&lt;/div&gt;
-                &lt;div class=&quot;catalog-item&quot; auto-to=&quot;function3&quot;&gt;&lt;a&gt;第3张&lt;/a&gt;&lt;/div&gt;
-            &lt;/div&gt;
-
-            &lt;div class=&quot;content&quot;&gt;
-                &lt;div menu=&quot;function1&quot; class=&quot;section&quot; style=&#39;background-color:green;&#39;&gt;
-                    &lt;h1&gt;第一章&lt;/h1&gt;
-                &lt;/div&gt;
-                &lt;div menu=&quot;function2&quot; class=&quot;section&quot; style=&#39;background-color:yellow;&#39;&gt;
-                    &lt;h1&gt;第二章&lt;/h1&gt;
-                &lt;/div&gt;
-                &lt;div menu=&quot;function3&quot; class=&quot;section&quot; style=&#39;background-color:red;&#39;&gt;
-                    &lt;h1&gt;第三章&lt;/h1&gt;
-                &lt;/div&gt;
-            &lt;/div&gt;
-        &lt;/div&gt;
-
-    &lt;/div&gt;
-
-    &lt;script type=&quot;text/javascript&quot; src=&quot;jquery-1.12.4.js&quot;&gt;&lt;/script&gt;
-    &lt;script type=&quot;text/javascript&quot;&gt;
-
-        $(function(){
-            // 自动执行
-            Init();
-        });
-
-
-        function Init(){
-
-
-            $(window).scroll(function() {
-                // 监听窗口滚动事件
-
-
-                // 获取滚动条高度
-                var scrollTop = $(window).scrollTop();
-
-
-                // 当滚动到50像素时，左侧带菜单固定
-                if(scrollTop &gt; 50){
-                    $(&#39;.catalog&#39;).addClass(&#39;fixed&#39;);
-                }else{
-                    $(&#39;.catalog&#39;).children().removeClass(&#39;active&#39;);
-                    $(&#39;.catalog&#39;).removeClass(&#39;fixed&#39;);
-                }
-
-                // 循环所有的内容
-                $(&#39;.content&#39;).children().each(function(){
-                    // 当前标签距离顶部高度
-                    var offSet = $(this).offset(); // 高度，左边有多远
-                    // offSet.top
-                    // offSet.left
-
-                    // 自身高度
-                    var height = $(this).height();
-
-                    //offSet&lt;滚动高度&lt;offSet+height
-
-
-                    // 当前内容位于用户阅览区
-                    if(scrollTop&gt;offSet.top &amp;&amp; scrollTop&lt; offSet.top + height){
-                        // $(this) 当前内容标签
-                        /*
-                        var target = $(this).attr(&#39;menu&#39;);
-                        $(&#39;.catalog&#39;).find(&#39;div[auto-to=&quot;&#39;+target+&#39;&quot;]&#39;).addClass(&#39;active&#39;).siblings().removeClass(&#39;active&#39;);
-                        return false;
-                        */
-
-                        var docHeight = $(document).height();
-                        var winHeight = $(window).height();
-                        // 如果，滚轮到达底部，则显示最后一个菜单
-                        if(docHeight == winHeight+scrollTop)
-                        {
-                            $(&#39;.catalog&#39;).find(&#39;div:last-child&#39;).addClass(&#39;active&#39;).siblings().removeClass(&#39;active&#39;);
-                        }else{
-                            var target = $(this).attr(&#39;menu&#39;);
-                            $(&#39;.catalog&#39;).find(&#39;div[auto-to=&quot;&#39;+target+&#39;&quot;]&#39;).addClass(&#39;active&#39;).siblings().removeClass(&#39;active&#39;);
-                        }
-                        return false;
-
-                    }
-                });
-
-            });
-
-
-        }
-
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="提交表单"><a href="#提交表单" class="headerlink" title="提交表单"></a>提交表单</h3><pre><code>document.geElementById(&#39;form&#39;).submit()
-</code></pre><h3 id="其他操作"><a href="#其他操作" class="headerlink" title="其他操作"></a>其他操作</h3><pre><code>console.log                 输出框
-alert                       弹出框
-confirm                     确认框
-
-// URL和刷新
-location.href               获取URL
-location.href = &quot;url&quot;       重定向
-location.reload()           重新加载
-
-// 定时器
-setInterval                 多次定时器
-clearInterval               清除多次定时器
-setTimeout                  单次定时器
-clearTimeout                清除单次定时器
-</code></pre><h3 id="事件"><a href="#事件" class="headerlink" title="事件"></a>事件</h3><p><img src="http://www.liangxiansen.cn/images/前端/DOM事件.png" alt="DOM事件"></p>
-<p>对于事件需要注意的要点：</p>
-<ul>
-<li>this</li>
-<li>event</li>
-<li>事件链以及跳出<br>this标签当前正在操作的标签，event封装了当前事件的内容。</li>
-</ul>
-<h3 id="操作案例"><a href="#操作案例" class="headerlink" title="操作案例"></a>操作案例</h3><p><code>搜索框</code></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html&gt;
-    &lt;head&gt;
-        &lt;meta charset=&#39;utf-8&#39; /&gt;
-        &lt;title&gt;&lt;/title&gt;
-
-        &lt;style&gt;
-            .gray{
-                color:gray;
-            }
-            .black{
-                color:black;
-            }
-        &lt;/style&gt;
-        &lt;script type=&quot;text/javascript&quot;&gt;
-            function Enter(){
-               var id= document.getElementById(&quot;tip&quot;)
-               id.className = &#39;black&#39;;
-               if(id.value==&#39;请输入关键字&#39;||id.value.trim()==&#39;&#39;){
-                    id.value = &#39;&#39;
-               }
-            }
-            function Leave(){
-                var id= document.getElementById(&quot;tip&quot;)
-                var val = id.value;
-                if(val.length==0||id.value.trim()==&#39;&#39;){
-                    id.value = &#39;请输入关键字&#39;
-                    id.className = &#39;gray&#39;;
-                }else{
-                    id.className = &#39;black&#39;;
-                }
-            }
-        &lt;/script&gt;
-    &lt;/head&gt;
-    &lt;body&gt;
-        &lt;input type=&#39;text&#39; class=&#39;gray&#39; id=&#39;tip&#39; value=&#39;请输入关键字&#39; onfocus=&#39;Enter();&#39;  onblur=&#39;Leave();&#39;/&gt;
-    &lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><code>跑马灯</code></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;跑马灯&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div id=&quot;msg&quot; style=&quot;display: inline-block;background-color: #C81623; color: white; font-size: 50px;&quot;&gt;祝愿梁先森当上CEO,赢取白富美! &amp;nbsp;&amp;nbsp;&amp;nbsp;&lt;/div&gt;
-
-    &lt;script&gt;
-        // 计时器,毫秒
-        setInterval(&quot;f1()&quot;, 100);
-
-        function f1() {
-            // js 获取一个id=&#39;msg&#39;的标签
-            var tag = document.getElementById(&quot;msg&quot;);
-            // 获取标签内容
-            var text = tag.innerText;
-
-            var a = text.charAt(0);
-            var sub = text.substring(1,text.length);
-
-            var new_str = sub + a;
-            tag.innerText= new_str;
-        }
-
-    &lt;/script&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/09/02/DOM/">DOM 操作</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-09-02, 21:31:23</p>
-        <p><span>最后更新:</span>2017-08-02, 14:15:20</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/09/02/DOM/" title="DOM 操作">http://www.liangxiansen.cn/2016/09/02/DOM/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/09/02/DOM/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/09/04/web/">
-                    Python Web框架
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/08/22/JavaScript/">
-                    JavaScript 学习
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"DOM 操作　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#查找元素"><span class="toc-number">1.</span> <span class="toc-text">查找元素</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#直接查找"><span class="toc-number">1.1.</span> <span class="toc-text">直接查找</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#间接查找"><span class="toc-number">1.2.</span> <span class="toc-text">间接查找</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#操作"><span class="toc-number">2.</span> <span class="toc-text">操作</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#内容"><span class="toc-number">2.1.</span> <span class="toc-text">内容</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性"><span class="toc-number">2.2.</span> <span class="toc-text">属性</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#class操作"><span class="toc-number">2.3.</span> <span class="toc-text">class操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#标签操作"><span class="toc-number">2.4.</span> <span class="toc-text">标签操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#样式操作"><span class="toc-number">2.5.</span> <span class="toc-text">样式操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#位置操作"><span class="toc-number">2.6.</span> <span class="toc-text">位置操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#提交表单"><span class="toc-number">2.7.</span> <span class="toc-text">提交表单</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#其他操作"><span class="toc-number">2.8.</span> <span class="toc-text">其他操作</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#事件"><span class="toc-number">2.9.</span> <span class="toc-text">事件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#操作案例"><span class="toc-number">2.10.</span> <span class="toc-text">操作案例</span></a></li></ol></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/09/04/web/" title="上一篇: Python Web框架">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2016/08/22/JavaScript/" title="下一篇: JavaScript 学习">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">

@@ -376,844 +376,99 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="post-css" class="article article-type-post" itemscope itemprop="blogPost">
-  
+      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
+  <%if(post.noDate != "true"){%>
     <div class="article-meta">
-      <a href="/2016/09/29/css/" class="article-date">
-      <time datetime="2016-09-29T10:23:09.000Z" itemprop="datePublished">2016-09-29</time>
-</a>
-
-
+      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
     </div>
-  
+  <%}%>
   <div class="article-inner">
-    
+    <% if (theme.fancybox){ %>
       <input type="hidden" class="isFancy" />
-    
-    
+    <% } %>
+    <% if (post.link || post.title){ %>
       <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      CSS 基础
-    </h1>
-  
-
+        <%- partial('post/title', {class_name: 'article-title'}) %>
       </header>
-      
+      <% if (!index){ %>
       <div class="article-info article-info-post">
-        
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/前端/">前端</a>
-    </div>
-
-
-        
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CSS/">CSS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
-    </div>
-
+        <%- partial('post/category') %>
+        <%- partial('post/tag') %>
         <div class="clearfix"></div>
       </div>
-      
-    
+      <% } %>
+    <% } %>
     <div class="article-entry" itemprop="articleBody">
-      
-          
-        <h2 id="CSS-介绍"><a href="#CSS-介绍" class="headerlink" title="CSS 介绍"></a>CSS 介绍</h2><p>css是英文<code>Cascading Style Sheets</code>的缩写,称为层叠样式表，用于对页面进行美化，CSS的可以使页面更加的美观。基本上所有的html页面都或多或少的使用css。</p>
-<p>存在方式有三种：<code>标签嵌入</code>、<code>页面嵌入</code>和<code>外部样式文件嵌入</code></p>
-<a id="more"></a>
-<h3 id="标签嵌入"><a href="#标签嵌入" class="headerlink" title="标签嵌入"></a>标签嵌入</h3><p>将要赋予某个标签样式的css代码写在标签里面.style属性定义标签的样式,所有的样式都写在style属性里面.</p>
-<pre><code class="html">&lt;div style=&quot;background-color: red;border: 1px solid green;&quot;&gt;测试&lt;/div&gt;
-</code></pre>
-<h3 id="页面嵌入"><a href="#页面嵌入" class="headerlink" title="页面嵌入"></a>页面嵌入</h3><p>统一写在页面的head部分,用style标签包裹,这样是不是不会那么散乱了呢? 但是问题就来了,我写这这,我怎么应用到我想要的那个标签或者元素上呢?</p>
-<p>在后面一小节就开始讲<code>选择器</code>,通过选择器来找到那个它(你心所想的那个标签).</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-
-    &lt;!--在head里面统一写css样式,页面嵌入得css样式都包裹在style标签里面--&gt;
-    &lt;style type=&quot;text/css&quot;&gt;
-        div{
-            background-color: red;
-            border: 1px solid green;
-        }
-    &lt;/style&gt;
-
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div&gt;测试&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="外部样式文件嵌入"><a href="#外部样式文件嵌入" class="headerlink" title="外部样式文件嵌入"></a>外部样式文件嵌入</h3><p>当页面内容写的多了,样式也随之增多,你回发现在head上一大长串,到最后如果要修改单独某个样式其实也不好找,那么我们可不可以将样式像网站目录那样分门别类的文件呢?</p>
-<p>只要创建一个<code>.css</code>的文件,然后将css样式写在里面就可以了.下面是应用方法:<br><code>test.css(css样式文件):</code></p>
-<pre><code>div{
-    background-color: red;
-    border: 1px solid green;
-}
-</code></pre><p><code>test.html(html页面):</code></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;!--外部样式文件引入--&gt;
-    &lt;link rel=&quot;stylesheet&quot; href=&quot;test.css&quot; /&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div&gt;测试&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<blockquote>
-<p><strong>优先级：</strong> 标签&gt;页面&gt;外部，这个仅限同样的样式冲突是才有用,如果真遇到冲突了,你一定要使用某个样式,你可以在那个冲突的样式后面加上<code>!important</code></p>
-</blockquote>
-<pre><code>.hide{
-    display: none!important;
-}
-</code></pre><h2 id="选择器"><a href="#选择器" class="headerlink" title="选择器"></a>选择器</h2><p>有了选择器,我们可以通过各种各样得方式找到页面上的某个元素并给它加上样式,选择器的定义方法如下:</p>
-<pre><code>选择器名称{
-
-}
-</code></pre><h3 id="标签选择器"><a href="#标签选择器" class="headerlink" title="标签选择器"></a>标签选择器</h3><p>定义标签选择器的时候,这个选择器的名称以你要定义的标签的名称命名,那么所有的这个标签都会加上这个样式</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*定义标签选择器,这个标签选择器名称要和标签的名称一样,在&quot;{}&quot;里面写样式代码,会让所有&quot;div&quot;标签应用上我这里写的样式*/
-        div{
-            background-color: red;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!--这里有div标签,那么他就会自动应用上上面定义的css样式--&gt;
-    &lt;div&gt;测试&lt;/div&gt;
-&lt;/body&gt;
-</code></pre>
-<h3 id="属性选择器"><a href="#属性选择器" class="headerlink" title="属性选择器"></a>属性选择器</h3><p>每一个标签上都还有或多或少的属性,有的是内部语法用来定义这个标签展示效果的,有的是程序员自己加的,为了帮助实现功能的.</p>
-<p>那么属性是什么呢? 摘一段代码:</p>
-<p><img src="http://www.liangxiansen.cn/images/前端/attr_selector.png" alt="标签属性"></p>
-<blockquote>
-<p>图中圈出来的,用等号连接起来,前面是属性名,后面是属性的值,这就是这个标签的属性了; 红色的是内置语法规定的,蓝色的是我自己写的一个.任何开发者都可以在标签中新增自己的属性,只要按照那种格式写就可以.</p>
-</blockquote>
-<p>属性选择器的用法:<br>属性用中括号包裹,等号前面是属性名,后面是value,添加多个属性条件直接紧接着在后面写就行了,属性选择和其他条件之间没有空格.</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*找到input标签,并且type属性是&quot;text&quot;的,lalbel属性是&quot;姓名&quot;的给它加上背景颜色*/
-        input[type=&#39;text&#39;][label=&#39;姓名&#39;]{
-            background-color: yellow;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;form action=&quot;http://192.168.11.88:8000/index/&quot; method=&quot;post&quot;  enctype=&quot;multipart/form-data&quot;&gt;
-        &lt;input type=&quot;text&quot; name=&quot;user&quot; label=&quot;姓名&quot;/&gt;
-        &lt;input type=&quot;password&quot; name=&quot;pwd&quot; label=&quot;密码&quot;/&gt;
-        &lt;input type=&quot;submit&quot; value=&quot;提交&quot; /&gt;
-    &lt;/form&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="ID-选择器"><a href="#ID-选择器" class="headerlink" title="ID 选择器"></a>ID 选择器</h3><p>为具有某个唯一ID的标签设置样式：</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*定义ID选择器,这个选择器名称前面加&quot;#&quot;号,表示这是一个id选择器,后面跟id值,下面会让所有id=&quot;test&quot;的标签并应用上我这里写的样式*/
-        #test{
-            background-color: red;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!--这里给div标签设置一个id,id是唯一的,不可以重复,为了能够证明这个标签的唯一作用,方便找到它.是的,id也是这个标签的属性--&gt;
-    &lt;div id=&quot;test&quot;&gt;测试&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="类选择器"><a href="#类选择器" class="headerlink" title="类选择器"></a>类选择器</h3><p>类选择器,定义好后,想用他随时可以拿来用,可以使用很多来实现很漂亮的样式,很灵活方便</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*定义类选择器,这个选择器名称前面加&quot;.&quot;,表示这是一个类选择器,需要使用这个样式的标签只需要class=&quot;test&quot;在他的class属性里面添加上这个类选择器名称,可以应用多个*/
-        .backgroud{
-            background-color: red;
-        }
-        .font_size{
-            font-size: 30px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;!--这里给div标签设置一个class属性,在class属性里面加上上面定义的类属选择器名--&gt;
-    &lt;div class=&quot;backgroud font_size&quot;&gt;测试&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="组合选择器"><a href="#组合选择器" class="headerlink" title="组合选择器"></a>组合选择器</h3><p>组合选择器就是我们之前所学的所有选择器组合起来使用,选择器之间用空格隔开</p>
-<p><strong>递归组合</strong></p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*第一个条件满足之后,就进入到里面然后在里面找第二个条件,如果没有满足的就再进入他的每一个子标签里面找,一级一级往下找,只要有满足这个递归关系就会应用这个样式*/
-        .body .bd-head{
-            background-color: blue;
-            font-size: 24px;
-        }
-        .body .bd-content{
-            background-color: greenyellow;
-            font-size: 12px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;body&quot;&gt;
-        &lt;div class=&quot;bd-head&quot;&gt;这是标题&lt;/div&gt;
-        &lt;div class=&quot;bd-content&quot;&gt;
-            &lt;ul&gt;
-                &lt;li&gt;cc1&lt;/li&gt;
-                &lt;li&gt;cc2&lt;/li&gt;
-                &lt;li&gt;cc3&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<hr>
-<p><strong>并联组合</strong></p>
-<p>用逗号将选择条件连接起来,最后哪个满足了谁都会应用上样式,都满足则都应用上.</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        /*第一个查找条件是一个递归组合查找,第二个也是递归组合查找,用逗号连接,最后这两个条件不管谁满足了谁就会应用这个样式*/
-        .body .bd-head,.body .bd-content{
-            background-color: yellow;
-            font-size: 24px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;body&quot;&gt;
-        &lt;div class=&quot;bd-head&quot;&gt;
-            &lt;ul&gt;
-                &lt;li&gt;head1&lt;/li&gt;
-                &lt;li&gt;head2&lt;/li&gt;
-                &lt;li&gt;head3&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-        &lt;div class=&quot;bd-content&quot;&gt;
-            &lt;ul&gt;
-                &lt;li&gt;cc1&lt;/li&gt;
-                &lt;li&gt;cc2&lt;/li&gt;
-                &lt;li&gt;cc3&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-        &lt;!--这个是不满足两个条件的,所以没有样式--&gt;
-        &lt;div class=&quot;bd-footer&quot;&gt;
-            &lt;ul&gt;
-                &lt;li&gt;footer1&lt;/li&gt;
-                &lt;li&gt;footer2&lt;/li&gt;
-                &lt;li&gt;footer3&lt;/li&gt;
-            &lt;/ul&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<h3 id="伪类"><a href="#伪类" class="headerlink" title="伪类"></a>伪类</h3><p>CSS 伪类用于向某些选择器添加特殊的效果。</p>
-<h4 id="语法："><a href="#语法：" class="headerlink" title="语法："></a>语法：</h4><pre><code>selector : pseudo-class {property: value}
-</code></pre><table>
-<thead>
-<tr>
-<th style="text-align:left">属性</th>
-<th style="text-align:left">描述</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:left">:active</td>
-<td style="text-align:left">向被激活的元素添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:focus</td>
-<td style="text-align:left">向拥有键盘输入焦点的元素添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:hover</td>
-<td style="text-align:left">当鼠标悬浮在元素上方时，向元素添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:link</td>
-<td style="text-align:left">向未被访问的链接添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:visited</td>
-<td style="text-align:left">向已被访问的链接添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:first-child</td>
-<td style="text-align:left">向元素的第一个子元素添加样式。</td>
-</tr>
-<tr>
-<td style="text-align:left">:lang</td>
-<td style="text-align:left">向带有指定 lang 属性的元素添加样式。</td>
-</tr>
-</tbody>
-</table>
-<h4 id="示例："><a href="#示例：" class="headerlink" title="示例："></a>示例：</h4><pre><code class="html">&lt;html&gt;
-&lt;head&gt;
-&lt;style type=&quot;text/css&quot;&gt;
-a:link {color: #FF0000}
-a:visited {color: #00FF00}
-a:hover {color: #FF00FF}
-a:active {color: #0000FF}
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-&lt;p&gt;&lt;b&gt;&lt;a href=&quot;/index.html&quot; target=&quot;_blank&quot;&gt;这是一个链接。&lt;/a&gt;&lt;/b&gt;&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;注释：&lt;/b&gt;在 CSS 定义中，a:hover 必须位于 a:link 和 a:visited 之后，这样才能生效！&lt;/p&gt;
-&lt;p&gt;&lt;b&gt;注释：&lt;/b&gt;在 CSS 定义中，a:active 必须位于 a:hover 之后，这样才能生效！&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<pre><code class="html">a:link {color: #FF0000}        /* 未访问的链接 */
-a:visited {color: #00FF00}    /* 已访问的链接 */
-a:hover {color: #FF00FF}    /* 鼠标移动到链接上 */
-a:active {color: #0000FF}    /* 选定的链接 */
-</code></pre>
-<p>:first-child</p>
-<pre><code class="html">&lt;html&gt;
-&lt;head&gt;
-&lt;style type=&quot;text/css&quot;&gt;
-p:first-child {
-  color: red;
-  } 
-&lt;/style&gt;
-&lt;/head&gt;
-
-&lt;body&gt;
-&lt;p&gt;some text&lt;/p&gt;
-&lt;p&gt;some text&lt;/p&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>:lang</p>
-<pre><code class="html">&lt;html&gt;
-&lt;head&gt;
-
-&lt;style type=&quot;text/css&quot;&gt;
-q:lang(no)
-   {
-   quotes: &quot;~&quot; &quot;~&quot;
-   }
-&lt;/style&gt;
-
-&lt;/head&gt;
-
-&lt;body&gt;
-&lt;p&gt;文字&lt;q lang=&quot;no&quot;&gt;段落中的引用的文字&lt;/q&gt;文字&lt;/p&gt;
-&lt;/body&gt;&lt;/html&gt;
-</code></pre>
-<h2 id="css美化网页"><a href="#css美化网页" class="headerlink" title="css美化网页"></a>css美化网页</h2><p>   学习css实战前,首先先学习两个理论知识,知道<code>css</code>是应用在<code>html</code>标签上的,那么css影响着html的显示效果,同时html也影响着css的效果,不同的标签加上同一个css样式不一定是同样的一个展示效果.html标签分别分为:<code>内联标签(行内标签)</code>, <code>块级标签</code>这两种.</p>
-<blockquote>
-<ul>
-<li>块级标签: 占整行, 可以设置宽度高度</li>
-<li>内联标签: 内容有多少占多少, 不能设置宽和高</li>
-</ul>
-</blockquote>
-<p>当然这两种形式也不是绝对的,后面会讲如何让这两种标签互相转换.<br>最典型的两个案例就是div标签(块级标签)和span标签(内联标签),现在很流行的页面布局方式就是<code>div + css</code></p>
-<h3 id="backgroud-color"><a href="#backgroud-color" class="headerlink" title="backgroud-color"></a>backgroud-color</h3><p>设置背景颜色,被标签添加背景颜色.</p>
-<pre><code class="html">&lt;div style=&quot;background-color: yellow&quot;&gt;Hello World&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/background-color.png" alt="背景颜色"></p>
-<pre><code class="html">&lt;span style=&quot;background-color: yellow;&quot;&gt;Hello World&lt;/span&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/span.png" alt="背景颜色"></p>
-<h3 id="height-amp-width"><a href="#height-amp-width" class="headerlink" title="height &amp; width"></a>height &amp; width</h3><p>设置宽和高</p>
-<pre><code class="html">&lt;div style=&quot;background-color: yellow;width: 200px; height: 200px&quot;&gt;Hello World&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/width.png" alt="高&amp;宽"></p>
-<h3 id="background-image"><a href="#background-image" class="headerlink" title="background-image"></a>background-image</h3><p>添加背景图片,如果图片尺寸不够标签尺寸的话,背景图片默认会平铺,</p>
-<pre><code class="html">&lt;div style=&quot;background-image: url(&#39;header.png&#39;);width: 500px; height: 700px&quot;&gt;Hello World&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/backgrund-image.png" alt="背景图片"></p>
-<p>设置为不平铺,只需要加上”background-repeat: no-repeat;”</p>
-<pre><code class="html">&lt;div style=&quot;background-image: url(&#39;header.png&#39;); background-repeat: no-repeat; width: 500px; height: 700px&quot;&gt;Hello World&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/backgrund-image2.png" alt="背景图片"></p>
-<h3 id="background-position"><a href="#background-position" class="headerlink" title="background-position"></a>background-position</h3><p>应用场景，在实际的生产环境中咱们在网页上看到的小图片不是一个一个的零散的小图片的，咱们只是看到了大图片的一部分。比如一个大图片，我只让他显示一部分并不全部显示怎么做？</p>
-<p>可以这么想：<br>有一个窗口，你在窗口的一边，只能通过窗口来看外面，你不能动，我们可以通过移动这个窗口来让你看到不同的场景，当然你看到的大小和窗口的大小有关！</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        .chuangkou{
-            /*定义一个图片*/
-            background-image: url(&#39;logo.png&#39;);
-            /*定义一个窗口,指定长和宽*/
-            height: 20px;
-            width: 20px;
-            background-repeat: no-repeat;
-            background-position: 0px -55px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;chuangkou&quot;&gt;&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p>原图:<br><img src="http://www.liangxiansen.cn/images/前端/backgrund-image.png" alt="背景图片"></p>
-<p>实际效果:<br><img src="http://www.liangxiansen.cn/images/前端/backgrund-image2.png" alt="背景图片"></p>
-<h3 id="border"><a href="#border" class="headerlink" title="border"></a>border</h3><p>设置边框</p>
-<pre><code class="html">&lt;!--border:有3个参数：线的粗细、线的样式（实线、点、虚线等）、线的颜色--&gt;
-&lt;!--第一种：线的粗细为1像素，实线、红色--&gt;
-&lt;div style=&quot;border:1px solid red;height:10px&quot; &gt;&lt;/div&gt;
-&lt;!--第二种：线的粗细为1像素，点、蓝色--&gt;
-&lt;div style=&quot;border:1px dotted blue;height:10px&quot; &gt;&lt;/div&gt;
-&lt;!--第三种：线的粗细为1像素、虚线、紫色--&gt;
-&lt;div style=&quot;border:1px dashed purple;height:10px&quot; &gt;&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/border.png" alt="边框"></p>
-<p>边框可以单独的设置一边的边框、上、下、左、右</p>
-<pre><code class="html">&lt;!--在右边设置边框，3px、实线、黑色--&gt;
-&lt;span style=&quot;border-right: 3px solid black&quot;&gt;Hello World&lt;/span&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/border2.png" alt="边框"></p>
-<h3 id="display"><a href="#display" class="headerlink" title="display"></a>display</h3><p>可以对内联标签和块标签进行转换,还能隐藏标签元素.</p>
-<pre><code class="html">&lt;!--display: none将隐藏标签--&gt;
-&lt;div style=&quot;display: none;&quot;&gt;我被隐藏了&lt;/div&gt;
-&lt;!--display: inline会将块级别标签调为内联标签--&gt;
-&lt;div style=&quot;background-color:red;display:inline&quot;&gt;我变内联了&lt;/div&gt;
-&lt;!--display: block会将内联标签调为块级别标签--&gt;
-&lt;span style=&quot;background-color:red;display:block&quot;&gt;我变块级了&lt;/span&gt;
-&lt;!--display: inline-block既可块级又可内联,就是在内联标签的基础上可以设置宽和高--&gt;
-&lt;span style=&quot;background-color:red;display:inline-block;height: 100px;width: 300px&quot;&gt;我既可块级又可内联&lt;/span&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/display.png" alt="Display"></p>
-<h3 id="cursor"><a href="#cursor" class="headerlink" title="cursor"></a>cursor</h3><p>鼠标停浮样式</p>
-<pre><code class="html">&lt;div style=&quot;cursor:pointer&quot;&gt;停放在这里显示小手(pointer)&lt;/div&gt;
-&lt;div style=&quot;cursor:help&quot;&gt;停放在这里显示问号(help)&lt;/div&gt;
-&lt;div style=&quot;cursor:wait&quot;&gt;停放在这里显示加载(wait)&lt;/div&gt;
-&lt;div style=&quot;cursor:move&quot;&gt;停放在这里显示移动(move)&lt;/div&gt;
-&lt;div style=&quot;cursor:crosshair&quot;&gt;停放在这里显示定位(crosshair)&lt;/div&gt;
-</code></pre>
-<h3 id="float"><a href="#float" class="headerlink" title="float"></a>float</h3><p>浮动,向一个方向靠齐,多用于布局</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div style=&quot;width: 500px;border: 1px solid red;&quot;&gt;
-        &lt;!--浮动对齐--&gt;
-        &lt;!--这里长和宽，可以用百分比或者直接指定像素来指定--&gt;
-        &lt;div style=&quot;width: 20%;background-color: aqua;float: left;&quot;&gt;f&lt;/div&gt;
-        &lt;div style=&quot;width: 30%;background-color: beige;float: right;&quot;&gt;a&lt;/div&gt;
-        &lt;div style=&quot;width: 30%;background-color: beige;float: right;&quot;&gt;a&lt;/div&gt;
-        &lt;!--解除浮动,把浮动拉取下来固定--&gt;
-        &lt;div style=&quot;clear: both;&quot;&gt;&lt;/div&gt;
-        最后如果不加上这条,他就会跳出父标签,
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/float.png" alt="浮动"></p>
-<h3 id="padding"><a href="#padding" class="headerlink" title="padding"></a>padding</h3><p>内边距</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        .content{
-            /*设置内边距*/
-            padding: 100px;
-            height: 500px;
-            width: 500px;
-            background-color: blue;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;content&quot;&gt;
-        &lt;div class=&quot;test&quot; style=&quot;font-size: 48px; color: red&quot;&gt;TEST&lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/padding.png" alt="内边距"></p>
-<h3 id="margin"><a href="#margin" class="headerlink" title="margin"></a>margin</h3><p>外边距</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        .content{
-            height: 500px;
-            width: 500px;
-            background-color: blue;
-        }
-        .font{
-            color: red;
-            font-size: 48px;
-            display: inline-block;
-            margin-left: 200px;
-            margin-top: 200px;
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;shell&quot;&gt;
-        &lt;div class=&quot;content&quot;&gt;
-            &lt;div class=&quot;font&quot;&gt;TEST&lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/margin.png" alt="外边距"></p>
-<h3 id="position"><a href="#position" class="headerlink" title="position"></a>position</h3><p>定位,position的四个属性值：static, fixed, relative, absolute<br>每个模式都能使用top, bottom, left, right, 这个四个属性来指定位置</p>
-<p><strong>1、absolute</strong><br>单独使用会根据父标签进行定位</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        .content{
-            height: 500px;
-            width: 500px;
-            background-color: blue;
-        }
-        .font{
-            color: red;
-            font-size: 48px;
-            display: inline-block;
-            position: absolute;
-            top: 200px;
-            left: 200px;
-
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;shell&quot;&gt;
-        &lt;div class=&quot;content&quot;&gt;
-            &lt;div class=&quot;font&quot;&gt;TEST&lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/absolute.png" alt="相对定位"></p>
-<p><strong>2、relative</strong></p>
-<p>绝对定位,relative单独使用没有意义,需要和absolute配合使用,他就相当于把absolute之前定位转移到自己身上,那么absolute就不再是根据父标签定位了,而是根据relative的位置来确定自己的位置.</p>
-<blockquote>
-<p>Note: 如果absolute标签的父标签里面有多个relative的标签,那么它向上查找,找到第一个relative就不会再找了.</p>
-</blockquote>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;test&lt;/title&gt;
-    &lt;style&gt;
-        .shell{
-            position: relative;
-        }
-        .content{
-            height: 500px;
-            width: 500px;
-            background-color: blue;
-        }
-        .font{
-            color: red;
-            font-size: 48px;
-            display: inline-block;
-            position: absolute;
-            right: 0px;
-            top: 0px;
-
-        }
-    &lt;/style&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div class=&quot;shell&quot;&gt;
-        &lt;div class=&quot;content&quot;&gt;
-            &lt;div class=&quot;font&quot;&gt;TEST&lt;/div&gt;
-        &lt;/div&gt;
-    &lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/relative.png" alt="绝对定位"></p>
-<p><strong>3、fixed</strong></p>
-<p>fixed是特殊的absolute，即fixed总是以body为定位对象的，按照浏览器的窗口进行定位。</p>
-<pre><code class="html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot;&gt;
-&lt;head&gt;
-    &lt;meta charset=&quot;UTF-8&quot;&gt;
-    &lt;title&gt;&lt;/title&gt;
-&lt;/head&gt;
-&lt;body&gt;
-    &lt;div style=&quot;height: 2000px;background-color: #ddd;&quot;&gt;&lt;/div&gt;
-    &lt;!--永远跟在窗口右下角,fixed根据窗口进行定位--&gt;
-    &lt;div style=&quot;position: fixed;bottom: 0px;right: 0px&quot;&gt;返回顶部&lt;/div&gt;
-&lt;/body&gt;
-&lt;/html&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/fixed.png" alt="窗口定位"></p>
-<h3 id="overflow"><a href="#overflow" class="headerlink" title="overflow"></a>overflow</h3><p>对超出的内容添加一个滚动条</p>
-<pre><code class="html">&lt;!--如果内容超出添加滚动条--&gt;
-&lt;div style=&quot;height: 300px; width: 200px;overflow: auto&quot;&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-    &lt;p&gt;test&lt;/p&gt;
-&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/overflow.png" alt="自动添加滚动条"></p>
-<h3 id="z-index"><a href="#z-index" class="headerlink" title="z-index"></a>z-index</h3><p>优先级,浏览器比作桌面,浏览器上的内容比作卡片,那么优先级就是用来比较那张卡片放在上面,哪张卡片放在下面.数字大的放在上面.数字越大,优先级越高.</p>
-<pre><code class="html">&lt;div style=&quot;width: 100%; height: 50px; position: fixed;top: 0px; background-color: green;z-index: 2;&quot;&gt;&lt;/div&gt;
-&lt;div style=&quot;width: 100%; height: 50px; position: fixed;top: 30px; background-color: red;z-index: 1&quot;&gt;&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/z-index.png" alt="层叠优先级"></p>
-<h3 id="opacity"><a href="#opacity" class="headerlink" title="opacity"></a>opacity</h3><p>设置透明度,0~1:1为不透明,0为完全透明.</p>
-<pre><code class="html">&lt;div style=&quot;width: 100%; height: 50px; position: fixed;top: 0px; background-color: green;z-index: 2;opacity: 0.6&quot;&gt;&lt;/div&gt;
-&lt;div style=&quot;width: 100%; height: 50px; position: fixed;top: 30px; background-color: red;z-index: 1&quot;&gt;&lt;/div&gt;
-</code></pre>
-<p><img src="http://www.liangxiansen.cn/images/前端/opactiy.png" alt="透明度"></p>
-
-      
+      <% if (index && (post.description || post.excerpt)){ %>
+          <% if (post.description){ %>
+              <%- post.description %>
+          <% } else { %>
+              <%- post.excerpt %>
+          <% } %>
+      <% } else { %>
+          <% if (is_page()){ %>
+              <%- partial('_partial/page') %>
+          <% } %>
+        <%- post.content %>
+      <% } %>
     </div>
-    
-  </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2016/09/29/css/">CSS 基础</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
-        <p><span>发布时间:</span>2016-09-29, 18:23:09</p>
-        <p><span>最后更新:</span>2017-08-02, 14:15:20</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2016/09/29/css/" title="CSS 基础">http://www.liangxiansen.cn/2016/09/29/css/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/09/29/css/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
-
-
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2016/10/08/随手笔记/">
-                    随手笔记
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2016/09/27/html/">
-                    HTML 基础
-                </a>
-            </div>
-        
-    </nav>
-
-  
-
-  
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+    <% if (index){ %>
+    <div class="article-info article-info-index">
+      <%if(post.top){%>
+        <div class="article-pop-out tagcloud">
+          <a class="">置顶</a>
         </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"CSS 基础　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-  
-
-  
-	  <! -- 添加捐赠图标 -->
-<div class ="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-           &uarr;<br>
-		   对你有帮助？求鼓励，求支持！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden" >
-		<!-- 支付宝打赏图案 -->
-		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+      <% } %>
+      <%- partial('post/category') %>
+      <%- partial('post/tag') %>
+      <% if (index && (post.description || post.excerpt)){ %>
+        <p class="article-more-link">
+          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
+        </p>
+      <% } %>
+      <div class="clearfix"></div>
     </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			$('#donate_board').addClass('hidden');
-			$('#donate_guide').removeClass('hidden');
-		}
-	</script>
-</div>
-<! -- 添加捐赠图标 -->
-  
-
+    <% } %>
+  </div>
+  <% if (!index){ %>
+    <%- partial('post/nav') %>
+  <% } %>
 </article>
+<%- partial('_partial/toc') %>
 
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#CSS-介绍"><span class="toc-number">1.</span> <span class="toc-text">CSS 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标签嵌入"><span class="toc-number">1.1.</span> <span class="toc-text">标签嵌入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#页面嵌入"><span class="toc-number">1.2.</span> <span class="toc-text">页面嵌入</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#外部样式文件嵌入"><span class="toc-number">1.3.</span> <span class="toc-text">外部样式文件嵌入</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#选择器"><span class="toc-number">2.</span> <span class="toc-text">选择器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#标签选择器"><span class="toc-number">2.1.</span> <span class="toc-text">标签选择器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#属性选择器"><span class="toc-number">2.2.</span> <span class="toc-text">属性选择器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#ID-选择器"><span class="toc-number">2.3.</span> <span class="toc-text">ID 选择器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类选择器"><span class="toc-number">2.4.</span> <span class="toc-text">类选择器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#组合选择器"><span class="toc-number">2.5.</span> <span class="toc-text">组合选择器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#伪类"><span class="toc-number">2.6.</span> <span class="toc-text">伪类</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#语法："><span class="toc-number">2.6.1.</span> <span class="toc-text">语法：</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#示例："><span class="toc-number">2.6.2.</span> <span class="toc-text">示例：</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#css美化网页"><span class="toc-number">3.</span> <span class="toc-text">css美化网页</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#backgroud-color"><span class="toc-number">3.1.</span> <span class="toc-text">backgroud-color</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#height-amp-width"><span class="toc-number">3.2.</span> <span class="toc-text">height &amp; width</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#background-image"><span class="toc-number">3.3.</span> <span class="toc-text">background-image</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#background-position"><span class="toc-number">3.4.</span> <span class="toc-text">background-position</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#border"><span class="toc-number">3.5.</span> <span class="toc-text">border</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#display"><span class="toc-number">3.6.</span> <span class="toc-text">display</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#cursor"><span class="toc-number">3.7.</span> <span class="toc-text">cursor</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#float"><span class="toc-number">3.8.</span> <span class="toc-text">float</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#padding"><span class="toc-number">3.9.</span> <span class="toc-text">padding</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#margin"><span class="toc-number">3.10.</span> <span class="toc-text">margin</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#position"><span class="toc-number">3.11.</span> <span class="toc-text">position</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#overflow"><span class="toc-number">3.12.</span> <span class="toc-text">overflow</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#z-index"><span class="toc-number">3.13.</span> <span class="toc-text">z-index</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#opacity"><span class="toc-number">3.14.</span> <span class="toc-text">opacity</span></a></li></ol></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
+<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
+    <%- partial('post/share') %>
+<% } %>
 
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+<% if (!index && post.comments){ %>
+    <% if (theme.duoshuo.on) { %>
+      <%- partial('comments/duoshuo', {
+          key: post.path,
+          title: post.title,
+          url: config.url+url_for(post.path),
+          }) %>
+    <% } else if (theme.youyan.on) { %>
+        <%- partial('comments/youyan') %>
+    <% } else if (theme.disqus.on) { %>
+        <%- partial('comments/disqus', {
+            shortname: theme.disqus.shortname
+          }) %>
+    <% } else if (config.disqus_shortname) { %>
+        <%- partial('comments/disqus', {
+            shortname: config.disqus_shortname
+          }) %>
+    <% } %>
+<% } %>
 
+<%- partial('_partial/post-nav-button') %>
+
+<% if (!index) { %>
     <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+        <% if (post.fancybox === false){ %>
+            yiliaConfig.fancybox = false;
+        <% } %>
     </script>
-
-
-
-    
-        <section class="youyan" id="comments">
-    <script>
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-    <div id="uyan_frame"></div>
-</section>
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2016/10/08/随手笔记/" title="上一篇: 随手笔记">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2016/09/27/html/" title="下一篇: HTML 基础">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
-
-
-
-
-  
-</div>
+<% } %></div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
