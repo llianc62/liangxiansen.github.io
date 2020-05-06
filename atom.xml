@@ -893,9 +893,9 @@ https://pypi.python.org/packages/source/t/tornado/tornado-4.3.tar.gz
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="Tornado" scheme="http://www.liangxiansen.cn/tags/Tornado/"/>
     
@@ -2866,9 +2866,9 @@ func(3)
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
   </entry>
   
@@ -5191,9 +5191,9 @@ SESSION_SAVE_EVERY_REQUEST = False                          # 是否每次请求
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="Django" scheme="http://www.liangxiansen.cn/tags/Django/"/>
     
@@ -5556,9 +5556,9 @@ f. String statesText
       <category term="前端" scheme="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
     
     
-      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
-    
       <category term="Ajax" scheme="http://www.liangxiansen.cn/tags/Ajax/"/>
+    
+      <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
     
   </entry>
   
@@ -5832,9 +5832,9 @@ if __name__ == &amp;#39;__main__&amp;#39;:
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="Web" scheme="http://www.liangxiansen.cn/tags/Web/"/>
     
@@ -7888,9 +7888,9 @@ for item in host_obj.h:
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="Mysql" scheme="http://www.liangxiansen.cn/tags/Mysql/"/>
     
@@ -8098,9 +8098,9 @@ server = SocketServer.ForkingTCPServer((&#39;127.0.0.1&#39;,8000),MyRequestHandl
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="Socket" scheme="http://www.liangxiansen.cn/tags/Socket/"/>
     
@@ -8745,9 +8745,9 @@ print(&amp;#39;main thread stop&amp;#39;)
       <category term="Python之路" scheme="http://www.liangxiansen.cn/categories/Python%E4%B9%8B%E8%B7%AF/"/>
     
     
-      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
-    
       <category term="编程" scheme="http://www.liangxiansen.cn/tags/%E7%BC%96%E7%A8%8B/"/>
+    
+      <category term="Python" scheme="http://www.liangxiansen.cn/tags/Python/"/>
     
       <category term="进程" scheme="http://www.liangxiansen.cn/tags/%E8%BF%9B%E7%A8%8B/"/>
     
