@@ -440,6 +440,26 @@
 
     
   <url>
+    <loc>http://www.liangxiansen.cn/2017/03/06/haproxy/</loc>
+    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
+    <data>
+        <display>
+        <title>HAproxy</title>
+        <pubTime>2017-03-06T06:25:29.000Z</pubTime>
+        
+        <tag>HAproxy</tag>
+         
+         
+           
+             
+              <breadCrumb title="Linux笔记" url="http://www.liangxiansen.cn/categories/Linux%E7%AC%94%E8%AE%B0/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://www.liangxiansen.cn/2016/09/27/html/</loc>
     <lastmod>2017-08-02T06:15:20.000Z</lastmod>
     <data>
@@ -455,26 +475,6 @@
            
              
               <breadCrumb title="前端" url="http://www.liangxiansen.cn/categories/%E5%89%8D%E7%AB%AF/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://www.liangxiansen.cn/2017/03/06/haproxy/</loc>
-    <lastmod>2017-08-02T06:15:20.000Z</lastmod>
-    <data>
-        <display>
-        <title>HAproxy</title>
-        <pubTime>2017-03-06T06:25:29.000Z</pubTime>
-        
-        <tag>HAproxy</tag>
-         
-         
-           
-             
-              <breadCrumb title="Linux笔记" url="http://www.liangxiansen.cn/categories/Linux%E7%AC%94%E8%AE%B0/"/>
           
         </display>
     </data>
