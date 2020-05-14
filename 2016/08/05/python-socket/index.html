@@ -358,99 +358,490 @@ const loadScript = function loadScript(c,b){var a=document.createElement("script
     </div>
     <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
 </nav>
-      <div class="body-wrap"><article id="<%= post.layout %>-<%= post.slug %>" class="article article-type-<%= post.layout %>" itemscope itemprop="blogPost">
-  <%if(post.noDate != "true"){%>
+      <div class="body-wrap"><article id="post-python-socket" class="article article-type-post" itemscope itemprop="blogPost">
+  
     <div class="article-meta">
-      <%- partial('post/date', {class_name: 'article-date', date_format: null}) %>
+      <a href="/2016/08/05/python-socket/" class="article-date">
+      <time datetime="2016-08-05T02:44:00.000Z" itemprop="datePublished">2016-08-05</time>
+</a>
+
+
     </div>
-  <%}%>
+  
   <div class="article-inner">
-    <% if (theme.fancybox){ %>
+    
       <input type="hidden" class="isFancy" />
-    <% } %>
-    <% if (post.link || post.title){ %>
+    
+    
       <header class="article-header">
-        <%- partial('post/title', {class_name: 'article-title'}) %>
+        
+  
+    <h1 class="article-title" itemprop="name">
+      Python之路：(十三）初识 socket
+    </h1>
+  
+
       </header>
-      <% if (!index){ %>
+      
       <div class="article-info article-info-post">
-        <%- partial('post/category') %>
-        <%- partial('post/tag') %>
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/Python之路/">Python之路</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Socket/">Socket</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/编程/">编程</a></li></ul>
+    </div>
+
         <div class="clearfix"></div>
       </div>
-      <% } %>
-    <% } %>
+      
+    
     <div class="article-entry" itemprop="articleBody">
-      <% if (index && (post.description || post.excerpt)){ %>
-          <% if (post.description){ %>
-              <%- post.description %>
-          <% } else { %>
-              <%- post.excerpt %>
-          <% } %>
-      <% } else { %>
-          <% if (is_page()){ %>
-              <%- partial('_partial/page') %>
-          <% } %>
-        <%- post.content %>
-      <% } %>
+      
+          
+        <h2 id="What-is-Socket"><a href="#What-is-Socket" class="headerlink" title="What is Socket"></a>What is Socket</h2><p>网络上的两个程序通过一个双向的通信连接实现数据的交换，这个连接的一端称为一个<code>socket</code>。<br>Socket的英文原义是<code>孔</code>或<code>插座</code>。作为<code>BSD UNIX</code>的<code>进程通信</code>机制，取后一种意思。通常也称作<code>套接字</code>，用于描述IP地址和端口，是一个通信链的<code>句柄</code>，可以用来实现不同虚拟机或不同计算机之间的通信。在Internet上的主机一般运行了多个服务软件，同时提供几种服务。每种服务都打开一个Socket，并绑定到一个端口上，不同的端口对应于不同的服务,这些服务通过”套接字”向网络发出请求或者应答网络请求。</p>
+<blockquote>
+<p>上面是不是很乱？但是概念一定要了解<br>现在是初学，我把Socket理解为一个电话拨通电话，接听电话！通信的一个概念！<br>Scket在写的时候要记住：<code>有发就有收，收发必相等！</code><br><a id="more"></a></p>
+</blockquote>
+<p>socket起源于Unix，而Unix/Linux基本哲学之一就是“一切皆文件”，对于文件用<code>【打开】【读写】【关闭】</code>模式来操作。socket就是该模式的一个实现，socket即是一种特殊的文件，一些socket函数就是对其进行的操作（读/写IO、打开、关闭）</p>
+<p>socket和file的区别：</p>
+<blockquote>
+<ul>
+<li>file模块是针对某个指定文件进行【打开】【读写】【关闭】</li>
+<li>socket模块是针对 服务器端 和 客户端Socket 进行【打开】【读写】【关闭】</li>
+</ul>
+</blockquote>
+<h2 id="第一个Socket代码"><a href="#第一个Socket代码" class="headerlink" title="第一个Socket代码"></a>第一个Socket代码</h2><h3 id="socket服务端"><a href="#socket服务端" class="headerlink" title="socket服务端"></a>socket服务端</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import socket
+
+# 创建socket对象
+sk = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
+# 设置监听的IP与端口(tuple格式)
+sk.bind((&#39;127.0.0.1&#39;,6666))
+# 设置client最大等待连接数
+sk.listen(5)
+
+while True:  # 循环
+    print(&#39;waiting client connection .......&#39;)
+    # 只有accept &amp; recv 会阻塞，这里accept阻塞，直到有client连接过来
+    # accept()接受客户端发送过来的请求:connection代表客户端对象，address是客户端的IP
+    connection, address = sk.accept()
+    # recv()接收客户端信息
+    client_messge = connection.recv(1024)
+    # 接受内容为bytes格式,转换成字符串str;发送消息Python.x只能发送bytes,python2.x能发送str
+    client_messge = str(client_messge, encoding=&#39;utf-8&#39;)
+    # 打印客户端信息
+    print(&#39;client send %s&#39; % client_messge)
+    # 发送回执信息给client.
+    connection.sendall(bytes(&#39;僵尸吃了你的脑子!!!&#39;, encoding=&#39;utf-8&#39;))
+    # 关闭和client的连接
+    connection.close()
+</code></pre>
+<h3 id="socket客户端"><a href="#socket客户端" class="headerlink" title="socket客户端"></a>socket客户端</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import socket
+
+# 端口和IP
+ip_port = (&#39;127.0.0.1&#39;, 8888)
+# 创建socket对象
+sk = socket.socket()
+# 创建链接
+sk.connect(ip_port)
+# 发送消息3.x只能发送bytes,2.x能发送str
+sk.sendall(bytes(&#39;请求占领地球&#39;, encoding=&#39;utf-8&#39;))
+# 接收数据(1024大小数据(字符))
+server_reply = sk.recv(1024)
+# 由于client &amp;  Server之前传输的是bytes类型,输出要转换成str类型
+print(str(server_reply, encoding=&#39;utf-8&#39;))
+
+sk.close()
+</code></pre>
+<h3 id="流程图"><a href="#流程图" class="headerlink" title="流程图"></a>流程图</h3><p><img src="http://www.liangxiansen.cn/images/socket编程/socket拓扑.png" alt="socket拓扑图"></p>
+<h2 id="更多功能"><a href="#更多功能" class="headerlink" title="更多功能"></a>更多功能</h2><h3 id="socket-socket-socket-AF-INET-socket-SOCK-STREAM-0"><a href="#socket-socket-socket-AF-INET-socket-SOCK-STREAM-0" class="headerlink" title="socket.socket(socket.AF_INET,socket.SOCK_STREAM,0)"></a>socket.socket(socket.AF_INET,socket.SOCK_STREAM,0)</h3><p><strong> 参数一：地址簇 </strong></p>
+<blockquote>
+<p>socket.AF_INET    IPv4（默认）<br>socket.AF_INET6     IPv6<br>socket.AF_UNIX      只能够用于单一的Unix系统进程间通信</p>
+</blockquote>
+<p><strong> 参数二：类型 </strong></p>
+<blockquote>
+<p>socket.SOCK_STREAM    流式socket , for TCP （默认）<br>socket.SOCK_DGRAM       数据报式socket , for UDP<br>socket.SOCK_RAW         原始套接字，普通的套接字无法处理ICMP、IGMP等网络报文，而SOCK_RAW可以；其次，SOCK_RAW也可以处理特殊的IPv4报文；此外，利用原始套接字，可以通过IP_HDRINCL套接字选项由用户构造IP头。<br>socket.SOCK_RDM         是一种可靠的UDP形式，即保证交付数据报但不保证顺序。SOCK_RAM用来提供对原始协议的低级访问，在需要执行某些特殊操作时使用，如发送ICMP报文。SOCK_RAM通常仅限于高级用户或管理员运行的程序使用。<br>socket.SOCK_SEQPACKET   可靠的连续数据包服务</p>
+</blockquote>
+<p><strong> 参数三：协议 </strong></p>
+<blockquote>
+<p>0　　（默认）与特定的地址家族相关的协议,如果是 0 ，则系统就会根据地址格式和套接类别,自动选择一个合适的协议</p>
+</blockquote>
+<h4 id="UDP-Dmoe"><a href="#UDP-Dmoe" class="headerlink" title="UDP Dmoe"></a>UDP Dmoe</h4><h5 id="UDP-socket-server"><a href="#UDP-socket-server" class="headerlink" title="UDP socket_server"></a>UDP socket_server</h5><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import socket
+ip_port = (&#39;127.0.0.1&#39;,9999)
+sk = socket.socket(socket.AF_INET, socket.SOCK_DGRAM, 0)
+sk.bind(ip_port)
+
+while True:
+    data = sk.recv(1024)
+    print(str(data, encoding=&#39;utf-8&#39;))
+</code></pre>
+<h5 id="UDP-socket-client"><a href="#UDP-socket-client" class="headerlink" title="UDP socket_client"></a>UDP socket_client</h5><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author: Liang Lian
+# Python 3.5
+
+import socket
+ip_port = (&#39;127.0.0.1&#39;,9999)
+
+sk = socket.socket(socket.AF_INET,socket.SOCK_DGRAM,0)
+while True:
+    inp = bytes(input(&#39;数据：&#39;).strip(), encoding=&#39;utf-8&#39;)
+    if inp == &#39;exit&#39;:
+        break
+    sk.sendto(inp, ip_port)
+
+sk.close()
+</code></pre>
+<h3 id="sk-bind-address"><a href="#sk-bind-address" class="headerlink" title="sk.bind(address)"></a>sk.bind(address)</h3><p>　　s.bind(address) 将套接字绑定到地址。address地址的格式取决于地址族。在AF_INET下，以元组（host,port）的形式表示地址。</p>
+<h3 id="sk-listen-backlog"><a href="#sk-listen-backlog" class="headerlink" title="sk.listen(backlog)"></a>sk.listen(backlog)</h3><p>　　开始监听传入连接。backlog指定在拒绝连接之前，可以挂起的最大连接数量。</p>
+<p>   backlog等于5，表示内核已经接到了连接请求，但服务器还没有调用accept进行处理的连接个数最大为5<br>   这个值不能无限大，因为要在内核中维护连接队列</p>
+<h3 id="sk-setblocking-bool"><a href="#sk-setblocking-bool" class="headerlink" title="sk.setblocking(bool)"></a>sk.setblocking(bool)</h3><p>　　是否阻塞（默认True），如果设置False，那么accept和recv时一旦无数据，则报错。</p>
+<h3 id="sk-accept"><a href="#sk-accept" class="headerlink" title="sk.accept()"></a>sk.accept()</h3><p>　　接受连接并返回（conn,address）,其中conn是新的套接字对象，可以用来接收和发送数据。address是连接客户端的地址。</p>
+<p>　　接收TCP 客户的连接（阻塞式）等待连接的到来</p>
+<h3 id="sk-connect-address"><a href="#sk-connect-address" class="headerlink" title="sk.connect(address)"></a>sk.connect(address)</h3><p>　　连接到address处的套接字。一般，address的格式为元组（hostname,port）,如果连接出错，返回socket.error错误。</p>
+<h3 id="sk-connect-ex-address"><a href="#sk-connect-ex-address" class="headerlink" title="sk.connect_ex(address)"></a>sk.connect_ex(address)</h3><p>　　同上，只不过会有返回值，连接成功时返回 0 ，连接失败时候返回编码，例如：10061</p>
+<h3 id="sk-close"><a href="#sk-close" class="headerlink" title="sk.close()"></a>sk.close()</h3><p>　　关闭套接字</p>
+<h3 id="sk-recv-bufsize-flag"><a href="#sk-recv-bufsize-flag" class="headerlink" title="sk.recv(bufsize[,flag])"></a>sk.recv(bufsize[,flag])</h3><p>　　接受套接字的数据。数据以字符形式返回，bufsize指定最多可以接收的数量。flag提供有关消息的其他信息，通常可以忽略。</p>
+<h3 id="sk-recvfrom-bufsize-flag"><a href="#sk-recvfrom-bufsize-flag" class="headerlink" title="sk.recvfrom(bufsize[.flag])"></a>sk.recvfrom(bufsize[.flag])</h3><p>　　与recv()类似，但返回值是（data,address）。其中data是包含接收数据的字符，address是发送数据的套接字地址。</p>
+<h3 id="sk-send-string-flag"><a href="#sk-send-string-flag" class="headerlink" title="sk.send(string[,flag])"></a>sk.send(string[,flag])</h3><p>　　将string中的数据1以字符的形式发送到连接的套接字。返回值是要发送的字节数量，该数量可能小于string的字节大小。即：可能未将指定内容全部发送。</p>
+<h3 id="sk-sendall-string-flag"><a href="#sk-sendall-string-flag" class="headerlink" title="sk.sendall(string[,flag])"></a>sk.sendall(string[,flag])</h3><p>　　将string中的数据发送到连接的套接字，但在返回之前会尝试发送所有数据。成功返回None，失败则抛出异常。</p>
+<p>   内部通过递归调用send，将所有内容发送出去。</p>
+<h3 id="sk-sendto-string-flag-address"><a href="#sk-sendto-string-flag-address" class="headerlink" title="sk.sendto(string[,flag],address)"></a>sk.sendto(string[,flag],address)</h3><p>　　将数据发送到套接字，address是形式为（ipaddr，port）的元组，指定远程地址。返回值是发送的字节数。该函数主要用于UDP协议。</p>
+<h3 id="sk-settimeout-timeout"><a href="#sk-settimeout-timeout" class="headerlink" title="sk.settimeout(timeout)"></a>sk.settimeout(timeout)</h3><p>　　设置套接字操作的超时期，timeout是一个浮点数，单位是秒。值为None表示没有超时期。一般，超时期应该在刚创建套接字时设置，因为它们可能用于连接的操作（如 client 连接最多等待5s ）</p>
+<h3 id="sk-getpeername"><a href="#sk-getpeername" class="headerlink" title="sk.getpeername()"></a>sk.getpeername()</h3><p>　　返回连接套接字的远程地址。返回值通常是元组（ipaddr,port）。</p>
+<h3 id="sk-getsockname"><a href="#sk-getsockname" class="headerlink" title="sk.getsockname()"></a>sk.getsockname()</h3><p>　　返回套接字自己的地址。通常是一个元组(ipaddr,port)</p>
+<h3 id="sk-fileno"><a href="#sk-fileno" class="headerlink" title="sk.fileno()"></a>sk.fileno()</h3><p>　　套接字的文件描述符</p>
+<h2 id="socket-练习"><a href="#socket-练习" class="headerlink" title="socket 练习"></a>socket 练习</h2><blockquote>
+<p>使用socket实现远程执行命令,并将命令执行结果放回, <code>注意粘包问题</code></p>
+</blockquote>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author:Liang Lian
+
+import json
+import socket
+import subprocess
+
+ip_port = (&#39;127.0.0.1&#39;, 8000)
+# 创建socket对象
+s = socket.socket()
+# 侦听的IP和端口
+s.bind(ip_port)
+# 设置client最大等待连接数,最多等待五个连接,其他的直接报错
+s.listen(5)
+while True:  # 循环
+
+    # 只有accept &amp; recv 会阻塞，这里accept阻塞，直到有client连接过来
+    # accept()接受客户端发送过来的请求:connection代表客户端对象，address是客户端的IP
+    connection, address = s.accept()
+
+    while True:
+        try:
+            # recv()接收客户端信息
+            recv_data = connection.recv(1024)
+
+            # 如果为空则退出这层循环,不做操作
+            if not recv_data:
+                break
+
+            # 接收到client端发送过来的指令并执行
+            p = subprocess.Popen(str(recv_data, encoding=&#39;utf-8&#39;), shell=True, stdout=subprocess.PIPE)
+            # 获取命令输出结果
+            res = p.stdout.read()
+            if res:
+                send_data = str(res, encoding=&#39;utf-8&#39;)
+            else:
+                send_data = &#39;cmd error&#39;
+
+            # str转换bytes
+            send_data = bytes(send_data, encoding=&#39;utf-8&#39;)
+
+            # 发送准备就绪和准备要发送的内容长度,防止粘包(发送内容超出接收端内容,多出的内容出现在下一次接收得内容中)
+            &#39;&#39;&#39;
+            粘包: 命令执行结果返回字符串长度为2018,如果客户端只接受1024,就接受了一次,那么多出来的内容回去哪呢,
+                  多出来的内容会出现在下一次返回前头,这就是粘包(分包传递,内容接收端发生错误)
+            &#39;&#39;&#39;
+            # 讲要发送的内容信息json格式发送客户端,客户端好做好准备接收
+            ready_dict = {&#39;status&#39;: &#39;Ready&#39;,
+                          &#39;msg_size&#39;: len(send_data),}
+            ready_tag = json.dumps(ready_dict)
+            connection.send(bytes(ready_tag, encoding=&#39;utf-8&#39;))
+
+            # 等待client &#39;Start&#39;信号后开始
+            feedback = connection.recv(1024)   # Start
+            feedback = str(feedback, encoding=&#39;utf-8&#39;)
+            if feedback == &#39;Start&#39;:
+                # 发送指令返回结果的内容
+                connection.send(send_data)
+
+        except Exception:
+            break
+
+    # 关闭和client的连接
+    connection.close()
+</code></pre>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><pre><code class="python">#!/usr/bin/env python
+# -*- coding:utf-8 -*-
+# Author:Liang Lian
+
+import socket
+import json
+# 服务端侦听的IP和端口
+ip_port = (&#39;127.0.0.1&#39;, 8000)
+# 创建socket对象
+s = socket.socket()
+s.connect(ip_port)
+
+while True:
+    # 发送消息
+    send_data = input(&quot;&gt;&gt;&gt;&quot;).strip()
+    # 用户如果没有输入,进入到下一步发送给server端,server接收到空就会堵塞不运行
+    if len(send_data) == 0:
+        continue
+    # 用户输入exit退出
+    if send_data == &#39;exit&#39;:
+        break
+
+    # 发送用户输入的指令到server端
+    s.send(bytes(send_data, encoding=&#39;utf-8&#39;))
+
+    # 接收到对方返回结果的准备消息和要返回内容的长度
+    ready_tag = s.recv(1024)  # Ready json格式
+    ready_tag = str(ready_tag, encoding=&#39;utf-8&#39;)
+    msg_dict = json.loads(ready_tag)
+    if msg_dict[&#39;status&#39;] == &#39;Ready&#39;:
+        msg_size = msg_dict[&#39;msg_size&#39;]
+
+    # 发送一个&#39;start&#39;给server端,让server端开始发送内容
+    start_tag = &#39;Start&#39;
+    s.send(bytes(start_tag, encoding=&#39;utf-8&#39;))
+
+    # 通过第一次交互,得知要接受多少数据后,recv_size设置初始值
+    recv_size = 0
+    recv_msg = b&#39;&#39;  # 初始化一个bytes格式追加接收内容
+
+    # 当前接收内容小于总接收内容,则一直持续到接收完
+    while recv_size &lt; msg_size:
+        recv_data = s.recv(1024)
+
+        # 每次接收内容做拼接
+        recv_msg += recv_data
+        recv_size += len(recv_data)
+    # 打印服务端返回结果
+    print(str(recv_msg, encoding=&#39;utf-8&#39;))
+s.close()
+</code></pre>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<li>罗天帅: <a href="http://www.cnblogs.com/luotianshuai/p/5058562.html" target="_blank" rel="noopener">http://www.cnblogs.com/luotianshuai/p/5058562.html</a></li>
+<li>武沛齐: <a href="http://www.cnblogs.com/wupeiqi/articles/5040823.html" target="_blank" rel="noopener">http://www.cnblogs.com/wupeiqi/articles/5040823.html</a></li>
+</ul>
+
+      
     </div>
-    <% if (index){ %>
-    <div class="article-info article-info-index">
-      <%if(post.top){%>
-        <div class="article-pop-out tagcloud">
-          <a class="">置顶</a>
-        </div>
-      <% } %>
-      <%- partial('post/category') %>
-      <%- partial('post/tag') %>
-      <% if (index && (post.description || post.excerpt)){ %>
-        <p class="article-more-link">
-          <a href="<%- url_for(post.path) %>#more"><%= __('index.more') %> >></a>
-        </p>
-      <% } %>
-      <div class="clearfix"></div>
-    </div>
-    <% } %>
+    
   </div>
-  <% if (!index){ %>
-    <%- partial('post/nav') %>
-  <% } %>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">梁先森</a></p>
+        <p><span>发布时间:</span>2016-08-05, 10:44:00</p>
+        <p><span>最后更新:</span>2017-08-10, 14:15:54</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2016/08/05/python-socket/" title="Python之路：(十三）初识 socket">http://www.liangxiansen.cn/2016/08/05/python-socket/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://www.liangxiansen.cn/2016/08/05/python-socket/　　作者: 梁先森" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+            <div id="article-nav-newer" class="article-nav-title">
+                <a href="/2016/08/05/IO Module/">
+                    Python之路：(十四）I/O多路复用
+                </a>
+            </div>
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2016/08/04/美丽得旅途-云南/">
+                    美丽得旅途-云南
+                </a>
+            </div>
+        
+    </nav>
+
+  
+
+  
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"Python之路：(十三）初识 socket　| 一个梦　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+  
+
+  
+	  <! -- 添加捐赠图标 -->
+<div class ="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+           &uarr;<br>
+		   对你有帮助？求鼓励，求支持！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden" >
+		<!-- 支付宝打赏图案 -->
+		<img src="http://liangxiansen.cn/images/alipay.png" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="http://liangxiansen.cn/images/weichatpay.png" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			$('#donate_board').addClass('hidden');
+			$('#donate_guide').removeClass('hidden');
+		}
+	</script>
+</div>
+<! -- 添加捐赠图标 -->
+  
+
 </article>
-<%- partial('_partial/toc') %>
 
-<% if (!index && theme.share.on && (post.share != false || post.share)){ %>
-    <%- partial('post/share') %>
-<% } %>
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#What-is-Socket"><span class="toc-number">1.</span> <span class="toc-text">What is Socket</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#第一个Socket代码"><span class="toc-number">2.</span> <span class="toc-text">第一个Socket代码</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#socket服务端"><span class="toc-number">2.1.</span> <span class="toc-text">socket服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#socket客户端"><span class="toc-number">2.2.</span> <span class="toc-text">socket客户端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#流程图"><span class="toc-number">2.3.</span> <span class="toc-text">流程图</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#更多功能"><span class="toc-number">3.</span> <span class="toc-text">更多功能</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#socket-socket-socket-AF-INET-socket-SOCK-STREAM-0"><span class="toc-number">3.1.</span> <span class="toc-text">socket.socket(socket.AF_INET,socket.SOCK_STREAM,0)</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#UDP-Dmoe"><span class="toc-number">3.1.1.</span> <span class="toc-text">UDP Dmoe</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#UDP-socket-server"><span class="toc-number">3.1.1.1.</span> <span class="toc-text">UDP socket_server</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#UDP-socket-client"><span class="toc-number">3.1.1.2.</span> <span class="toc-text">UDP socket_client</span></a></li></ol></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-bind-address"><span class="toc-number">3.2.</span> <span class="toc-text">sk.bind(address)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-listen-backlog"><span class="toc-number">3.3.</span> <span class="toc-text">sk.listen(backlog)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-setblocking-bool"><span class="toc-number">3.4.</span> <span class="toc-text">sk.setblocking(bool)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-accept"><span class="toc-number">3.5.</span> <span class="toc-text">sk.accept()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-connect-address"><span class="toc-number">3.6.</span> <span class="toc-text">sk.connect(address)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-connect-ex-address"><span class="toc-number">3.7.</span> <span class="toc-text">sk.connect_ex(address)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-close"><span class="toc-number">3.8.</span> <span class="toc-text">sk.close()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-recv-bufsize-flag"><span class="toc-number">3.9.</span> <span class="toc-text">sk.recv(bufsize[,flag])</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-recvfrom-bufsize-flag"><span class="toc-number">3.10.</span> <span class="toc-text">sk.recvfrom(bufsize[.flag])</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-send-string-flag"><span class="toc-number">3.11.</span> <span class="toc-text">sk.send(string[,flag])</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-sendall-string-flag"><span class="toc-number">3.12.</span> <span class="toc-text">sk.sendall(string[,flag])</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-sendto-string-flag-address"><span class="toc-number">3.13.</span> <span class="toc-text">sk.sendto(string[,flag],address)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-settimeout-timeout"><span class="toc-number">3.14.</span> <span class="toc-text">sk.settimeout(timeout)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-getpeername"><span class="toc-number">3.15.</span> <span class="toc-text">sk.getpeername()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-getsockname"><span class="toc-number">3.16.</span> <span class="toc-text">sk.getsockname()</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#sk-fileno"><span class="toc-number">3.17.</span> <span class="toc-text">sk.fileno()</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#socket-练习"><span class="toc-number">4.</span> <span class="toc-text">socket 练习</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#服务端"><span class="toc-number">4.1.</span> <span class="toc-text">服务端</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#客户端"><span class="toc-number">4.2.</span> <span class="toc-text">客户端</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#参考资料"><span class="toc-number">5.</span> <span class="toc-text">参考资料</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
 
-<% if (!index && post.comments){ %>
-    <% if (theme.duoshuo.on) { %>
-      <%- partial('comments/duoshuo', {
-          key: post.path,
-          title: post.title,
-          url: config.url+url_for(post.path),
-          }) %>
-    <% } else if (theme.youyan.on) { %>
-        <%- partial('comments/youyan') %>
-    <% } else if (theme.disqus.on) { %>
-        <%- partial('comments/disqus', {
-            shortname: theme.disqus.shortname
-          }) %>
-    <% } else if (config.disqus_shortname) { %>
-        <%- partial('comments/disqus', {
-            shortname: config.disqus_shortname
-          }) %>
-    <% } %>
-<% } %>
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
 
-<%- partial('_partial/post-nav-button') %>
-
-<% if (!index) { %>
     <script>
-        <% if (post.fancybox === false){ %>
-            yiliaConfig.fancybox = false;
-        <% } %>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
     </script>
-<% } %></div>
+
+
+
+    
+        <section class="youyan" id="comments">
+    <script>
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = 'http://v2.uyan.cc/code/uyan.js?uid=2140495';
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+    <div id="uyan_frame"></div>
+</section>
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/2016/08/05/IO Module/" title="上一篇: Python之路：(十四）I/O多路复用">
+                <i class="fa fa-angle-left"></i>
+            </a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2016/08/04/美丽得旅途-云南/" title="下一篇: 美丽得旅途-云南">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/04/11/tornado/">Python Web框架之Tornado</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/28/jupyter/">Jupyter 使用</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/07/14/scl/">Software Collections</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/17/区间数值统计/">区间数值统计</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/06/consul/">Consul 使用手册</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/03/06/haproxy/">HAproxy</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/13/python函数默认参数坑/">python函数默认参数的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/01/06/supervisor-shell/">使用supervisor管理python脚本守护进程踩的一个坑</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/10/08/随手笔记/">随手笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/29/css/">CSS 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/27/html/">HTML 基础</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/14/git_notes/">Git 笔记</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/05/Django/">Django 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/Ajax/">Ajax 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/04/web/">Python Web框架</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/09/02/DOM/">DOM 操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/22/JavaScript/">JavaScript 学习</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/11/Python-MySQL/">Python对MySQL进行操作</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/10/socketserver/">Python之路：(十六）socketserver模块</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/08/python-thread-process-gevent/">Python之路：(十五）进程、线程和协程</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-queue/">Python之路：(十二）队列(queue)</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/IO Module/">Python之路：(十四）I/O多路复用</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/05/python-socket/">Python之路：(十三）初识 socket</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/04/美丽得旅途-云南/">美丽得旅途-云南</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/03/python其他理解与思考/">Python其他理解与思考</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/08/02/zabbix-mosa/">(玩转ZABBIX)Dell 服务器硬件信息监控，自动生成服务器资产信息</a></li><li class="post-list-item"><a class="post-list-link" href="/2016/03/05/hexo/">Hexo 搭建个人博客</a></li></ul>
+
+
+
+
+  
+</div>
       <footer id="footer">
     <div class="outer">
         <div id="footer-info">
